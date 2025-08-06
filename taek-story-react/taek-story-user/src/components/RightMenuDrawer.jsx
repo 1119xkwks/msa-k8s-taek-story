@@ -1,6 +1,14 @@
 import {Drawer, DrawerHeader, DrawerItems, Sidebar, SidebarItem, SidebarItemGroup, SidebarItems} from "flowbite-react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowRightToBracket, faChartPie, faShoppingBag, faUserPlus, faUsers, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRightToBracket,
+  faChartPie,
+  faShoppingBag,
+  faUserPlus,
+  faUsers,
+  faTimes,
+  faArrowRightFromBracket, faHome, faUserGear
+} from "@fortawesome/free-solid-svg-icons";
 import './RightMenuDrawer.css';
 
 const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
@@ -31,24 +39,24 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
         <div className="p-4">
           <nav className="space-y-2">
             <a href="/" className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors">
-              <FontAwesomeIcon icon={faChartPie} className="mr-3" />
-              Dashboard
+              <FontAwesomeIcon icon={faHome} className="mr-3" />
+              홈
             </a>
-            <a href="/e-commerce/products" className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors">
-              <FontAwesomeIcon icon={faShoppingBag} className="mr-3" />
-              Products
+            <a href="/" className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <FontAwesomeIcon icon={faUserGear} className="mr-3" />
+              계정
             </a>
-            <a href="/users/list" className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors">
-              <FontAwesomeIcon icon={faUsers} className="mr-3" />
-              Users list
-            </a>
-            <a href="/authentication/sign-in" className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors">
+            <a href="/login" className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors">
               <FontAwesomeIcon icon={faArrowRightToBracket} className="mr-3" />
-              Sign in
+              로그인
             </a>
-            <a href="/authentication/sign-up" className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors">
+            <a href="/signup" className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors">
               <FontAwesomeIcon icon={faUserPlus} className="mr-3" />
-              Sign up
+              회원가입
+            </a>
+            <a href="/login" className="flex items-center px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <FontAwesomeIcon icon={faArrowRightFromBracket} className="mr-3" />
+              로그아웃
             </a>
           </nav>
         </div>
