@@ -1,5 +1,32 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-gradient-to-br from-blue-50 to-indigo-100;
+  font-family: "NotoSansKR", sans-serif;
+}
+
+img {
+  @apply h-auto max-w-full;
+}
+
+button, a {
+  @apply cursor-pointer;
+}
+
+a {
+  @apply no-underline;
+}
+
+a.no-decoration {
+  @apply text-current no-underline;
+}
+
+.divider {
+  @apply border-t border-gray-200;
+}
+
 #root {
-  @apply min-h-screen bg-gray-100;
+  @apply min-h-screen;
 }
 
 /* 커스텀 버튼 스타일 */

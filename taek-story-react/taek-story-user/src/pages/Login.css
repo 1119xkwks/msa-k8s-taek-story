@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+/* 로그인 페이지 메인 컨테이너 */
+.login-page {
+  @apply min-h-screen flex items-center justify-center relative;
+}
+
+/* 홈 버튼 */
+.login-page .home-button {
+  @apply absolute top-6 left-6 z-10;
+}
+
+/* 로그인 컨테이너 */
+.login-page .login-container {
+  @apply flex flex-col items-center space-y-6;
+}
+
+/* 로그인 헤더 */
+.login-page .login-header {
+  @apply text-center;
+}
+
+/* 로그인 제목 */
+.login-page .login-title {
+  @apply text-3xl font-bold text-gray-900 mb-2;
+}
+
+/* 로그인 부제목 */
+.login-page .login-subtitle {
+  @apply text-gray-600 text-sm;
+}
+
+/* 로그인 카드 컨테이너 */
+.login-page .login-card {
+  @apply w-full max-w-md bg-white rounded-xl shadow-2xl p-8 border-0;
+}
+
+/* 폼 컨테이너 */
+.login-page .login-form {
+  @apply space-y-6;
+}
+
+/* 입력 필드 그룹 */
+.login-page .input-group {
+  @apply space-y-2;
+}
+
+/* 입력 필드 라벨 */
+.login-page .input-label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
+}
+
+/* 입력 필드 컨테이너 */
+.login-page .input-container {
+  @apply flex;
+}
+
+/* 아이콘 span */
+.login-page .input-icon-span {
+  @apply inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md;
+}
+
+/* 입력 필드 */
+.login-page .input-field {
+  @apply rounded-none bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5;
+}
+
+/* 비밀번호 토글 버튼 span */
+.login-page .password-toggle-span {
+  @apply inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-r-md cursor-pointer hover:bg-gray-300 transition-colors duration-200;
+}
+
+/* FontAwesome 아이콘 크기 조정 */
+.login-page .input-icon-span svg,
+.login-page .password-toggle-span svg {
+  @apply w-4 h-4 text-gray-500;
+}
+
+/* 로그인 버튼 */
+.login-page .login-button {
+  @apply w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-colors duration-200 justify-center;
+}
+
+/* 로그인 버튼 비활성화 상태 */
+.login-page .login-button:disabled {
+  @apply bg-gray-400 cursor-not-allowed hover:bg-gray-400;
+}
+
+/* 회원가입 링크 */
+.login-page .signup-link {
+  @apply text-center text-sm text-gray-600;
+}
+
+.login-page .signup-link a {
+  @apply text-blue-600 hover:text-blue-700 font-medium;
+}
+
+/* 에러 메시지 */
+.login-page .error-message {
+  @apply text-red-600 text-sm mt-2;
+}
+
+/* 성공 메시지 */
+.login-page .success-message {
+  @apply text-green-600 text-sm mt-2;
+} 
