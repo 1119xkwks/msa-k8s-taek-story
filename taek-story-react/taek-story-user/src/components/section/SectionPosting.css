@@ -3,7 +3,7 @@
 .section-posting {}
 
 .section-posting .section-posting-card {
-    @apply max-w-lg mx-auto;
+    @apply max-w-lg mx-auto mb-2;
 }
 
 .section-posting .section-posting-card-main {

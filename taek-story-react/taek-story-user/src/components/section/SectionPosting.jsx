@@ -1,6 +1,7 @@
 import "./SectionPosting.css";
-import { Card, Button, Avatar, Textarea } from "flowbite-react";
+import { Button, Avatar, Textarea } from "flowbite-react";
 import { useState } from "react";
+import MyCard from "../layout/MyCard.jsx";
 
 const SectionPosting = () => {
   const [postingText, setPostingText] = useState("");
@@ -12,7 +13,7 @@ const SectionPosting = () => {
 
   return (
     <section className="section-posting">
-      <Card className="section-posting-card ">
+      <MyCard className="section-posting-card">
         <div className="section-posting-card-main">
           <Avatar img="https://i.pravatar.cc/40" alt="User avatar" rounded />
           <Textarea
@@ -32,7 +33,7 @@ const SectionPosting = () => {
             Post
           </Button>
         </div>
-      </Card>
+      </MyCard>
     </section>
   );
 };

@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+.post-card {
+    @apply mb-2;
+}
+
+.post-card .post-card-header {
+    @apply flex;
+}
+
+.post-card .poster-avatar {
+    @apply me-2;
+}
+
+.post-card .poster-wrap {
+    @apply grow;
+}
+
+.post-card .poster-wrap .poster-name {
+    @apply font-bold;
+}
+
+.post-card .poster-wrap .posted-info {
+    @apply text-gray-400 text-sm;
+}

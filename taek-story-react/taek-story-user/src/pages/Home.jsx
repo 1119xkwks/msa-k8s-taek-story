@@ -6,6 +6,7 @@ import DisplayMyName from "../components/display/DisplayMyName.jsx";
 import AnchorSetting from "../components/anchor/AnchorSetting.jsx";
 import RightMenuDrawer from "../components/drawer/RightMenuDrawer.jsx";
 import SectionPosting from "../components/section/SectionPosting";
+import SectionPostList from "../components/section/SectionPostList";
 
 import { useState } from "react";
 
@@ -23,6 +24,9 @@ const Home = () => {
 
       {/*글쓰기*/}
       <SectionPosting />
+
+      {/*글목록*/}
+      <SectionPostList />
 
       {/*사이드바*/}
       <RightMenuDrawer
