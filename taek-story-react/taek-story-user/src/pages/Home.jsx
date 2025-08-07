@@ -1,12 +1,13 @@
 import "./Home.css";
 
 import Header from "../components/Header.jsx";
-import AnchorHome from "../components/AnchorHome";
-import RightMenuDrawer from "../components/RightMenuDrawer";
-import AnchorSetting from "../components/AnchorSetting.jsx";
+import AnchorHome from "../components/anchor/AnchorHome.jsx";
+import DisplayMyName from "../components/display/DisplayMyName.jsx";
+import AnchorSetting from "../components/anchor/AnchorSetting.jsx";
+import RightMenuDrawer from "../components/drawer/RightMenuDrawer.jsx";
+import SectionPosting from "../components/section/SectionPosting";
 
 import { useState } from "react";
-import DisplayMyName from "../components/DisplayMyName.jsx";
 
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,6 +20,9 @@ const Home = () => {
         center={<DisplayMyName />}
         right={<AnchorSetting clickHandler={() => setIsMenuOpen(true)} />}
       />
+
+      {/*글쓰기*/}
+      <SectionPosting />
 
       {/*사이드바*/}
       <RightMenuDrawer

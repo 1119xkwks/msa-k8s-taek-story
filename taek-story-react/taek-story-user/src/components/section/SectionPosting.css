@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+.section-posting {}
+
+.section-posting .section-posting-card {
+    @apply max-w-lg mx-auto;
+}
+
+.section-posting .section-posting-card-main {
+    @apply flex items-center space-x-3;
+}
+
+.section-posting .textarea-posting {
+    @apply w-full resize-none;
+}

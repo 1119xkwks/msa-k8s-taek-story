@@ -1,32 +1,41 @@
-import { useState } from 'react';
-import { Button, Card } from 'flowbite-react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faEnvelope, faLock, faUser, faCalendar, faPhone, faHome } from '@fortawesome/free-solid-svg-icons';
-import './SignUp.css';
-import usePageTitle from '../hooks/usePageTitle'
-import AnchorHome from "../components/AnchorHome.jsx";
+import { useState } from "react";
+import { Button, Card } from "flowbite-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faEyeSlash,
+  faEnvelope,
+  faLock,
+  faUser,
+  faCalendar,
+  faPhone,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
+import "./SignUp.css";
+import usePageTitle from "../hooks/usePageTitle";
+import AnchorHome from "../components/anchor/AnchorHome.jsx";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    nickname: '',
-    birthDate: '',
-    phone: ''
+    email: "",
+    password: "",
+    confirmPassword: "",
+    nickname: "",
+    birthDate: "",
+    phone: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
-  usePageTitle('회원가입');
+  usePageTitle("회원가입");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -41,30 +50,36 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    setError("");
 
     // 유효성 검사
-    if (!formData.email || !formData.password || !formData.confirmPassword || 
-        !formData.nickname || !formData.birthDate || !formData.phone) {
-      setError('모든 필드를 입력해주세요.');
+    if (
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword ||
+      !formData.nickname ||
+      !formData.birthDate ||
+      !formData.phone
+    ) {
+      setError("모든 필드를 입력해주세요.");
       setIsLoading(false);
       return;
     }
 
-    if (!formData.email.includes('@')) {
-      setError('올바른 이메일 형식을 입력해주세요.');
+    if (!formData.email.includes("@")) {
+      setError("올바른 이메일 형식을 입력해주세요.");
       setIsLoading(false);
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('비밀번호가 일치하지 않습니다.');
+      setError("비밀번호가 일치하지 않습니다.");
       setIsLoading(false);
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('비밀번호는 최소 6자 이상이어야 합니다.');
+      setError("비밀번호는 최소 6자 이상이어야 합니다.");
       setIsLoading(false);
       return;
     }
@@ -72,12 +87,12 @@ const SignUp = () => {
     // 실제 회원가입 로직은 여기에 구현
     try {
       // API 호출 시뮬레이션
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // 성공 시 로그인 페이지로 이동
-      window.location.href = '/login';
+      window.location.href = "/login";
     } catch (err) {
-      setError('회원가입에 실패했습니다. 다시 시도해주세요.');
+      setError("회원가입에 실패했습니다. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
     }
@@ -92,7 +107,9 @@ const SignUp = () => {
         {/* 회원가입 제목 */}
         <div className="sign-up-header">
           <h1 className="sign-up-title">회원가입</h1>
-          <p className="sign-up-subtitle">새로운 계정을 만들어 서비스를 이용하세요</p>
+          <p className="sign-up-subtitle">
+            새로운 계정을 만들어 서비스를 이용하세요
+          </p>
         </div>
 
         {/* 회원가입 폼 */}
@@ -141,18 +158,20 @@ const SignUp = () => {
                   tabIndex="2"
                   required
                 />
-                <span 
+                <span
                   className="password-toggle-span"
                   onClick={togglePasswordVisibility}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                    if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
                       togglePasswordVisibility();
                     }
                   }}
                   tabIndex="3"
                   role="button"
-                  aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                  aria-label={
+                    showPassword ? "비밀번호 숨기기" : "비밀번호 보기"
+                  }
                 >
                   <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                 </span>
@@ -179,20 +198,24 @@ const SignUp = () => {
                   tabIndex="4"
                   required
                 />
-                <span 
+                <span
                   className="password-toggle-span"
                   onClick={toggleConfirmPasswordVisibility}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                    if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
                       toggleConfirmPasswordVisibility();
                     }
                   }}
                   tabIndex="5"
                   role="button"
-                  aria-label={showConfirmPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                  aria-label={
+                    showConfirmPassword ? "비밀번호 숨기기" : "비밀번호 보기"
+                  }
                 >
-                  <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                  <FontAwesomeIcon
+                    icon={showConfirmPassword ? faEyeSlash : faEye}
+                  />
                 </span>
               </div>
             </div>
@@ -273,22 +296,24 @@ const SignUp = () => {
             )}
 
             {/* 회원가입 버튼 */}
-            <Button 
+            <Button
               type="submit"
               className="sign-up-button"
               disabled={isLoading}
               color="blue"
               tabIndex="9"
             >
-              {isLoading ? '회원가입 중...' : '회원가입'}
+              {isLoading ? "회원가입 중..." : "회원가입"}
             </Button>
           </form>
         </Card>
 
         {/* 로그인 링크 */}
         <div className="login-link">
-          이미 계정이 있으신가요?{' '}
-          <a href="/login" tabIndex="10">로그인</a>
+          이미 계정이 있으신가요?{" "}
+          <a href="/login" tabIndex="10">
+            로그인
+          </a>
         </div>
       </div>
     </div>

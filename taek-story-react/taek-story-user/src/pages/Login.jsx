@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./Login.css";
 import usePageTitle from "../hooks/usePageTitle.jsx";
-import AnchorHome from "../components/AnchorHome.jsx";
+import AnchorHome from "../components/anchor/AnchorHome.jsx";
 
 const Login = () => {
   const [formData, setFormData] = useState({
