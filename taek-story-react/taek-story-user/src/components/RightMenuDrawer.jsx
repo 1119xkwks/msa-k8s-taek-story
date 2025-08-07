@@ -10,7 +10,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
-  Button,
   Drawer,
   DrawerHeader,
   DrawerItems,
@@ -50,13 +49,13 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                 <SidebarItems>
                   <SidebarItemGroup>
                     <SidebarItem
-                      href="/authentication/sign-in"
+                      href="/"
                       icon={() => <FontAwesomeIcon icon={faHome} />}
                     >
                       홈
                     </SidebarItem>
                     <SidebarItem
-                      href="/authentication/sign-up"
+                      href="/#"
                       icon={() => <FontAwesomeIcon icon={faUserGear} />}
                     >
                       계정
@@ -64,7 +63,7 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                   </SidebarItemGroup>
                   <SidebarItemGroup>
                     <SidebarItem
-                      href="https://github.com/themesberg/flowbite-react/"
+                      href="/login"
                       icon={() => (
                         <FontAwesomeIcon icon={faArrowRightToBracket} />
                       )}
@@ -72,13 +71,13 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                       로그인
                     </SidebarItem>
                     <SidebarItem
-                      href="https://flowbite-react.com/"
+                      href="/signup"
                       icon={() => <FontAwesomeIcon icon={faUserPlus} />}
                     >
                       회원가입
                     </SidebarItem>
                     <SidebarItem
-                      href="https://github.com/themesberg/flowbite-react/issues"
+                      href="#"
                       icon={() => (
                         <FontAwesomeIcon icon={faArrowRightFromBracket} />
                       )}
