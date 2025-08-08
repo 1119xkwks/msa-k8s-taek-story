@@ -1,0 +1,18 @@
+@import 'tailwindcss';
+
+/* 댓글 작성 컴포저 */
+.comment-composer {
+    @apply flex gap-3 items-start;
+}
+.comment-composer .composer-area {
+    @apply flex-1 min-w-0;
+}
+.comment-composer .composer-textarea {
+    @apply w-full resize-none rounded-lg border border-gray-300 bg-white text-gray-900 text-sm p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+.comment-composer .composer-actions {
+    @apply mt-2 flex justify-end;
+}
+.comment-composer .commenting-button:disabled {
+    @apply bg-blue-500/50 cursor-not-allowed;
+}

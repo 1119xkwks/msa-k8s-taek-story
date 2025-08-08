@@ -1,7 +1,9 @@
 import "./PostCardComment.css";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CommentItem from "./comment/CommentItem.jsx";
+import { Avatar, Button, Textarea } from "flowbite-react";
+import CommentComposer from "./comment/CommentComposer.jsx";
 
 const PostCardComment = ({ comments }) => {
   const sampleComments = useMemo(
@@ -106,18 +108,39 @@ const PostCardComment = ({ comments }) => {
     [],
   );
 
-  const data = comments && comments.length > 0 ? comments : sampleComments;
+  const initialComments =
+    comments && comments.length > 0 ? comments : sampleComments;
+  const [allComments, setAllComments] = useState(initialComments);
+  useEffect(() => {
+    setAllComments(comments && comments.length > 0 ? comments : sampleComments);
+  }, [comments, sampleComments]);
 
-  const hasToggle = data.length >= 3;
+  const hasToggle = allComments.length >= 3;
   const [expanded, setExpanded] = useState(!hasToggle);
 
   const visibleComments = useMemo(
-    () => (expanded ? data : data.slice(0, 3)),
-    [expanded, data],
+    () => (expanded ? allComments : allComments.slice(0, 3)),
+    [expanded, allComments],
   );
+
+  const handleAddComment = (value) => {
+    const newComment = {
+      id: `new-${Date.now()}`,
+      author: { name: "You", avatarUrl: "https://i.pravatar.cc/40?u=you" },
+      content: value,
+      createdAt: new Date().toISOString(),
+      likes: 0,
+      replies: [],
+    };
+    setAllComments((prev) => [newComment, ...prev]);
+    setExpanded(true);
+  };
 
   return (
     <div className="post-card-comment">
+      {/* Comment composer */}
+      <CommentComposer onSubmit={handleAddComment} />
+
       <ul role="list" className="space-y-5">
         {visibleComments.map((comment) => (
           <li key={comment.id}>
@@ -135,7 +158,7 @@ const PostCardComment = ({ comments }) => {
           >
             {expanded
               ? "Hide comments"
-              : `See more comments (${data.length - 3})`}
+              : `See more comments (${allComments.length - 3})`}
           </button>
         </div>
       )}
