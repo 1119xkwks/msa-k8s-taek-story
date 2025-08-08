@@ -4,6 +4,19 @@ server:
 spring:
   application:
     name: user-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:31001/userdb
+    username: postgres
+    password: postgres
+  sql:
+    init:
+      mode: never
+
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 management:
   endpoints:

@@ -5,16 +5,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.userservice.mapper.TimeMapper;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/")
 public class HomeController {
+    private final TimeMapper timeMapper;
 
-	@GetMapping("/test")
-	public String test() {
-		log.info("test.");
-		return "test";
-	}
+    @GetMapping("/test")
+    public String test() {
+        String now = timeMapper.selectNow();
+        log.info("db now: {}", now);
+        return now;
+    }
 }
