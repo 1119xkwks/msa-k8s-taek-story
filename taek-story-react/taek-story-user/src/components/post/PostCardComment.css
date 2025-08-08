@@ -61,3 +61,11 @@
     @apply flex items-center gap-2 justify-end;
 }
 
+/* 더보기 버튼 */
+.post-card-comment .see-more-wrap {
+    @apply mt-2 flex justify-center;
+}
+.post-card-comment .see-more-btn {
+    @apply text-sm text-blue-600 hover:underline px-2 py-1 rounded;
+}
+

@@ -1,6 +1,6 @@
 import "./PostCardComment.css";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import CommentItem from "./comment/CommentItem.jsx";
 
 const PostCardComment = ({ comments }) => {
@@ -62,21 +62,83 @@ const PostCardComment = ({ comments }) => {
         likes: 5,
         replies: [],
       },
+      {
+        id: "c3",
+        author: { name: "Eve", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
+        content: "3야호",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        likes: 5,
+        replies: [],
+      },
+      {
+        id: "c4",
+        author: { name: "xor", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
+        content: "4어디 갔다 왔어?",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        likes: 5,
+        replies: [],
+      },
+      {
+        id: "c5",
+        author: { name: "Eve", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
+        content: "5주말에 등산 갈 분 계신가요? ⛰️",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        likes: 5,
+        replies: [],
+      },
+      {
+        id: "c6",
+        author: { name: "Eve", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
+        content: "6야호",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        likes: 5,
+        replies: [],
+      },
+      {
+        id: "c7",
+        author: { name: "xor", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
+        content: "7어디 갔다 왔어?",
+        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        likes: 5,
+        replies: [],
+      },
     ],
     [],
   );
 
   const data = comments && comments.length > 0 ? comments : sampleComments;
 
+  const hasToggle = data.length >= 3;
+  const [expanded, setExpanded] = useState(!hasToggle);
+
+  const visibleComments = useMemo(
+    () => (expanded ? data : data.slice(0, 3)),
+    [expanded, data],
+  );
+
   return (
     <div className="post-card-comment">
       <ul role="list" className="space-y-5">
-        {data.map((comment) => (
+        {visibleComments.map((comment) => (
           <li key={comment.id}>
             <CommentItem comment={comment} depth={0} />
           </li>
         ))}
       </ul>
+      {hasToggle && (
+        <div className="see-more-wrap">
+          <button
+            type="button"
+            className="see-more-btn"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+          >
+            {expanded
+              ? "Hide comments"
+              : `See more comments (${data.length - 3})`}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
