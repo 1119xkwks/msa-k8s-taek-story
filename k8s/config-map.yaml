@@ -1,0 +1,20 @@
+# How to re-create (kubectl):
+#   kubectl delete -f config-map.yaml --ignore-not-found
+#   kubectl apply  -f config-map.yaml
+#   kubectl get configmap config-map -o yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-map
+data:
+  # USER DB
+  USER_DB_NAME: userdb
+  USER_DB_HOST: pg-db-user
+  USER_DB_PORT: "15432"
+  # POSTING DB
+  POSTING_DB_NAME: postingdb
+  POSTING_DB_HOST: pg-db-posting
+  POSTING_DB_PORT: "15433"
+
+

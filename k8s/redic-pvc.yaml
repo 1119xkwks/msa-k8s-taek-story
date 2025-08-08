@@ -1,0 +1,21 @@
+# How to re-create (kubectl):
+#   kubectl delete -f redic-pvc.yaml --ignore-not-found
+#   kubectl apply  -f redic-pvc.yaml
+#   kubectl get pvc redic-pvc
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redic-pvc
+  labels:
+    app: redis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # storageClassName: <your-storageclass-name>
+  # If you have a default StorageClass, you can omit storageClassName.
+
+

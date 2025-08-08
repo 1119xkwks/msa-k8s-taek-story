@@ -1,0 +1,22 @@
+# How to re-create (kubectl):
+#   kubectl delete -f pg-db-user-pvc.yaml --ignore-not-found
+#   kubectl apply  -f pg-db-user-pvc.yaml
+#   kubectl get pvc pg-db-user-pvc
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg-db-user-pvc
+  labels:
+    app: pg-db-user
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  # storageClassName: <your-storageclass-name>
+  # If you have a default StorageClass, you can omit storageClassName (as here).
+  # If not, set an existing StorageClass name or pre-provision a PV.
+
+

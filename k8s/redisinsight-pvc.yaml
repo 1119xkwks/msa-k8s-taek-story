@@ -1,0 +1,21 @@
+# How to re-create (kubectl):
+#   kubectl delete -f redisinsight-pvc.yaml --ignore-not-found
+#   kubectl apply  -f redisinsight-pvc.yaml
+#   kubectl get pvc redisinsight-pvc
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redisinsight-pvc
+  labels:
+    app: redisinsight
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # storageClassName: <your-storageclass-name>
+  # If you have a default StorageClass, you can omit storageClassName.
+
+

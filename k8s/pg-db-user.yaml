@@ -1,0 +1,98 @@
+# How to re-deploy (kubectl):
+#   kubectl delete -f pg-db-user.yaml --ignore-not-found
+#   kubectl apply  -f pg-db-user.yaml
+#   kubectl get pods,svc -l app=pg-db-user -o wide
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-db-user
+  labels:
+    app: pg-db-user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-db-user
+  template:
+    metadata:
+      labels:
+        app: pg-db-user
+    spec:
+      containers:
+        - name: postgres
+          # PostgreSQL 17 (latest stable in 17.x line)
+          image: postgres:17
+          imagePullPolicy: IfNotPresent
+          args:
+            - "-c"
+            - "port=15432"
+          ports:
+            - containerPort: 15432
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: USER_DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: USER_DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: USER_DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: USER_DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: USER_DB_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: USER_DB_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: USER_DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: USER_DB_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pg-db-user-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-db-user
+  labels:
+    app: pg-db-user
+spec:
+  type: NodePort
+  selector:
+    app: pg-db-user
+  ports:
+    - name: postgres
+      port: 15432
+      targetPort: 15432
+      nodePort: 31001
+
+

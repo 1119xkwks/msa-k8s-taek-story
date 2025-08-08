@@ -1,0 +1,21 @@
+# How to re-create (kubectl):
+#   kubectl delete -f pg-db-posting-pvc.yaml --ignore-not-found
+#   kubectl apply  -f pg-db-posting-pvc.yaml
+#   kubectl get pvc pg-db-posting-pvc
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg-db-posting-pvc
+  labels:
+    app: pg-db-posting
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  # storageClassName: <your-storageclass-name>
+  # If you have a default StorageClass, you can omit storageClassName.
+
+

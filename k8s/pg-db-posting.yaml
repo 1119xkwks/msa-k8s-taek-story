@@ -1,0 +1,97 @@
+# How to re-deploy (kubectl):
+#   kubectl delete -f pg-db-posting.yaml --ignore-not-found
+#   kubectl apply  -f pg-db-posting.yaml
+#   kubectl get pods,svc -l app=pg-db-posting -o wide
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-db-posting
+  labels:
+    app: pg-db-posting
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-db-posting
+  template:
+    metadata:
+      labels:
+        app: pg-db-posting
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          imagePullPolicy: IfNotPresent
+          args:
+            - "-c"
+            - "port=15433"
+          ports:
+            - containerPort: 15433
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: POSTING_DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: POSTING_DB_PASSWORD
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: POSTING_DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: POSTING_DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: POSTING_DB_NAME
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: POSTING_DB_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: POSTING_DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: POSTING_DB_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pg-db-posting-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-db-posting
+  labels:
+    app: pg-db-posting
+spec:
+  type: NodePort
+  selector:
+    app: pg-db-posting
+  ports:
+    - name: postgres
+      port: 15433
+      targetPort: 15433
+      nodePort: 31002
+
+
