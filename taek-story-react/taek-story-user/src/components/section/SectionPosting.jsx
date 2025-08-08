@@ -1,6 +1,6 @@
 import "./SectionPosting.css";
 import { Button, Avatar, Textarea } from "flowbite-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import MyCard from "../layout/MyCard.jsx";
 import MyDivider from "../layout/MyDivider.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +15,9 @@ import {
   faHeart,
   faFaceSurprise,
 } from "@fortawesome/free-solid-svg-icons";
+import PostingVideoPanel from "../post/posting/action/PostingVideoPanel.jsx";
+import PostingPhotoPanel from "../post/posting/action/PostingPhotoPanel.jsx";
+import PostingFeelingPanel from "../post/posting/action/PostingFeelingPanel.jsx";
 
 const SectionPosting = () => {
   const [postingText, setPostingText] = useState("");
@@ -23,6 +26,7 @@ const SectionPosting = () => {
   const [videoFile, setVideoFile] = useState(null);
   const [photoFiles, setPhotoFiles] = useState([]);
   const [selectedFeeling, setSelectedFeeling] = useState(null);
+  const prevActionRef = useRef(null);
 
   const handlePost = () => {
     setPostingText("");
@@ -52,6 +56,17 @@ const SectionPosting = () => {
       photoPreviews.forEach((p) => URL.revokeObjectURL(p.url));
     };
   }, [photoPreviews]);
+
+  // 패널 전환 시 상태 초기화 (닫히는 순간 clear)
+  useEffect(() => {
+    const prev = prevActionRef.current;
+    if (prev && prev !== activeAction) {
+      if (prev === "video") setVideoFile(null);
+      if (prev === "photo") setPhotoFiles([]);
+      if (prev === "feeling") setSelectedFeeling(null);
+    }
+    prevActionRef.current = activeAction;
+  }, [activeAction]);
 
   const FEELINGS = [
     { id: "happy", label: "Happy", icon: faFaceSmile, color: "text-amber-500" },
@@ -133,92 +148,30 @@ const SectionPosting = () => {
         </div>
 
         {activeAction === "video" && (
-          <div className="action-panel">
-            <div className="file-row">
-              <label className="file-label">
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={handleVideoChange}
-                />
-                <span className="file-button">Choose video</span>
-              </label>
-              <span className="file-name">
-                {videoFile?.name || "No file selected"}
-              </span>
-              <button
-                type="button"
-                className={`file-clear ${videoFile ? "" : "is-disabled"}`}
-                onClick={() => setVideoFile(null)}
-                disabled={!videoFile}
-              >
-                Clear
-              </button>
-            </div>
-          </div>
+          <PostingVideoPanel
+            videoFile={videoFile}
+            onChoose={handleVideoChange}
+            onClear={() => setVideoFile(null)}
+          />
         )}
 
         {activeAction === "photo" && (
-          <div className="action-panel">
-            <div className="file-row">
-              <label className="file-label">
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handlePhotoChange}
-                />
-                <span className="file-button">Choose photos</span>
-              </label>
-              <span className="file-name">
-                {photoFiles.length > 0
-                  ? `${photoFiles.length} selected`
-                  : "No files selected"}
-              </span>
-              <button
-                type="button"
-                className={`file-clear ${photoFiles.length ? "" : "is-disabled"}`}
-                onClick={() => setPhotoFiles([])}
-                disabled={photoFiles.length === 0}
-              >
-                Clear
-              </button>
-            </div>
-            {photoPreviews.length > 0 && (
-              <div className="thumb-grid" aria-label="selected photos preview">
-                {photoPreviews.map((p, idx) => (
-                  <img
-                    key={idx}
-                    src={p.url}
-                    alt={`preview-${idx}`}
-                    className="thumb"
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+          <PostingPhotoPanel
+            photoFiles={photoFiles}
+            photoPreviews={photoPreviews}
+            onChoose={handlePhotoChange}
+            onClear={() => setPhotoFiles([])}
+          />
         )}
 
         {activeAction === "feeling" && (
-          <div className="action-panel">
-            <div className="feeling-grid">
-              {FEELINGS.map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  className={`feeling-item ${selectedFeeling === f.id ? "selected" : ""}`}
-                  onClick={() => setSelectedFeeling((prev) => (prev === f.id ? null : f.id))}
-                  aria-pressed={selectedFeeling === f.id}
-                >
-                  <FontAwesomeIcon
-                    icon={f.icon}
-                    className={`feeling-icon ${f.color}`}
-                  />
-                  <span className="feeling-label">{f.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+          <PostingFeelingPanel
+            feelings={FEELINGS}
+            selectedFeeling={selectedFeeling}
+            onSelect={(id) =>
+              setSelectedFeeling((prev) => (prev === id ? null : id))
+            }
+          />
         )}
       </MyCard>
     </section>

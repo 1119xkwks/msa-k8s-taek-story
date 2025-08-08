@@ -75,7 +75,7 @@
     @apply flex items-center gap-3;
 }
 .section-posting .file-clear {
-    @apply text-sm text-blue-600 hover:underline disabled:text-gray-400 disabled:cursor-not-allowed;
+    @apply ml-auto text-sm text-blue-600 hover:underline disabled:text-gray-400 disabled:cursor-not-allowed;
 }
 
 /* 사진 썸네일 그리드 */
