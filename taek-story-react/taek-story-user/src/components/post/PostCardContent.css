@@ -20,6 +20,16 @@
     @apply w-full rounded-lg;
 }
 
+.post-card-content .attach .feeling .feeling-badge {
+    @apply inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gray-50 border border-gray-200;
+}
+.post-card-content .attach .feeling .feeling-icon {
+    @apply text-xl;
+}
+.post-card-content .attach .feeling .feeling-text {
+    @apply text-sm text-gray-700;
+}
+
 .post-card-content .content {
     @apply mb-2;
 }
