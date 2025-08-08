@@ -9,3 +9,9 @@
 *.ipr
 
 
+# VS Code settings
+.vscode/
+**/.vscode/
+**/.vscode/*
+**/.vscode/**
+
