@@ -4,17 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import MyCard from "../layout/MyCard.jsx";
 import MyDivider from "../layout/MyDivider.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faVideo,
-  faImage,
-  faSmile,
-  faFaceSmile,
-  faFaceFrown,
-  faFaceAngry,
-  faFaceTired,
-  faHeart,
-  faFaceSurprise,
-} from "@fortawesome/free-solid-svg-icons";
+import { faVideo, faImage, faSmile } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
+import { selectFeelings } from "../../store/feelingsSlice.js";
 import PostingVideoPanel from "../post/posting/action/PostingVideoPanel.jsx";
 import PostingPhotoPanel from "../post/posting/action/PostingPhotoPanel.jsx";
 import PostingFeelingPanel from "../post/posting/action/PostingFeelingPanel.jsx";
@@ -68,19 +60,7 @@ const SectionPosting = () => {
     prevActionRef.current = activeAction;
   }, [activeAction]);
 
-  const FEELINGS = [
-    { id: "happy", label: "Happy", icon: faFaceSmile, color: "text-amber-500" },
-    { id: "sad", label: "Sad", icon: faFaceFrown, color: "text-blue-600" },
-    { id: "angry", label: "Angry", icon: faFaceAngry, color: "text-red-600" },
-    { id: "tired", label: "Tired", icon: faFaceTired, color: "text-gray-600" },
-    { id: "love", label: "In love", icon: faHeart, color: "text-pink-600" },
-    {
-      id: "surprised",
-      label: "Surprised",
-      icon: faFaceSurprise,
-      color: "text-purple-600",
-    },
-  ];
+  const FEELINGS = useSelector(selectFeelings);
 
   return (
     <section className="section-posting">
