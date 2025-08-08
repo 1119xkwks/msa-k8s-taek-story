@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+.post-card-content {
+    @apply pt-2;
+}
+
+.post-card-content .attach {
+    @apply mb-2;
+}
+
+.post-card-content .attach img.image-single {
+    @apply rounded-lg;
+}
+
+.post-card-content .attach .image-multi-carousel {
+    @apply h-[300px];
+}
+
+.post-card-content .attach video.video {
+    @apply w-full rounded-lg;
+}
+
+.post-card-content .content {
+    @apply mb-2;
+}

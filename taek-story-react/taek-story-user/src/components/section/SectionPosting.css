@@ -13,3 +13,7 @@
 .section-posting .textarea-posting {
     @apply w-full resize-none;
 }
+
+.section-posting .posting-button:disabled {
+    @apply bg-blue-500/50 cursor-not-allowed;
+}

@@ -26,6 +26,7 @@ const SectionPosting = () => {
             onBlur={() => !postingText && setTextareaRows(1)} // focus 해제 시 비어있으면 rows=1
           />
           <Button
+            className="posting-button"
             color="blue"
             onClick={handlePost}
             disabled={!postingText.trim()}

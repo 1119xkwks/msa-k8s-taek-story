@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/* 컨테이너 */
+.post-card-comment {
+    @apply w-full space-y-5;
+}
+
+/* 댓글 한 항목 (작성자 아바타 + 내용) */
+.post-card-comment .comment-item {
+    @apply flex gap-3 items-start;
+}
+
+/* 말풍선 영역 */
+.post-card-comment .comment-bubble {
+    @apply inline-block bg-white text-gray-900 rounded-2xl px-4 py-2 align-top shadow-sm border border-gray-200;
+}
+
+/* 작성자 */
+.post-card-comment .author {
+    @apply font-semibold leading-snug text-gray-900;
+}
+
+/* 본문 */
+.post-card-comment .content {
+    @apply mt-1 whitespace-pre-wrap break-words text-gray-800;
+}
+
+/* 메타(좋아요/답글/시간/더보기) */
+.post-card-comment .comment-meta {
+    @apply mt-1 flex items-center gap-3 text-xs text-gray-500;
+}
+.post-card-comment .meta-button {
+    @apply hover:underline inline-flex items-center gap-1 transition-colors;
+}
+.post-card-comment .meta-more {
+    @apply ml-auto p-1 rounded hover:bg-gray-100;
+}
+.post-card-comment .time {
+    @apply select-none;
+}
+
+/* 답글 쓰레드 */
+.post-card-comment .reply-thread {
+    @apply mt-2 ml-12 space-y-3;
+}
+.post-card-comment .reply-toggle {
+    @apply text-xs text-gray-600 hover:underline inline-flex items-center gap-1;
+}
+.post-card-comment .replies {
+    @apply space-y-3;
+}
+
+/* 답글 입력 영역 */
+.post-card-comment .reply-editor {
+    @apply mt-3 ml-12 space-y-2;
+}
+.post-card-comment .reply-editor textarea {
+    @apply w-full rounded-lg border border-gray-300 bg-white text-gray-900 text-sm p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+.post-card-comment .reply-actions {
+    @apply flex items-center gap-2 justify-end;
+}
+
