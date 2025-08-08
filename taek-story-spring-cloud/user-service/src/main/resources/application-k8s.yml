@@ -1,0 +1,13 @@
+server:
+  port: 90
+
+spring:
+  application:
+    name: user-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, info
+
