@@ -1,8 +1,9 @@
 import "./PostCardComment.css";
 
 import { useEffect, useMemo, useState } from "react";
+import dayjs from "dayjs";
 import CommentItem from "./comment/CommentItem.jsx";
-import { Avatar, Button, Textarea } from "flowbite-react";
+// no direct UI imports needed here
 import CommentComposer from "./comment/CommentComposer.jsx";
 
 const PostCardComment = ({ comments }) => {
@@ -15,7 +16,7 @@ const PostCardComment = ({ comments }) => {
           avatarUrl: "https://i.pravatar.cc/40?u=alice",
         },
         content: "오늘 날씨 정말 좋네요! 산책 가고 싶어요 ☀️",
-        createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+        createdAt: dayjs().subtract(15, "minute").format("YYYY-MM-DDTHH:mm:ss"),
         likes: 3,
         replies: [
           {
@@ -25,7 +26,9 @@ const PostCardComment = ({ comments }) => {
               avatarUrl: "https://i.pravatar.cc/40?u=bob",
             },
             content: "맞아요! 강아지랑 공원 다녀왔어요 🐶",
-            createdAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
+            createdAt: dayjs()
+              .subtract(10, "minute")
+              .format("YYYY-MM-DDTHH:mm:ss"),
             likes: 1,
             replies: [
               /*
@@ -50,7 +53,9 @@ const PostCardComment = ({ comments }) => {
               avatarUrl: "https://i.pravatar.cc/40?u=dave",
             },
             content: "저는 자전거 타고 왔습니다 🚴‍♂️",
-            createdAt: new Date(Date.now() - 1000 * 60 * 9).toISOString(),
+            createdAt: dayjs()
+              .subtract(9, "minute")
+              .format("YYYY-MM-DDTHH:mm:ss"),
             likes: 0,
             replies: [],
           },
@@ -60,7 +65,7 @@ const PostCardComment = ({ comments }) => {
         id: "c2",
         author: { name: "Eve", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
         content: "주말에 등산 갈 분 계신가요? ⛰️",
-        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        createdAt: dayjs().subtract(1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
         likes: 5,
         replies: [],
       },
@@ -68,7 +73,7 @@ const PostCardComment = ({ comments }) => {
         id: "c3",
         author: { name: "Eve", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
         content: "3야호",
-        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        createdAt: dayjs().subtract(1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
         likes: 5,
         replies: [],
       },
@@ -76,7 +81,7 @@ const PostCardComment = ({ comments }) => {
         id: "c4",
         author: { name: "xor", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
         content: "4어디 갔다 왔어?",
-        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        createdAt: dayjs().subtract(1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
         likes: 5,
         replies: [],
       },
@@ -84,7 +89,7 @@ const PostCardComment = ({ comments }) => {
         id: "c5",
         author: { name: "Eve", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
         content: "5주말에 등산 갈 분 계신가요? ⛰️",
-        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        createdAt: dayjs().subtract(1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
         likes: 5,
         replies: [],
       },
@@ -92,7 +97,7 @@ const PostCardComment = ({ comments }) => {
         id: "c6",
         author: { name: "Eve", avatarUrl: "https://i.pravatar.cc/40?u=eve" },
         content: "6야호",
-        createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+        createdAt: dayjs().subtract(1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
         likes: 5,
         replies: [],
       },
@@ -128,7 +133,7 @@ const PostCardComment = ({ comments }) => {
       id: `new-${Date.now()}`,
       author: { name: "You", avatarUrl: "https://i.pravatar.cc/40?u=you" },
       content: value,
-      createdAt: new Date().toISOString(),
+      createdAt: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
       likes: 0,
       replies: [],
     };

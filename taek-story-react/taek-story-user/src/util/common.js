@@ -1,16 +1,19 @@
-export function formatRelativeTime(isoString) {
+import dayjs from "dayjs";
+
+export function formatRelativeTime(isoOrPlainString) {
   try {
-    const date = new Date(isoString);
-    const diffMs = Date.now() - date.getTime();
-    const diffSec = Math.floor(diffMs / 1000);
+    const d = dayjs(isoOrPlainString);
+    if (!d.isValid()) return "";
+    const now = dayjs();
+    const diffSec = now.diff(d, "second");
     if (diffSec < 60) return "방금 전";
-    const diffMin = Math.floor(diffSec / 60);
+    const diffMin = now.diff(d, "minute");
     if (diffMin < 60) return `${diffMin}분 전`;
-    const diffHr = Math.floor(diffMin / 60);
+    const diffHr = now.diff(d, "hour");
     if (diffHr < 24) return `${diffHr}시간 전`;
-    const diffDay = Math.floor(diffHr / 24);
+    const diffDay = now.diff(d, "day");
     if (diffDay < 7) return `${diffDay}일 전`;
-    return date.toLocaleDateString();
+    return d.format("YYYY-MM-DD");
   } catch (e) {
     return "";
   }
