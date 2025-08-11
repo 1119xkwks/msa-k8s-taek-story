@@ -1,0 +1,93 @@
+# How to re-create (kubectl):
+#   kubectl delete -f user-service.yaml --ignore-not-found
+#   kubectl apply  -f user-service.yaml
+#   kubectl get deploy user-service-deploy
+#   kubectl get svc user-service
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트 (이미지 태그 변경 없이 새로 pull 원하면 :latest 권장)
+#   kubectl set image deploy/user-service-deploy user-service=ytkwon91/user-service:0.1
+#   kubectl rollout status deploy/user-service-deploy
+#   # 필요 시 롤백
+#   kubectl rollout undo deploy/user-service-deploy
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: ytkwon91/user-service:0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 90
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: USER_DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: USER_DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: USER_DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: USER_DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: USER_DB_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 90
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 90
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            failureThreshold: 3
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  type: NodePort
+  selector:
+    app: user-service
+  ports:
+    - name: http
+      port: 90
+      targetPort: 90
+      nodePort: 32090
+
+
