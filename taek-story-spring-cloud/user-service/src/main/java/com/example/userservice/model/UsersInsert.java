@@ -19,6 +19,7 @@ public class UsersInsert {
 
 	/** 이메일 */
 	@NotBlank(message = "이메일을 입력하세요.")
+	@Email(message = "이메일 형식이 올바르지 않습니다.")
 	@Size(max = 100, message = "이메일을 최대 100자까지 가능합니다.")
 	private String email;
 
