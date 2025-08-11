@@ -6,7 +6,6 @@ import {
   faEyeSlash,
   faEnvelope,
   faLock,
-  faHome,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Login.css";
 import usePageTitle from "../hooks/usePageTitle.jsx";
@@ -15,9 +14,9 @@ import AnchorHome from "../components/anchor/AnchorHome.jsx";
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
+    pw: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPw, setShowPw] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -32,7 +31,7 @@ const Login = () => {
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    setShowPw(!showPw);
   };
 
   const handleSubmit = async (e) => {
@@ -117,7 +116,7 @@ const Login = () => {
                   <FontAwesomeIcon icon={faLock} />
                 </span>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPw ? "text" : "password"}
                   id="password"
                   name="password"
                   value={formData.password}
@@ -139,11 +138,9 @@ const Login = () => {
                   }}
                   tabIndex="3"
                   role="button"
-                  aria-label={
-                    showPassword ? "비밀번호 숨기기" : "비밀번호 보기"
-                  }
+                  aria-label={showPw ? "비밀번호 숨기기" : "비밀번호 보기"}
                 >
-                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                  <FontAwesomeIcon icon={showPw ? faEyeSlash : faEye} />
                 </span>
               </div>
             </div>
