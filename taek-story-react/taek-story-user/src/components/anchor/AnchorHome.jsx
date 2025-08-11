@@ -9,7 +9,7 @@ const AnchorHome = ({ showText, className = "" }) => {
   }
 
   return (
-    <a href="/public" className={className}>
+    <a href="/" className={className}>
       <FontAwesomeIcon icon={faHome} className={iconClassName} />
       {showText ? <span>{showText}</span> : ""}
     </a>
