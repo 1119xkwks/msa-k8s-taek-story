@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:k8s": "vite --mode k8s",
     "build": "vite build",
+    "build:k8s": "vite build --mode k8s",
     "lint": "eslint .",
     "preview": "vite preview"
   },

@@ -16,12 +16,13 @@ import usePageTitle from "../hooks/usePageTitle";
 import AnchorHome from "../components/anchor/AnchorHome.jsx";
 
 const SignUp = () => {
+  const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "";
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
-    confirmPassword: "",
+    pw: "",
+    pwChk: "",
     nickname: "",
-    birthDate: "",
+    birth: "",
     phone: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -55,10 +56,10 @@ const SignUp = () => {
     // 유효성 검사
     if (
       !formData.email ||
-      !formData.password ||
-      !formData.confirmPassword ||
+      !formData.pw ||
+      !formData.pwChk ||
       !formData.nickname ||
-      !formData.birthDate ||
+      !formData.birth ||
       !formData.phone
     ) {
       setError("모든 필드를 입력해주세요.");
@@ -72,13 +73,13 @@ const SignUp = () => {
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.pw !== formData.pwChk) {
       setError("비밀번호가 일치하지 않습니다.");
       setIsLoading(false);
       return;
     }
 
-    if (formData.password.length < 6) {
+    if (formData.pw.length < 6) {
       setError("비밀번호는 최소 6자 이상이어야 합니다.");
       setIsLoading(false);
       return;
@@ -86,13 +87,29 @@ const SignUp = () => {
 
     // 실제 회원가입 로직은 여기에 구현
     try {
-      // API 호출 시뮬레이션
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // API 호출
+      const res = await fetch(`${API_BASE}/user-service/users`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          pw: formData.pw,
+          pwChk: formData.pwChk,
+          nickname: formData.nickname,
+          birth: formData.birth,
+          phone: formData.phone,
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "회원가입 실패");
+      }
 
       // 성공 시 로그인 페이지로 이동
       window.location.href = "/login";
     } catch (err) {
-      setError("회원가입에 실패했습니다. 다시 시도해주세요.");
+      setError(err.message || "회원가입에 실패했습니다. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
     }
@@ -140,7 +157,7 @@ const SignUp = () => {
 
             {/* 비밀번호 입력 필드 */}
             <div className="input-group">
-              <label htmlFor="password" className="input-label">
+              <label htmlFor="pw" className="input-label">
                 비밀번호
               </label>
               <div className="input-container">
@@ -149,14 +166,15 @@ const SignUp = () => {
                 </span>
                 <input
                   type={showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  value={formData.password}
+                  id="pw"
+                  name="pw"
+                  value={formData.pw}
                   onChange={handleInputChange}
                   placeholder="비밀번호를 입력하세요"
                   className="input-field"
                   tabIndex="2"
                   required
+                  autoComplete="off"
                 />
                 <span
                   className="password-toggle-span"
@@ -180,7 +198,7 @@ const SignUp = () => {
 
             {/* 비밀번호 확인 입력 필드 */}
             <div className="input-group">
-              <label htmlFor="confirmPassword" className="input-label">
+              <label htmlFor="pwChk" className="input-label">
                 비밀번호 확인
               </label>
               <div className="input-container">
@@ -189,14 +207,15 @@ const SignUp = () => {
                 </span>
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
+                  id="pwChk"
+                  name="pwChk"
+                  value={formData.pwChk}
                   onChange={handleInputChange}
                   placeholder="비밀번호를 다시 입력하세요"
                   className="input-field"
                   tabIndex="4"
                   required
+                  autoComplete="off"
                 />
                 <span
                   className="password-toggle-span"
@@ -245,7 +264,7 @@ const SignUp = () => {
 
             {/* 생년월일 입력 필드 */}
             <div className="input-group">
-              <label htmlFor="birthDate" className="input-label">
+              <label htmlFor="birth" className="input-label">
                 생년월일
               </label>
               <div className="input-container">
@@ -254,9 +273,9 @@ const SignUp = () => {
                 </span>
                 <input
                   type="date"
-                  id="birthDate"
-                  name="birthDate"
-                  value={formData.birthDate}
+                  id="birth"
+                  name="birth"
+                  value={formData.birth}
                   onChange={handleInputChange}
                   className="input-field"
                   tabIndex="7"

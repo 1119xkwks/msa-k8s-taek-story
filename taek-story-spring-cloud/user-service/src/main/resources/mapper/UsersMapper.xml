@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.userservice.mapper.UsersMapper">
+
+    <insert id="insert" parameterType="com.example.userservice.model.UsersInsert" useGeneratedKeys="true">
+        INSERT INTO users (
+            email, pw, nickname, birth, phone
+        ) VALUES (
+            #{email}, hash_password(#{pw}), #{nickname}, #{birth}, #{phone}
+        )
+    </insert>
+
+    <select id="countByEmail" parameterType="string" resultType="int">
+        SELECT COUNT(1)
+        FROM users
+        WHERE email = #{email}
+    </select>
+
+</mapper>
+
+

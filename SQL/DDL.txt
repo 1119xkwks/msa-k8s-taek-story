@@ -1,0 +1,30 @@
+
+-- drop table users;
+CREATE TABLE users (
+    seq INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,   -- 순번
+    email VARCHAR(100) NOT NULL UNIQUE,                 -- 이메일
+    pw VARCHAR(200) NOT NULL,                           -- 비밀번호
+    nickname VARCHAR(50) NOT NULL,                      -- 닉네임
+    birth DATE NOT NULL,                                -- 생일
+    phone VARCHAR(20) NOT NULL                          -- 핸드폰번호
+);
+
+-- 테이블 주석
+COMMENT ON TABLE users IS '사용자 테이블';
+
+-- 컬럼 주석
+COMMENT ON COLUMN users.seq IS '순번';
+COMMENT ON COLUMN users.email IS '이메일';
+COMMENT ON COLUMN users.pw IS '비밀번호';
+COMMENT ON COLUMN users.nickname IS '닉네임';
+COMMENT ON COLUMN users.birth IS '생일';
+COMMENT ON COLUMN users.phone IS '핸드폰번호';
+
+-- 비밀번호 단방향 암호화
+CREATE OR REPLACE FUNCTION hash_password(p_plain text)
+RETURNS text
+LANGUAGE sql
+VOLATILE
+AS $$
+  SELECT crypt(p_plain, gen_salt('bf'));
+$$;
