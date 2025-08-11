@@ -12,11 +12,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./SignUp.css";
 import usePageTitle from "../hooks/usePageTitle";
+import { useNavigate } from "react-router-dom";
 import AnchorHome from "../components/anchor/AnchorHome.jsx";
 import { $alert, $confirm } from "../util/modals.js";
 
 const SignUp = () => {
   const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "";
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     pw: "",
@@ -108,7 +110,7 @@ const SignUp = () => {
 
       // 성공 시 로그인 페이지로 이동
       await $alert("회원가입 되었습니다. 로그인 해주세요.");
-      window.location.href = "/login";
+      navigate("/login", { replace: true });
     } catch (err) {
       setError(err.message || "회원가입에 실패했습니다. 다시 시도해주세요.");
     } finally {

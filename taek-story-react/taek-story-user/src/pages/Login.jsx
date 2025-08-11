@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "/src/store/sessionSlice.js";
+import { useNavigate } from "react-router-dom";
 import { Button, Card } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,10 +15,9 @@ import usePageTitle from "../hooks/usePageTitle.jsx";
 import AnchorHome from "../components/anchor/AnchorHome.jsx";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    pw: "",
-  });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ email: "", pw: "" });
   const [showPw, setShowPw] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -40,7 +42,7 @@ const Login = () => {
     setError("");
 
     // 간단한 유효성 검사
-    if (!formData.email || !formData.password) {
+    if (!formData.email || !formData.pw) {
       setError("이메일과 비밀번호를 모두 입력해주세요.");
       setIsLoading(false);
       return;
@@ -54,11 +56,15 @@ const Login = () => {
 
     // 실제 로그인 로직은 여기에 구현
     try {
-      // API 호출 시뮬레이션
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // 성공 시 홈페이지로 이동
-      window.location.href = "/";
+      // TODO: 실제 로그인 API 호출 후 서버가 주는 사용자 정보(비번 제외)를 사용
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      const profile = {
+        email: formData.email,
+        nickname: "Guest",
+        roles: ["USER"],
+      };
+      dispatch(setUser(profile));
+      navigate("/", { replace: true });
     } catch (err) {
       setError("로그인에 실패했습니다. 다시 시도해주세요.");
     } finally {
