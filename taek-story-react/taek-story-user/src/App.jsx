@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
+import ConfirmModal from "./components/modal/ConfirmModal.jsx";
+import AlertModal from "./components/modal/AlertModal.jsx";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
+      <ConfirmModal />
+      <AlertModal />
     </>
   );
 }
