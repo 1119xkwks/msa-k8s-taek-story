@@ -1,4 +1,8 @@
-package com.example.fileservice;
+package com.example.fileservice.mapper;
 
-public class HomeMapper {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface HomeMapper {
+	String selectNow();
 }

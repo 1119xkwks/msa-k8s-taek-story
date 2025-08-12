@@ -1,21 +1,16 @@
 server:
-  port: 90
-  servlet:
-    session:
-      cookie:
-        same-site: Lax
-        secure: false
+  port: 91
 
 spring:
   application:
-    name: user-service
+    name: file-service
   data:
     redis:
       host: localhost
       port: 30101
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:31001/userdb
+    url: jdbc:postgresql://localhost:31004/filedb
     username: postgres
     password: postgres
   sql:
@@ -27,11 +22,11 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  type-aliases-package: com.example.userservice.model
+  type-aliases-package: com.example.fileservice.model
 
 logging:
   level:
-    com.example.userservice.mapper: DEBUG
+    com.example.fileservice.mapper: DEBUG
     org.mybatis: DEBUG
     org.apache.ibatis: DEBUG
     com.p6spy: DEBUG

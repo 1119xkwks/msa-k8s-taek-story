@@ -16,5 +16,9 @@ data:
   POSTING_DB_NAME: postingdb
   POSTING_DB_HOST: pg-db-posting
   POSTING_DB_PORT: "15433"
+  # FILE DB
+  FILE_DB_NAME: filedb
+  FILE_DB_HOST: pg-db-file
+  FILE_DB_PORT: "15434"
 
 

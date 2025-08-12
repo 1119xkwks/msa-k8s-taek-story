@@ -1,0 +1,18 @@
+# How to re-create (kubectl):
+#   kubectl delete -f minio-pvc.yaml --ignore-not-found
+#   kubectl apply  -f minio-pvc.yaml
+#   kubectl get pvc minio-pvc -o wide
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  # storageClassName: standard  # 필요 시 스토리지 클래스 지정
+
+

@@ -1,0 +1,72 @@
+# How to re-deploy (kubectl):
+#   kubectl delete -f pg-db-file.yaml --ignore-not-found
+#   kubectl apply  -f pg-db-file.yaml
+#   kubectl get pods,svc -l app=pg-db-file -o wide
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-db-file
+  labels:
+    app: pg-db-file
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-db-file
+  template:
+    metadata:
+      labels:
+        app: pg-db-file
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          imagePullPolicy: IfNotPresent
+          args:
+            - "-c"
+            - "port=15434"
+          ports:
+            - containerPort: 15434
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: FILE_DB_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: FILE_DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: FILE_DB_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pg-db-file-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-db-file
+  labels:
+    app: pg-db-file
+spec:
+  type: NodePort
+  selector:
+    app: pg-db-file
+  ports:
+    - name: postgres
+      port: 15434
+      targetPort: 15434
+      nodePort: 31004
+
+
