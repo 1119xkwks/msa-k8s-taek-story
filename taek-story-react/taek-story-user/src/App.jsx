@@ -11,7 +11,7 @@ import AlertModal from "./components/modal/AlertModal.jsx";
 import useSessionRefresher from "./hooks/useSessionRefresher.jsx";
 
 function App() {
-  // 페이지 이동할 때마다 세션 정보 불러오는 Custom Hook
+  // 페이지 이동시마다 세션 정보 가져오기
   useSessionRefresher();
 
   return (

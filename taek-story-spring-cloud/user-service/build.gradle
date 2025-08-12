@@ -34,6 +34,13 @@ dependencies {
     implementation 'org.apache.commons:commons-collections4:4.5.0'
     implementation 'com.google.code.gson:gson:2.13.1'
 
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
+
+    // Pretty SQL logging
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
+
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

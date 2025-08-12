@@ -19,8 +19,16 @@ import {
   SidebarItems,
   TextInput,
 } from "flowbite-react";
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "../../store/sessionSlice.js";
 
 const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  const onSignOut = async () => {
+    console.log("onSignOut");
+  };
+
   return (
     <Drawer
       className="right-side-menu"
@@ -60,30 +68,36 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                     Notification
                   </SidebarItem>
                 </SidebarItemGroup>
-                <SidebarItemGroup>
-                  <SidebarItem
-                    href="/login"
-                    icon={() => (
-                      <FontAwesomeIcon icon={faArrowRightToBracket} />
-                    )}
-                  >
-                    로그인
-                  </SidebarItem>
-                  <SidebarItem
-                    href="/signup"
-                    icon={() => <FontAwesomeIcon icon={faUserPlus} />}
-                  >
-                    회원가입
-                  </SidebarItem>
-                  <SidebarItem
-                    href="#"
-                    icon={() => (
-                      <FontAwesomeIcon icon={faArrowRightFromBracket} />
-                    )}
-                  >
-                    로그아웃
-                  </SidebarItem>
-                </SidebarItemGroup>
+                {isAuthenticated ? (
+                  <SidebarItemGroup>
+                    <SidebarItem
+                      href="#"
+                      icon={() => (
+                        <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                      )}
+                      onClick={onSignOut}
+                    >
+                      로그아웃
+                    </SidebarItem>
+                  </SidebarItemGroup>
+                ) : (
+                  <SidebarItemGroup>
+                    <SidebarItem
+                      href="/login"
+                      icon={() => (
+                        <FontAwesomeIcon icon={faArrowRightToBracket} />
+                      )}
+                    >
+                      로그인
+                    </SidebarItem>
+                    <SidebarItem
+                      href="/signup"
+                      icon={() => <FontAwesomeIcon icon={faUserPlus} />}
+                    >
+                      회원가입
+                    </SidebarItem>
+                  </SidebarItemGroup>
+                )}
               </SidebarItems>
             </div>
           </div>

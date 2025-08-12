@@ -1,8 +1,11 @@
 package com.example.userservice.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 사용자 DTO
@@ -10,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
+@Alias("users")
 public class Users {
 
 	/** 순번 (자동 증가, PK) */
@@ -19,7 +23,8 @@ public class Users {
 	private String email;
 
 	/** 비밀번호 */
-	private String password;
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String pw;
 
 	/** 닉네임 */
 	private String nickname;
@@ -29,4 +34,9 @@ public class Users {
 
 	/** 핸드폰번호 */
 	private String phone;
+
+	private LocalDateTime crtDt;
+	private String crtIp;
+	private LocalDateTime udtDt;
+	private String udtIp;
 }

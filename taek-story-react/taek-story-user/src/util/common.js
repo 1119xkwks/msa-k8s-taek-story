@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import { apiFetch } from "./api.js";
+import { useNavigate } from "react-router-dom";
 
 export function formatRelativeTime(isoOrPlainString) {
   try {
@@ -16,5 +18,17 @@ export function formatRelativeTime(isoOrPlainString) {
     return d.format("YYYY-MM-DD");
   } catch (e) {
     return "";
+  }
+}
+
+export async function signOut() {
+  console.debug("signOut called.");
+  const navigate = useNavigate();
+  const response = await apiFetch(`/user-service/users/signout`, {
+    method: "POST",
+    credentials: "include",
+  });
+  if (response.ok) {
+    navigate("/");
   }
 }

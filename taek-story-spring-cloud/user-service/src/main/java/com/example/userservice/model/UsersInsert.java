@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -15,6 +17,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@Alias("usersInsert")
 public class UsersInsert {
 
 	/** 이메일 */
@@ -54,4 +57,9 @@ public class UsersInsert {
 		}
 		return Objects.equals(pw, pwChk);
 	}
+
+	private LocalDateTime crtDt;
+	private String crtIp;
+	private LocalDateTime udtDt;
+	private String udtIp;
 }

@@ -67,7 +67,7 @@ const SectionPosting = () => {
       <MyCard className="section-posting-card">
         <div className="section-posting-card-main">
           <Avatar img="https://i.pravatar.cc/40" alt="User avatar" rounded />
-          <Textarea
+          <textarea
             className="textarea-posting"
             placeholder="What's on your mind?"
             value={postingText}

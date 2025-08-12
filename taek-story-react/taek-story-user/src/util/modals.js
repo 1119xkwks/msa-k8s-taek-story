@@ -20,17 +20,12 @@ export const $confirm = (msg) => {
 };
 
 export const resolveConfirm = (value) => {
-  try {
-    if (configResolver) {
-      const r = configResolver;
-      configResolver = null;
-      r(value);
-    }
-  } finally {
-    // Always close and clear message
-    store.dispatch(closeConfirmModal());
-    store.dispatch(setConfirmModalMsg(""));
-  }
+  const r = configResolver;
+  configResolver = null;
+  // Close first, then resolve on next tick
+  store.dispatch(closeConfirmModal());
+  store.dispatch(setConfirmModalMsg(""));
+  if (r) setTimeout(() => r(value), 0);
 };
 
 let alertResolver = null;
@@ -42,14 +37,10 @@ export const $alert = (msg) =>
   });
 
 export const resolveAlert = (value) => {
-  try {
-    if (alertResolver) {
-      const r = alertResolver;
-      alertResolver = null;
-      r(value);
-    }
-  } finally {
-    store.dispatch(closeAlertModal());
-    store.dispatch(setAlertModalMsg(""));
-  }
+  const r = alertResolver;
+  alertResolver = null;
+  // Close first, then resolve on next tick
+  store.dispatch(closeAlertModal());
+  store.dispatch(setAlertModalMsg(""));
+  if (r) setTimeout(() => r(value), 0);
 };

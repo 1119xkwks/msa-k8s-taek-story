@@ -2,18 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.userservice.mapper.UsersMapper">
 
-    <insert id="insert" parameterType="com.example.userservice.model.UsersInsert" useGeneratedKeys="true">
-        INSERT INTO users (
-            email, pw, nickname, birth, phone
-        ) VALUES (
-            #{email}, hash_password(#{pw}), #{nickname}, #{birth}, #{phone}
+    <insert id="insert" parameterType="usersInsert" useGeneratedKeys="true">
+        /** insert  */
+        insert into users (
+            email, pw, nickname, birth, phone, crt_dt, crt_ip
+        ) values (
+            #{email}, hash_password_fixed_salt(#{pw}), #{nickname}, #{birth}, #{phone}, CURRENT_TIMESTAMP, #{crtIp}
         )
     </insert>
 
     <select id="countByEmail" parameterType="string" resultType="int">
-        SELECT COUNT(1)
-        FROM users
-        WHERE email = #{email}
+        /** countByEmail    */
+        select count(1)
+        from users
+        where email = #{email}
+    </select>
+
+    <select id="selectByLogin" resultType="users" >
+        /** selectByLogin   */
+        select  seq
+            ,   email
+            ,   nickname
+            ,   birth
+            ,   phone
+            ,   crt_dt
+            ,   crt_ip
+            ,   udt_dt
+            ,   udt_ip
+        from    users
+        where   1=1
+        and email   =   #{email}
+        and pw   =   hash_password_fixed_salt(#{pw})
     </select>
 
 </mapper>

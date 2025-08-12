@@ -1,9 +1,10 @@
+import { useSelector } from "react-redux";
+import { selectUser } from "/src/store/sessionSlice.js";
+
 const DisplayMyName = () => {
-  return (
-    <div >
-      누구누구
-    </div>
-  )
+  const user = useSelector(selectUser);
+  const nickname = user?.nickname || "Guest";
+  return <div>{nickname}</div>;
 };
 
 export default DisplayMyName;

@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setUser } from "/src/store/sessionSlice.js";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE, apiFetch } from "/src/util/api.js";
 import { Button, Card } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,16 +12,24 @@ import {
 import "./Login.css";
 import usePageTitle from "../hooks/usePageTitle.jsx";
 import AnchorHome from "../components/anchor/AnchorHome.jsx";
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "/src/store/sessionSlice.js";
 
 const Login = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const [formData, setFormData] = useState({ email: "", pw: "" });
   const [showPw, setShowPw] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   usePageTitle("로그인");
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,17 +63,23 @@ const Login = () => {
 
     // 실제 로그인 로직은 여기에 구현
     try {
-      // TODO: 실제 로그인 API 호출 후 서버가 주는 사용자 정보(비번 제외)를 사용
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      const profile = {
-        email: formData.email,
-        nickname: "Guest",
-        roles: ["USER"],
-      };
-      dispatch(setUser(profile));
+      const res = await apiFetch(`/user-service/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await res.json();
+      if (result < 1) {
+        setError("회원 정보가 존재하지 않습니다.");
+        return false;
+      }
+      // 로그인 성공
       navigate("/", { replace: true });
     } catch (err) {
-      setError("로그인에 실패했습니다. 다시 시도해주세요.");
+      setError("서버 에러입니다.. 다시 시도해주세요.");
     } finally {
       setIsLoading(false);
     }
@@ -123,9 +136,9 @@ const Login = () => {
                 </span>
                 <input
                   type={showPw ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  value={formData.password}
+                  id="pw"
+                  name="pw"
+                  value={formData.pw}
                   onChange={handleInputChange}
                   placeholder="비밀번호를 입력하세요"
                   className="input-field"

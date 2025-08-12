@@ -20,14 +20,18 @@ export default function AlertModal() {
       <ModalBody>
         <div className="text-center">
           <FontAwesomeIcon
-            className="mx-auto mb-4 text-4xl text-gray-400 dark:text-gray-200"
+            className="mx-auto mb-4 text-4xl text-gray-400 "
             icon={faCircleInfo}
           />
-          <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+          <h3 className="mb-5 text-lg font-normal text-gray-500 ">
             {msg || "알림"}
           </h3>
           <div className="flex justify-end gap-4">
-            <Button type="button" color="blue" onClick={() => resolveAlert(true)}>
+            <Button
+              type="button"
+              color="blue"
+              onClick={() => resolveAlert(true)}
+            >
               확인
             </Button>
           </div>

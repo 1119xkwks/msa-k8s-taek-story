@@ -20,7 +20,4 @@ const sessionSlice = createSlice({
 export const { setUser, clearUser } = sessionSlice.actions;
 export const selectUser = (state) => state.session.user;
 export const selectIsAuthenticated = (state) => Boolean(state.session.user);
-export const selectRoles = (state) => state.session.user?.roles || [];
 export default sessionSlice.reducer;
-
-

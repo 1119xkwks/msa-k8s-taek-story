@@ -1,12 +1,16 @@
 
 -- drop table users;
 CREATE TABLE users (
-    seq INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,   -- 순번
-    email VARCHAR(100) NOT NULL UNIQUE,                 -- 이메일
-    pw VARCHAR(200) NOT NULL,                           -- 비밀번호
-    nickname VARCHAR(50) NOT NULL,                      -- 닉네임
-    birth DATE NOT NULL,                                -- 생일
-    phone VARCHAR(20) NOT NULL                          -- 핸드폰번호
+	seq INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY   -- 순번
+,	email VARCHAR(100) NOT NULL UNIQUE                 -- 이메일
+,	pw VARCHAR(200) NOT NULL                           -- 비밀번호
+,	nickname VARCHAR(50) NOT NULL                      -- 닉네임
+,	birth DATE NOT NULL                                -- 생일
+,	phone VARCHAR(20) NOT NULL                         -- 핸드폰번호
+,	crt_dt	TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+,	crt_ip	VARCHAR(100)
+,	udt_dt	TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+,	udt_ip	VARCHAR(100)
 );
 
 -- 테이블 주석
@@ -21,10 +25,10 @@ COMMENT ON COLUMN users.birth IS '생일';
 COMMENT ON COLUMN users.phone IS '핸드폰번호';
 
 -- 비밀번호 단방향 암호화
-CREATE OR REPLACE FUNCTION hash_password(p_plain text)
+CREATE OR REPLACE FUNCTION hash_password_fixed_salt(p_plain text)
 RETURNS text
 LANGUAGE sql
-VOLATILE
+IMMUTABLE
 AS $$
-  SELECT crypt(p_plain, gen_salt('bf'));
+  SELECT crypt(p_plain, '$2a$04$abcdefghijklmnopqrstuv'); 
 $$;

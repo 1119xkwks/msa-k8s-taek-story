@@ -15,9 +15,9 @@ import usePageTitle from "../hooks/usePageTitle";
 import { useNavigate } from "react-router-dom";
 import AnchorHome from "../components/anchor/AnchorHome.jsx";
 import { $alert, $confirm } from "../util/modals.js";
+import { API_BASE, apiFetch } from "/src/util/api.js";
 
 const SignUp = () => {
-  const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) || "";
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -90,7 +90,7 @@ const SignUp = () => {
     // 실제 회원가입 로직은 여기에 구현
     try {
       // API 호출
-      const res = await fetch(`${API_BASE}/user-service/users`, {
+      const res = await apiFetch(`/user-service/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

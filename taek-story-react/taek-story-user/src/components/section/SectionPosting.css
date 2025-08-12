@@ -11,7 +11,7 @@
 }
 
 .section-posting .textarea-posting {
-    @apply w-full resize-none;
+    @apply w-full resize-none rounded-xl border-gray-300;
 }
 
 .section-posting .posting-button:disabled {

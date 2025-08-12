@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "dev:k8s": "vite --mode k8s",
     "build": "vite build",
     "build:k8s": "vite build --mode k8s",

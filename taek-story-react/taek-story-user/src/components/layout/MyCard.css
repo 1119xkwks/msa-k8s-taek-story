@@ -2,6 +2,6 @@
 
 .my-card {
     @apply flex rounded-lg border
-    border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800
+    border-gray-200 bg-white shadow-md
     flex-col p-2 px-3;
 }
