@@ -6,7 +6,7 @@
 #
 # Rollout / 이미지 교체 재배포:
 #   # 최신 이미지로 강제 롤링 업데이트 (이미지 태그 변경 없이 새로 pull 원하면 :latest 권장)
-#   kubectl set image deploy/user-service-deploy user-service=ytkwon91/user-service:0.1
+#   kubectl rollout restart deploy/user-service-deploy
 #   kubectl rollout status deploy/user-service-deploy
 #   # 필요 시 롤백
 #   kubectl rollout undo deploy/user-service-deploy
@@ -17,7 +17,7 @@ kind: Deployment
 metadata:
   name: user-service-deploy
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: user-service

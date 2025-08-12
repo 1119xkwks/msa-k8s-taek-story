@@ -1,0 +1,63 @@
+# 재적용 명령어 (k8s 폴더에서 실행)
+# kubectl apply -f taek-store-user.yaml
+# 삭제: kubectl delete -f taek-store-user.yaml
+# 확인: kubectl get deploy taek-store-user && kubectl get svc taek-store-user
+# 이미지 교체/롤아웃:
+#   kubectl rollout restart deploy/taek-store-user
+#   kubectl rollout status deploy/taek-store-user
+#   kubectl rollout undo deploy/taek-store-user
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taek-store-user
+  labels:
+    app: taek-store-user
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: taek-store-user
+  template:
+    metadata:
+      labels:
+        app: taek-store-user
+    spec:
+      containers:
+        - name: taek-store-user
+          image: ytkwon91/taek-story-user:0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: taek-store-user
+  labels:
+    app: taek-store-user
+spec:
+  type: NodePort
+  selector:
+    app: taek-store-user
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+
+
