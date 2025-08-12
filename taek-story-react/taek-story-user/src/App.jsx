@@ -8,16 +8,23 @@ import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
 import ConfirmModal from "./components/modal/ConfirmModal.jsx";
 import AlertModal from "./components/modal/AlertModal.jsx";
+import useSessionRefresher from "./hooks/useSessionRefresher.jsx";
 
 function App() {
+  // 페이지 이동할 때마다 세션 정보 불러오는 Custom Hook
+  useSessionRefresher();
+
   return (
     <>
+      {/*react-router-dom*/}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
+
+      {/*alert/confirm modals*/}
       <ConfirmModal />
       <AlertModal />
     </>
