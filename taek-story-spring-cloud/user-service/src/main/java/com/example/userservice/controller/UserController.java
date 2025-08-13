@@ -73,8 +73,11 @@ public class UserController {
     }
 
     // 로그아웃 (세션 제거 -> Redis Spring Session에서 삭제됨)
-    @PostMapping("/signout")
+    @GetMapping("/signout")
     public ResponseEntity<?> signOut(HttpSession session) {
+		log.info("[signOut] session ID {}", session.getId());
+		Object value = session.getAttribute("logged:user");
+		log.info("[signOut] value {}", value);
         try {
             session.invalidate();
         } catch (IllegalStateException ignored) {

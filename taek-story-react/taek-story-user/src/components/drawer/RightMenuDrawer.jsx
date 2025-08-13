@@ -19,14 +19,29 @@ import {
   SidebarItems,
   TextInput,
 } from "flowbite-react";
-import { useSelector } from "react-redux";
-import { selectIsAuthenticated } from "../../store/sessionSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { clearUser, selectIsAuthenticated } from "/src/store/sessionSlice.js";
+import { apiFetch } from "../../util/api.js";
+import { useNavigate } from "react-router-dom";
 
 const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const navigate = useNavigate();
 
   const onSignOut = async () => {
     console.log("onSignOut");
+    const res = await apiFetch(`/user-service/users/signout`, {
+      method: "GET",
+    });
+    if (res.ok) {
+      const result = await res.json();
+      if (result > 0) {
+        dispatch(clearUser()); // 1) 클라이언트 세션 제거
+        menuCloseHandler?.(); // 2) 선택: 드로어 닫기
+        navigate("/login", { replace: true }); // 3) SPA 이동
+      }
+    }
   };
 
   return (
