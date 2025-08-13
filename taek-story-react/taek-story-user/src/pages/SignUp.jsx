@@ -11,10 +11,10 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import "./SignUp.css";
-import usePageTitle from "../hooks/usePageTitle";
+import usePageTitle from "/src/hooks/usePageTitle";
 import { useNavigate } from "react-router-dom";
-import AnchorHome from "../components/anchor/AnchorHome.jsx";
-import { $alert, $confirm } from "../util/modals.js";
+import AnchorHome from "/src/components/anchor/AnchorHome.jsx";
+import { $alert, $confirm } from "/src/util/modals.js";
 import { API_BASE, apiFetch } from "/src/util/api.js";
 
 const SignUp = () => {

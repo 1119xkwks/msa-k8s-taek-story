@@ -10,8 +10,8 @@ import {
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Login.css";
-import usePageTitle from "../hooks/usePageTitle.jsx";
-import AnchorHome from "../components/anchor/AnchorHome.jsx";
+import usePageTitle from "/src/hooks/usePageTitle.jsx";
+import AnchorHome from "/src/components/anchor/AnchorHome.jsx";
 import { useSelector } from "react-redux";
 import { selectIsAuthenticated } from "/src/store/sessionSlice.js";
 

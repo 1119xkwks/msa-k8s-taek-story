@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { apiFetch } from "./api.js";
+import { apiFetch } from "/src/util/api.js";
 import { useNavigate } from "react-router-dom";
 
 export function formatRelativeTime(isoOrPlainString) {

@@ -21,7 +21,7 @@ import {
 } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser, selectIsAuthenticated } from "/src/store/sessionSlice.js";
-import { apiFetch } from "../../util/api.js";
+import { apiFetch } from "/src/util/api.js";
 import { useNavigate } from "react-router-dom";
 
 const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {

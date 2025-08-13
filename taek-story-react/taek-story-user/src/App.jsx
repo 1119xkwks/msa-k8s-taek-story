@@ -2,13 +2,13 @@ import "./App.css";
 
 import { Routes, Route } from "react-router-dom";
 
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import NotFound from "./pages/NotFound";
-import ConfirmModal from "./components/modal/ConfirmModal.jsx";
-import AlertModal from "./components/modal/AlertModal.jsx";
-import useSessionRefresher from "./hooks/useSessionRefresher.jsx";
+import Home from "/src/pages/Home";
+import Login from "/src/pages/Login";
+import SignUp from "/src/pages/SignUp";
+import NotFound from "/src/pages/NotFound";
+import ConfirmModal from "/src/components/modal/ConfirmModal.jsx";
+import AlertModal from "/src/components/modal/AlertModal.jsx";
+import useSessionRefresher from "/src/hooks/useSessionRefresher.jsx";
 
 function App() {
   // 페이지 이동시마다 세션 정보 가져오기

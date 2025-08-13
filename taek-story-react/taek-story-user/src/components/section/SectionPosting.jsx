@@ -1,15 +1,15 @@
 import "./SectionPosting.css";
 import { Button, Avatar, Textarea } from "flowbite-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import MyCard from "../layout/MyCard.jsx";
-import MyDivider from "../layout/MyDivider.jsx";
+import MyCard from "/src/components/layout/MyCard.jsx";
+import MyDivider from "/src/components/layout/MyDivider.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVideo, faImage, faSmile } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import { selectFeelings } from "../../store/feelingsSlice.js";
-import PostingVideoPanel from "../post/posting/action/PostingVideoPanel.jsx";
-import PostingPhotoPanel from "../post/posting/action/PostingPhotoPanel.jsx";
-import PostingFeelingPanel from "../post/posting/action/PostingFeelingPanel.jsx";
+import { selectFeelings } from "/src/store/feelingsSlice.js";
+import PostingVideoPanel from "/src/components/post/posting/action/PostingVideoPanel.jsx";
+import PostingPhotoPanel from "/src/components/post/posting/action/PostingPhotoPanel.jsx";
+import PostingFeelingPanel from "/src/components/post/posting/action/PostingFeelingPanel.jsx";
 
 const SectionPosting = () => {
   const [postingText, setPostingText] = useState("");

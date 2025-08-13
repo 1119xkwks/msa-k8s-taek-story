@@ -2,8 +2,8 @@ import "./PostCardContent.css";
 import { Carousel } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
-import { selectFeelings } from "../../store/feelingsSlice.js";
-import { feelingIdToIcon } from "../../icons/feelingIcons.js";
+import { selectFeelings } from "/src/store/feelingsSlice.js";
+import { feelingIdToIcon } from "/src/icons/feelingIcons.js";
 
 const PostCardContent = () => {
   const FEELINGS = useSelector(selectFeelings);

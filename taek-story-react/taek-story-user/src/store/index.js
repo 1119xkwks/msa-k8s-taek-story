@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import feelingsReducer from "./feelingsSlice.js";
-import uiReducer from "./modalSlice.js";
-import sessionReducer from "./sessionSlice.js";
+import feelingsReducer from "/src/store/feelingsSlice.js";
+import uiReducer from "/src/store/modalSlice.js";
+import sessionReducer from "/src/store/sessionSlice.js";
 
 const store = configureStore({
   reducer: {
