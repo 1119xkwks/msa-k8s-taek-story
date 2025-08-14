@@ -29,9 +29,11 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   type-aliases-package: com.example.userservice.model
 
+
+
 logging:
   level:
-    com.example.userservice.mapper: DEBUG
+    com.example.userservice: DEBUG
     org.mybatis: DEBUG
     org.apache.ibatis: DEBUG
     com.p6spy: DEBUG

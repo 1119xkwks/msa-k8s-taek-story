@@ -41,6 +41,10 @@ dependencies {
     // Pretty SQL logging
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
 
+    //MinIO
+    implementation 'io.minio:minio:8.5.10'
+    implementation 'org.apache.commons:commons-io:1.3.2'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

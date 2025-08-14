@@ -7,6 +7,7 @@ import {
   faArrowRightFromBracket,
   faHome,
   faBell,
+  faUserGear,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -82,6 +83,16 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                   >
                     Notification
                   </SidebarItem>
+                  {isAuthenticated ? (
+                    <SidebarItem
+                      href="/profile"
+                      icon={() => <FontAwesomeIcon icon={faUserGear} />}
+                    >
+                      profile
+                    </SidebarItem>
+                  ) : (
+                    <></>
+                  )}
                 </SidebarItemGroup>
                 {isAuthenticated ? (
                   <SidebarItemGroup>

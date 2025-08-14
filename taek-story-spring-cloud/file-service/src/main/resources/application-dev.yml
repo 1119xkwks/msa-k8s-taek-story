@@ -26,7 +26,7 @@ mybatis:
 
 logging:
   level:
-    com.example.fileservice.mapper: DEBUG
+    com.example.fileservice: DEBUG
     org.mybatis: DEBUG
     org.apache.ibatis: DEBUG
     com.p6spy: DEBUG
@@ -35,6 +35,14 @@ p6spy:
   logging: sysout
   multiline: true
   sql-format: true
+
+minio:
+  endpoint: http://localhost:30103
+  accessKey: minioadmin
+  secretKey: minioadmin123!
+  bucket:
+    images: images
+    videos: videos
 
 management:
   endpoints:

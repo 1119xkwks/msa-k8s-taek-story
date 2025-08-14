@@ -22,11 +22,11 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  type-aliases-package: com.example.userservice.model
+  type-aliases-package: com.example.fileservice.model
 
 logging:
   level:
-    com.example.userservice.mapper: INFO
+    com.example.fileservice: INFO
     org.mybatis: INFO
     org.apache.ibatis: INFO
     com.p6spy: INFO
@@ -35,6 +35,14 @@ p6spy:
   logging: sysout
   multiline: true
   sql-format: true
+
+minio:
+  endpoint: ${MINIO_ENDPOINT}
+  accessKey: ${MINIO_ACCESS_KEY}
+  secretKey: ${MINIO_SECRET_KEY}
+  bucket:
+    images: ${MINIO_BUCKET_IMAGES:images}
+    videos: ${MINIO_BUCKET_VIDEOS:videos}
 
 management:
   endpoints:

@@ -33,6 +33,31 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: k8s
+            - name: MINIO_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: MINIO_ENDPOINT
+            - name: MINIO_BUCKET_IMAGES
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: MINIO_BUCKET_IMAGES
+            - name: MINIO_BUCKET_VIDEOS
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: MINIO_BUCKET_VIDEOS
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: MINIO_ROOT_USER
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: MINIO_ROOT_PASSWORD
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:

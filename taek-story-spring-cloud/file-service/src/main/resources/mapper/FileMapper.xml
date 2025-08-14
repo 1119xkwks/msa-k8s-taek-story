@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.fileservice.mapper.FileMapper">
+
+    <insert id="insertFileMaster" parameterType="fileMaster" useGeneratedKeys="true" keyProperty="seq" keyColumn="seq">
+        /** insertFileMaster    */
+        insert into file_master (file_type, description, crt_id, crt_ip)
+        values (#{fileType}, #{description}, #{crtId}, #{crtIp})
+    </insert>
+
+    <insert id="insertFileDetail" parameterType="fileDetail" useGeneratedKeys="true" keyProperty="seq" keyColumn="seq">
+        /** insertFileDetail    */
+        insert into file_detail (master_seq, file_name, file_path, file_size, mime_type, crt_id, crt_ip)
+        values (#{masterSeq}, #{fileName}, #{filePath}, #{fileSize}, #{mimeType}, #{crtId}, #{crtIp})
+    </insert>
+
+</mapper>
+
+

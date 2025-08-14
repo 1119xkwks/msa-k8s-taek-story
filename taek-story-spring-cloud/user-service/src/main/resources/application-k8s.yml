@@ -26,7 +26,7 @@ mybatis:
 
 logging:
   level:
-    com.example.userservice.mapper: INFO
+    com.example.userservice: DEBUG
     org.mybatis: INFO
     org.apache.ibatis: INFO
     com.p6spy: INFO
