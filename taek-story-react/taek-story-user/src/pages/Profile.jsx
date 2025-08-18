@@ -13,7 +13,7 @@ import { selectUser } from "../store/sessionSlice.js";
 import { $alert } from "../util/modals.js";
 import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "/src/store/sessionSlice.js";
-import { loadMyProfile, makeMyProfileSrc } from "../util/common.js";
+import { makeMyProfileSrc } from "../util/common.js";
 
 const Profile = () => {
   const user = useSelector(selectUser);
