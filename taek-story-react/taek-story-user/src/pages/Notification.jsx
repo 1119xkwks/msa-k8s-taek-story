@@ -48,19 +48,19 @@ const Notification = () => {
         <div className="notification-page__header">
           <h1 className="notification-page__title">알림</h1>
           <div className="notification-page__actions">
-            <button className="notification-page__btn">
-              모두 읽음 처리
-            </button>
-            <button className="notification-page__btn">
-              설정
-            </button>
+            <button className="notification-page__btn">모두 읽음 처리</button>
+            <button className="notification-page__btn">설정</button>
           </div>
         </div>
 
         {/* Filters */}
         <div className="notification-page__filters">
-          <button className="notification-page__filter-btn notification-page__filter-btn--primary">전체</button>
-          <button className="notification-page__filter-btn notification-page__filter-btn--secondary">읽지 않음</button>
+          <button className="notification-page__filter-btn notification-page__filter-btn--primary">
+            전체
+          </button>
+          <button className="notification-page__filter-btn notification-page__filter-btn--secondary">
+            읽지 않음
+          </button>
         </div>
 
         {/* List */}
@@ -91,16 +91,24 @@ const Notification = () => {
                         {/* Content */}
                         <div className="notification-page__content">
                           <p className="notification-page__text">
-                            <span className="notification-page__name">{n.name}</span>
-                            <span className="notification-page__message">{n.message}</span>
+                            <span className="notification-page__name">
+                              {n.name}
+                            </span>
+                            <span className="notification-page__message">
+                              {n.message}
+                            </span>
                           </p>
                           <p className="notification-page__time">{n.time}</p>
                         </div>
 
                         {/* Actions */}
                         <div className="notification-page__item-actions">
-                          <button className="notification-page__action-btn">숨기기</button>
-                          <button className="notification-page__action-btn">읽음</button>
+                          <button className="notification-page__action-btn">
+                            숨기기
+                          </button>
+                          <button className="notification-page__action-btn">
+                            읽음
+                          </button>
                         </div>
                       </div>
                     </li>
