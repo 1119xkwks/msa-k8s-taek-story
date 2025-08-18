@@ -74,7 +74,7 @@ const SectionPosting = () => {
             img={makeMyProfileSrc(user)}
             alt={"나의 프로필 이미지"}
             rounded
-            class="w-20"
+            className="w-20"
           />
           <textarea
             className="textarea-posting"
