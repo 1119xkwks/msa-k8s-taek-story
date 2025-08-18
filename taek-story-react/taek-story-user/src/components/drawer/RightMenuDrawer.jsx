@@ -78,7 +78,7 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                     홈
                   </SidebarItem>
                   <SidebarItem
-                    href="/#"
+                    href="/notification"
                     icon={() => <FontAwesomeIcon icon={faBell} />}
                   >
                     Notification
