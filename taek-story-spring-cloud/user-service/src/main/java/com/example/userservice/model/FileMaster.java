@@ -1,14 +1,10 @@
-package com.example.fileservice.model;
+package com.example.userservice.model;
 
-import lombok.Builder;
 import lombok.Data;
-import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
 
 @Data
-@Alias("fileMaster")
-@Builder
 public class FileMaster {
 
 	/** 순번 */

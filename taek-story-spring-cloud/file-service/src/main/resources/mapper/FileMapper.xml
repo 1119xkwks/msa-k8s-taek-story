@@ -4,15 +4,53 @@
 
     <insert id="insertFileMaster" parameterType="fileMaster" useGeneratedKeys="true" keyProperty="seq" keyColumn="seq">
         /** insertFileMaster    */
-        insert into file_master (file_type, description, crt_id, crt_ip)
-        values (#{fileType}, #{description}, #{crtId}, #{crtIp})
+        insert into file_master (file_type, description, crt_dt, crt_ip, crt_seq)
+        values (#{fileType}, #{description}, CURRENT_TIMESTAMP, #{crtIp}, #{crtSeq})
     </insert>
+
+    <update id="updateFileMaster" parameterType="fileMaster">
+        /** updateFileMaster    */
+        update file_master
+        set description =   #{description}
+        ,   udt_dt  =   CURRENT_TIMESTAMP
+        ,   udt_ip  =   #{udtIp}
+        ,   udt_seq =   #{udtSeq}
+        where   seq =   #{seq}
+    </update>
 
     <insert id="insertFileDetail" parameterType="fileDetail" useGeneratedKeys="true" keyProperty="seq" keyColumn="seq">
         /** insertFileDetail    */
-        insert into file_detail (master_seq, file_name, file_path, file_size, mime_type, crt_id, crt_ip)
-        values (#{masterSeq}, #{fileName}, #{filePath}, #{fileSize}, #{mimeType}, #{crtId}, #{crtIp})
+        insert into file_detail (master_seq, file_name, file_path, file_size, mime_type, crt_dt, crt_ip, crt_seq)
+        values (#{masterSeq}, #{fileName}, #{filePath}, #{fileSize}, #{mimeType}, CURRENT_TIMESTAMP, #{crtIp}, #{crtSeq})
     </insert>
+
+    <update id="deleteFileDetailByMasterSeq" parameterType="java.lang.Integer">
+        /** deleteFileDetailByMasterSeq */
+        update  file_detail
+        set del_yn  =   'Y'
+        where   master_seq  =   #{masterSeq}
+    </update>
+    <select id="selectFileDetailOneByMasterSeq" resultType="fileDetail">
+        /** selectFileDetailOneByMasterSeq  */
+        select  seq
+            ,   master_seq
+            ,   file_name
+            ,   file_path
+            ,   file_size
+            ,   mime_type
+            ,   del_yn
+            ,   order_seq
+
+            ,   crt_dt
+            ,   crt_ip
+            ,   crt_seq
+            ,   udt_dt
+            ,   udt_ip
+            ,   udt_seq
+        from    file_detail
+        where   master_seq  =   #{seq}
+        and del_yn  =   'N'
+    </select>
 
 </mapper>
 

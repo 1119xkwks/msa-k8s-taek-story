@@ -58,8 +58,17 @@ public class UsersInsert {
 		return Objects.equals(pw, pwChk);
 	}
 
+	/** 프로필 파일 마스터번호 */
+	private Integer fileProfileSeq;
+
+	/** 프로필 파일 상태 */
+	private String fileProfileStatus;
+
+
 	private LocalDateTime crtDt;
 	private String crtIp;
+	private Integer crtSeq;
 	private LocalDateTime udtDt;
 	private String udtIp;
+	private Integer udtSeq;
 }

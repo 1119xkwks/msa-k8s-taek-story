@@ -71,6 +71,9 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
 
+      if (!res.ok) {
+        setError("서버 에러입니다. 다시 시도해주세요.");
+      }
       const result = await res.json();
       if (result < 1) {
         setError("회원 정보가 존재하지 않습니다.");

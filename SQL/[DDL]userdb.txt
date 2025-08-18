@@ -7,10 +7,17 @@ CREATE TABLE users (
 ,	nickname VARCHAR(50) NOT NULL                      -- 닉네임
 ,	birth DATE NOT NULL                                -- 생일
 ,	phone VARCHAR(20) NOT NULL                         -- 핸드폰번호
-,	crt_dt	TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-,	crt_ip	VARCHAR(100)
-,	udt_dt	TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-,	udt_ip	VARCHAR(100)
+,	file_profile_seq INT                               -- 프로필 파일 마스터번호
+,	file_profile_status VARCHAR(20)                    -- 프로필 파일 상태
+
+    -- 등록 정보
+,   crt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP       -- 생성일
+,   crt_ip VARCHAR(100)                               -- 생성 IP
+,   crt_seq INT                               -- 생성자 ID
+    -- 수정 정보
+,   udt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP       -- 수정일
+,   udt_ip VARCHAR(100)                               -- 수정 IP
+,   udt_seq INT                                -- 수정자 ID
 );
 
 -- 테이블 주석
@@ -23,6 +30,14 @@ COMMENT ON COLUMN users.pw IS '비밀번호';
 COMMENT ON COLUMN users.nickname IS '닉네임';
 COMMENT ON COLUMN users.birth IS '생일';
 COMMENT ON COLUMN users.phone IS '핸드폰번호';
+COMMENT ON COLUMN users.file_profile_seq IS '프로필 파일 마스터번호';
+COMMENT ON COLUMN users.file_profile_status IS '프로필 파일 상태';
+COMMENT ON COLUMN users.crt_dt IS '생성일';
+COMMENT ON COLUMN users.crt_ip IS '생성 IP';
+COMMENT ON COLUMN users.crt_seq IS '생성자 seq';
+COMMENT ON COLUMN users.udt_dt IS '수정일';
+COMMENT ON COLUMN users.udt_ip IS '수정 IP';
+COMMENT ON COLUMN users.udt_seq IS '수정자 seq';
 
 -- 비밀번호 단방향 암호화
 CREATE OR REPLACE FUNCTION hash_password_fixed_salt(p_plain text)

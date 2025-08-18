@@ -4,6 +4,7 @@ import com.example.fileservice.mapper.FileMapper;
 import com.example.fileservice.model.FileDetail;
 import com.example.fileservice.model.FileMaster;
 import io.minio.*;
+import io.minio.errors.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class FileStorageServiceImpl implements FileStorageService {
+public class FileServiceImpl implements FileService {
 	private final MinioClient minio;
 	@Value("${minio.bucket.images}")
 	private String imagesBucket;
@@ -26,7 +27,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	private final FileMapper fileMapper;
 
 	@Override
-	public String uploadProfileImage(MultipartFile file) throws Exception {
+	public FileMaster uploadProfileImage(MultipartFile file, Integer fileMasterSeq, String ip, Integer userSeq) throws Exception {
 
 		// MinIO 저장
 		log.debug("[uploadProfileImage] imagesBucket : {}", imagesBucket);
@@ -67,8 +68,20 @@ public class FileStorageServiceImpl implements FileStorageService {
 		// DB Insert
 		FileMaster fileMaster = FileMaster.builder()
 				.fileType("profile")
+				.crtIp(ip)
+				.crtSeq(userSeq)
+				.udtIp(ip)
+				.udtSeq(userSeq)
 				.build();
-		fileMapper.insertFileMaster(fileMaster);
+		if (fileMasterSeq == null) {
+			fileMaster.setDescription("프로필 사진 업로드");
+			fileMapper.insertFileMaster(fileMaster);
+		} else {
+			fileMaster.setDescription("프로필 사진 수정 업로드");
+			fileMaster.setSeq(fileMasterSeq);
+			fileMapper.updateFileMaster(fileMaster);
+			fileMapper.deleteFileDetailByMasterSeq(fileMasterSeq);
+		}
 		log.debug("[uploadProfileImage] inserted fileMaster : {}", fileMaster);
 
 		FileDetail  fileDetail = FileDetail.builder()
@@ -77,11 +90,32 @@ public class FileStorageServiceImpl implements FileStorageService {
 				.filePath(objectName)
 				.fileSize(fileSize)
 				.mimeType(contentType)
+				.crtIp(ip)
+				.crtSeq(userSeq)
 				.build();
 		fileMapper.insertFileDetail(fileDetail);
 		log.debug("[uploadProfileImage] inserted fileDetail : {}", fileDetail);
 
-		return objectName;
+		return fileMaster;
+	}
+
+	@Override
+	public byte[] viewProfile(Integer seq) {
+		FileDetail fileDetail = fileMapper.selectFileDetailOneByMasterSeq( seq );
+		log.debug("[viewProfile] fileDetail : {}", fileDetail);
+
+		String objectName = fileDetail.getFilePath();
+
+		try (GetObjectResponse is = minio.getObject(
+				GetObjectArgs.builder()
+						.bucket(imagesBucket)
+						.object(objectName)
+						.build()
+		)) {
+			return is.readAllBytes(); // Java 9+, JDK 21 OK
+		} catch (Exception e) {
+			return new byte[0];
+		}
 	}
 
 	private void ensureBucket(String bucket) throws Exception {

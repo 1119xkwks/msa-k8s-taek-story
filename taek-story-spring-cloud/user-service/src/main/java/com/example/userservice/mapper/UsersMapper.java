@@ -15,6 +15,8 @@ public interface UsersMapper {
     int countByEmail(@Param("email") String email);
 
 	Users selectByLogin(@Valid UsersLogin usersLogin);
+
+	int updateProfile(Users users);
 }
 
 

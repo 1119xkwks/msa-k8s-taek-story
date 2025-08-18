@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 public class FileDetail {
 
 	/** 순번 */
-	private Long seq;
+	private Integer seq;
 
 	/** 파일 마스터 ID */
-	private Long masterSeq;
+	private Integer masterSeq;
 
 	/** 원본 파일명 */
 	private String fileName;
@@ -29,21 +29,16 @@ public class FileDetail {
 	/** MIME 타입 */
 	private String mimeType;
 
-	/** 생성일 */
+	/** 삭제여부 */
+	private String delYn;
+
+	/** 순번 */
+	private Integer orderSeq;
+
 	private LocalDateTime crtDt;
-
-	/** 생성 IP */
 	private String crtIp;
-
-	/** 생성자 ID */
-	private String crtId;
-
-	/** 수정일 */
+	private Integer crtSeq;
 	private LocalDateTime udtDt;
-
-	/** 수정 IP */
 	private String udtIp;
-
-	/** 수정자 ID */
-	private String udtId;
+	private Integer udtSeq;
 }

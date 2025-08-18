@@ -7,5 +7,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface FileMapper {
 	int insertFileMaster(FileMaster fileMaster);
+	int updateFileMaster(FileMaster fileMaster);
+
 	int insertFileDetail(FileDetail fileDetail);
+	int deleteFileDetailByMasterSeq(Integer fileMasterSeq);
+
+	FileDetail selectFileDetailOneByMasterSeq(Integer seq);
 }

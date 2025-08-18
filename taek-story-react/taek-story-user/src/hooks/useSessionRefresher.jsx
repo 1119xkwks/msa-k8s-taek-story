@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUser, clearUser, selectUser } from "/src/store/sessionSlice.js";
+import { setUser, clearUser } from "/src/store/sessionSlice.js";
 import { apiFetch } from "/src/util/api.js";
 
 /**

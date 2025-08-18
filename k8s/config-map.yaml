@@ -20,6 +20,8 @@ data:
   MINIO_ENDPOINT: http://minio-s3:9000
   MINIO_BUCKET_IMAGES: images
   MINIO_BUCKET_VIDEOS: videos
+  # File Service Endpoint (K8s)
+  FILE_SERVICE_BASE_URL: http://file-service:90
   # FILE DB
   FILE_DB_NAME: filedb
   FILE_DB_HOST: pg-db-file

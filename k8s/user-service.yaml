@@ -60,6 +60,11 @@ spec:
                 secretKeyRef:
                   name: secret
                   key: USER_DB_PASSWORD
+            - name: FILE_SERVICE_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: FILE_SERVICE_BASE_URL
           readinessProbe:
             httpGet:
               path: /actuator/health

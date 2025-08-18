@@ -5,9 +5,9 @@
     <insert id="insert" parameterType="usersInsert" useGeneratedKeys="true">
         /** insert  */
         insert into users (
-            email, pw, nickname, birth, phone, crt_dt, crt_ip
+            email, pw, nickname, birth, phone, crt_dt, crt_ip, crt_seq
         ) values (
-            #{email}, hash_password_fixed_salt(#{pw}), #{nickname}, #{birth}, #{phone}, CURRENT_TIMESTAMP, #{crtIp}
+            #{email}, hash_password_fixed_salt(#{pw}), #{nickname}, #{birth}, #{phone}, CURRENT_TIMESTAMP, #{crtIp}, #{crtSeq}
         )
     </insert>
 
@@ -27,13 +27,24 @@
             ,   phone
             ,   crt_dt
             ,   crt_ip
+            ,   crt_seq
             ,   udt_dt
             ,   udt_ip
+            ,   udt_seq
         from    users
         where   1=1
         and email   =   #{email}
         and pw   =   hash_password_fixed_salt(#{pw})
     </select>
+
+    <update id="updateProfile" parameterType="users">
+        /** updateProfile   */
+        update  users
+        set file_profile_seq    =   #{fileProfileSeq}
+        ,   file_profile_status =   #{fileProfileStatus}
+        where   seq =   #{seq}
+    </update>
+
 
 </mapper>
 

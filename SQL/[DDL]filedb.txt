@@ -1,18 +1,20 @@
 
+-- drop table file_detail;
+-- drop table file_master;
+
 CREATE TABLE file_master (
-    seq INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, -- PK
-    file_type VARCHAR(50) NOT NULL,                   -- 파일 종류 (profile, image_single, image_multi, video 등)
-    description TEXT,                                 -- 설명 (선택)
+    seq INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY -- PK
+,   file_type VARCHAR(50) NOT NULL                   -- 파일 종류 (profile, image_single, image_multi, video 등)
+,   description TEXT                                 -- 설명 (선택)
 
     -- 등록 정보
-    crt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,       -- 생성일
-    crt_ip VARCHAR(100),                               -- 생성 IP
-    crt_id VARCHAR(100),                               -- 생성자 ID
-
+,   crt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP       -- 생성일
+,   crt_ip VARCHAR(100)                               -- 생성 IP
+,   crt_seq INT                               -- 생성자 ID
     -- 수정 정보
-    udt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,       -- 수정일
-    udt_ip VARCHAR(100),                               -- 수정 IP
-    udt_id VARCHAR(100)                                -- 수정자 ID
+,   udt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP       -- 수정일
+,   udt_ip VARCHAR(100)                               -- 수정 IP
+,   udt_seq INT                                -- 수정자 ID
 );
 COMMENT ON TABLE file_master IS '파일 업로드 마스터';
 COMMENT ON COLUMN file_master.seq IS '순번';
@@ -20,30 +22,32 @@ COMMENT ON COLUMN file_master.file_type IS '파일 종류';
 COMMENT ON COLUMN file_master.description IS '설명';
 COMMENT ON COLUMN file_master.crt_dt IS '생성일';
 COMMENT ON COLUMN file_master.crt_ip IS '생성 IP';
-COMMENT ON COLUMN file_master.crt_id IS '생성자 ID';
+COMMENT ON COLUMN file_master.crt_seq IS '생성자 seq';
 COMMENT ON COLUMN file_master.udt_dt IS '수정일';
 COMMENT ON COLUMN file_master.udt_ip IS '수정 IP';
-COMMENT ON COLUMN file_master.udt_id IS '수정자 ID';
+COMMENT ON COLUMN file_master.udt_seq IS '수정자 seq';
 
 
 
+-- drop table file_detail;
 CREATE TABLE file_detail (
-    seq INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, -- PK
-    master_seq INT NOT NULL REFERENCES file_master(seq) ON DELETE CASCADE, -- FK
-    file_name VARCHAR(255) NOT NULL,                  -- 원본 파일명
-    file_path VARCHAR(500) NOT NULL,                  -- 저장 경로
-    file_size BIGINT,                                 -- 파일 크기 (byte)
-    mime_type VARCHAR(100),                           -- MIME 타입
+    seq INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY -- PK
+,    master_seq INT NOT NULL REFERENCES file_master(seq) ON DELETE CASCADE -- FK
+,    file_name VARCHAR(255) NOT NULL                  -- 원본 파일명
+,    file_path VARCHAR(500) NOT NULL                  -- 저장 경로
+,    file_size BIGINT                                 -- 파일 크기 (byte)
+,    mime_type VARCHAR(100)                           -- MIME 타입
+,    del_yn CHAR(1) NOT NULL DEFAULT 'N'              -- 삭제여부
+,    order_seq INT NOT NULL DEFAULT 0                 -- 순번
 
     -- 등록 정보
-    crt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,       -- 생성일
-    crt_ip VARCHAR(100),                               -- 생성 IP
-    crt_id VARCHAR(100),                               -- 생성자 ID
-
+,   crt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP       -- 생성일
+,   crt_ip VARCHAR(100)                               -- 생성 IP
+,   crt_seq INT                               -- 생성자 ID
     -- 수정 정보
-    udt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,       -- 수정일
-    udt_ip VARCHAR(100),                               -- 수정 IP
-    udt_id VARCHAR(100)                                -- 수정자 ID
+,   udt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP       -- 수정일
+,   udt_ip VARCHAR(100)                               -- 수정 IP
+,   udt_seq INT                                -- 수정자 ID
 );
 COMMENT ON TABLE file_detail IS '파일 업로드 상세';
 COMMENT ON COLUMN file_detail.seq IS '순번';
@@ -52,11 +56,13 @@ COMMENT ON COLUMN file_detail.file_name IS '원본 파일명';
 COMMENT ON COLUMN file_detail.file_path IS '저장 경로';
 COMMENT ON COLUMN file_detail.file_size IS '파일 크기';
 COMMENT ON COLUMN file_detail.mime_type IS 'MIME 타입';
+COMMENT ON COLUMN file_detail.del_yn IS '삭제여부';
+COMMENT ON COLUMN file_detail.order_seq IS '순번';
 COMMENT ON COLUMN file_detail.crt_dt IS '생성일';
 COMMENT ON COLUMN file_detail.crt_ip IS '생성 IP';
-COMMENT ON COLUMN file_detail.crt_id IS '생성자 ID';
+COMMENT ON COLUMN file_detail.crt_seq IS '생성자 seq';
 COMMENT ON COLUMN file_detail.udt_dt IS '수정일';
 COMMENT ON COLUMN file_detail.udt_ip IS '수정 IP';
-COMMENT ON COLUMN file_detail.udt_id IS '수정자 ID';
+COMMENT ON COLUMN file_detail.udt_seq IS '수정자 seq';
 
 
