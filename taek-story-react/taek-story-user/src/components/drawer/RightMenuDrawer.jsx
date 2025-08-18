@@ -81,14 +81,14 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                     href="/notification"
                     icon={() => <FontAwesomeIcon icon={faBell} />}
                   >
-                    Notification
+                    알림
                   </SidebarItem>
                   {isAuthenticated ? (
                     <SidebarItem
                       href="/profile"
                       icon={() => <FontAwesomeIcon icon={faUserGear} />}
                     >
-                      profile
+                      프로필 이미지
                     </SidebarItem>
                   ) : (
                     <></>
