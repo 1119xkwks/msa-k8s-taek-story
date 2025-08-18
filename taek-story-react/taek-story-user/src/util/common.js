@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { apiFetch } from "/src/util/api.js";
+import { API_BASE, apiFetch } from "/src/util/api.js";
 import { useNavigate } from "react-router-dom";
 
 export function formatRelativeTime(isoOrPlainString) {
@@ -31,4 +31,10 @@ export async function signOut() {
   if (response.ok) {
     navigate("/");
   }
+}
+
+export function makeMyProfileSrc(user) {
+  if (!user?.fileProfileSeq) return; // 아직 세션 없음
+  const { fileProfileSeq } = user; // 필요 키 사용
+  return `${API_BASE}/file-service/file/view/profile/${fileProfileSeq}`;
 }

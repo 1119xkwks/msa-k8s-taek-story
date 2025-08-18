@@ -10,8 +10,12 @@ import { selectFeelings } from "/src/store/feelingsSlice.js";
 import PostingVideoPanel from "/src/components/post/posting/action/PostingVideoPanel.jsx";
 import PostingPhotoPanel from "/src/components/post/posting/action/PostingPhotoPanel.jsx";
 import PostingFeelingPanel from "/src/components/post/posting/action/PostingFeelingPanel.jsx";
+import { selectUser } from "../../store/sessionSlice.js";
+import { makeMyProfileSrc } from "../../util/common.js";
 
 const SectionPosting = () => {
+  const user = useSelector(selectUser);
+
   const [postingText, setPostingText] = useState("");
   const [textareaRows, setTextareaRows] = useState(1); // 기본 rows 1
   const [activeAction, setActiveAction] = useState(null); // 'video' | 'photo' | 'feeling' | null
@@ -66,7 +70,12 @@ const SectionPosting = () => {
     <section className="section-posting">
       <MyCard className="section-posting-card">
         <div className="section-posting-card-main">
-          <Avatar img="https://i.pravatar.cc/40" alt="User avatar" rounded />
+          <Avatar
+            img={makeMyProfileSrc(user)}
+            alt={"나의 프로필 이미지"}
+            rounded
+            class="w-20"
+          />
           <textarea
             className="textarea-posting"
             placeholder="What's on your mind?"

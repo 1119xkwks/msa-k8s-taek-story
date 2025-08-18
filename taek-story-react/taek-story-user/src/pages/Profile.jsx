@@ -13,6 +13,7 @@ import { selectUser } from "../store/sessionSlice.js";
 import { $alert } from "../util/modals.js";
 import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "/src/store/sessionSlice.js";
+import { loadMyProfile, makeMyProfileSrc } from "../util/common.js";
 
 const Profile = () => {
   const user = useSelector(selectUser);
@@ -87,12 +88,8 @@ const Profile = () => {
   const loadMyProfile = () => {
     console.debug("user", user);
     if (!user?.fileProfileSeq) return; // 아직 세션 없음
-    const { fileProfileSeq } = user; // 필요 키 사용
-    console.debug("fileProfileSeq", fileProfileSeq);
     // 자기 자신 프로필 불러오는 작업
-    setPreviewUrl(
-      `${API_BASE}/file-service/file/view/profile/${fileProfileSeq}`,
-    );
+    setPreviewUrl(makeMyProfileSrc(user));
   };
 
   useEffect(() => {
@@ -114,7 +111,7 @@ const Profile = () => {
           <h2 className="profile-title">현재 프로필 이미지</h2>
           <div className="profile-preview">
             {previewUrl ? (
-              <img src={previewUrl} alt="preview" className="" />
+              <img src={previewUrl} alt="프로필 이미지" className="" />
             ) : (
               <div className="profile-hint">
                 이미지를 선택하면 미리보기가 표시됩니다

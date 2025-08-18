@@ -7,7 +7,7 @@
 }
 
 .section-posting .section-posting-card-main {
-    @apply flex items-center space-x-3;
+    @apply flex items-center space-x-1;
 }
 
 .section-posting .textarea-posting {
