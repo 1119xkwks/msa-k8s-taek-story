@@ -1,0 +1,17 @@
+# How to re-create (kubectl):
+#   kubectl delete -f kafka-pvc.yaml --ignore-not-found
+#   kubectl apply  -f kafka-pvc.yaml
+#   kubectl get pvc kafka-pvc -o wide
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kafka-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+

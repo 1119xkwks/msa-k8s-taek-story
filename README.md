@@ -9,7 +9,7 @@
 | dev-proxy |  | 80 | 32290 | 개발 pc 프록시 |
 
 
-## 캐쉬서버 (Redis), 파일서버 (MinIO)
+## 캐쉬서버 (Redis), 파일서버 (MinIO), 메시지 브로커 서버 (kafka)
 
 | 서비스명 | namespace | 서비스 포트 | 노드 포트 | 메모 |
 |---|---:|---:|---:|---|
@@ -17,6 +17,8 @@
 | redisinsight |  | 5540 | 30102 | Redis 관리 GUI |
 | minio-s3 |  | 9000 | 30103 | MinIO S3 API |
 | minio-console |  | 9001 | 30104 | Web Console |
+| kafka KRaft |  | 9990 | 30105 | KAFKA |
+| Kafka UI |  | 9991 | 30106 | Topic/Consumer 관리, 메시지 브라우징, Schema Registry 지원 |
 
 
 ## Database
