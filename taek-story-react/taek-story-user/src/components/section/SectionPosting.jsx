@@ -15,27 +15,99 @@ import { selectFeelings } from "/src/store/feelingsSlice.js";
 import PostingVideoPanel from "/src/components/post/posting/action/PostingVideoPanel.jsx";
 import PostingPhotoPanel from "/src/components/post/posting/action/PostingPhotoPanel.jsx";
 import PostingFeelingPanel from "/src/components/post/posting/action/PostingFeelingPanel.jsx";
-import { selectIsAuthenticated, selectUser } from "../../store/sessionSlice.js";
+import {
+  clearUser,
+  selectIsAuthenticated,
+  selectUser,
+  setUser,
+} from "../../store/sessionSlice.js";
 import { makeMyProfileSrc } from "../../util/common.js";
+import { apiFetch } from "../../util/api.js";
+import { $alert } from "../../util/modals.js";
 
 const SectionPosting = () => {
   const user = useSelector(selectUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
+  const [isSendPosting, setIsSendingPosting] = useState(false);
   const [postingText, setPostingText] = useState("");
   const [textareaRows, setTextareaRows] = useState(1); // 기본 rows 1
   const [activeAction, setActiveAction] = useState(null); // 'video' | 'photo' | 'feeling' | null
   const [videoFile, setVideoFile] = useState(null);
-  const [photoFiles, setPhotoFiles] = useState([]);
+  const [photoFile, setPhotoFile] = useState(null);
   const [selectedFeeling, setSelectedFeeling] = useState(null);
   const prevActionRef = useRef(null);
 
-  const handlePost = () => {
-    setPostingText("");
+  // 포스팅 글 올리기
+  const handlePost = async () => {
+    if (!postingText) {
+      return;
+    }
+
+    try {
+      setIsSendingPosting(true);
+      const form = new FormData();
+
+      let finalAction = "NONE";
+      switch (activeAction) {
+        case "video":
+          if (videoFile) {
+            if (videoFile.size > 200 * 1024 * 1024) {
+              await $alert("200MB를 초과할 수 없습니다.");
+              return;
+            }
+            finalAction = "video";
+            form.append("file", videoFile);
+          }
+          break;
+        case "photo":
+          if (photoFile) {
+            if (photoFile.size > 200 * 1024 * 1024) {
+              await $alert("200MB를 초과할 수 없습니다.");
+              return;
+            }
+            finalAction = "photo";
+            form.append("file", photoFile);
+          }
+          break;
+        case "feeling":
+          if (selectedFeeling) {
+            finalAction = "feeling";
+            form.append("selectedFeeling", selectedFeeling);
+          }
+          break;
+        default:
+          finalAction = "NONE";
+      }
+
+      form.append("activeAction", finalAction);
+      form.append("contents", postingText);
+
+      const res = await apiFetch(`/posting-service/posting/insert`, {
+        method: "POST",
+        body: form,
+      });
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      const result = await res.json();
+      if (result) {
+        //
+        console.debug("[handlePost] result", result);
+      }
+    } catch (_e) {
+      console.error(_e);
+    } finally {
+      setIsSendingPosting(false);
+    }
+
+    // setPostingText("");
   };
 
   const handleToggle = (key) => {
     if (!isAuthenticated) {
+      setActiveAction(null);
       return;
     }
     setActiveAction((prev) => (prev === key ? null : key));
@@ -47,14 +119,14 @@ const SectionPosting = () => {
   };
 
   const handlePhotoChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    setPhotoFiles(files);
+    const file = e.target.files?.[0] || null;
+    setPhotoFile(file);
   };
 
-  const photoPreviews = useMemo(
-    () => photoFiles.map((f) => ({ file: f, url: URL.createObjectURL(f) })),
-    [photoFiles],
-  );
+  const photoPreviews = useMemo(() => {
+    if (!photoFile) return [];
+    return [{ file: photoFile, url: URL.createObjectURL(photoFile) }];
+  }, [photoFile]);
 
   useEffect(() => {
     return () => {
@@ -67,7 +139,7 @@ const SectionPosting = () => {
     const prev = prevActionRef.current;
     if (prev && prev !== activeAction) {
       if (prev === "video") setVideoFile(null);
-      if (prev === "photo") setPhotoFiles([]);
+      if (prev === "photo") setPhotoFile(null);
       if (prev === "feeling") setSelectedFeeling(null);
     }
     prevActionRef.current = activeAction;
@@ -107,9 +179,9 @@ const SectionPosting = () => {
             className="posting-button"
             color="blue"
             onClick={handlePost}
-            disabled={!postingText.trim()}
+            disabled={isSendPosting || !postingText.trim()}
           >
-            Post
+            {isSendPosting ? "Posting.." : "Post"}
           </Button>
         </div>
 
@@ -164,10 +236,10 @@ const SectionPosting = () => {
 
         {activeAction === "photo" && (
           <PostingPhotoPanel
-            photoFiles={photoFiles}
+            photoFiles={photoFile ? [photoFile] : []}
             photoPreviews={photoPreviews}
             onChoose={handlePhotoChange}
-            onClear={() => setPhotoFiles([])}
+            onClear={() => setPhotoFile(null)}
           />
         )}
 

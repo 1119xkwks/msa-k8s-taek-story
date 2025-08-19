@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { feelingIdToIcon } from "/src/icons/feelingIcons.js";
 
 const PostingFeelingPanel = ({ feelings, selectedFeeling, onSelect }) => {
   return (
@@ -13,7 +14,7 @@ const PostingFeelingPanel = ({ feelings, selectedFeeling, onSelect }) => {
             aria-pressed={selectedFeeling === f.id}
           >
             <FontAwesomeIcon
-              icon={f.icon}
+              icon={feelingIdToIcon[f.id]}
               className={`feeling-icon ${f.color}`}
             />
             <span className="feeling-label">{f.label}</span>

@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: posting-service
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
   data:
     redis:
       host: redis
