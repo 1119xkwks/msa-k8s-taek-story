@@ -41,7 +41,10 @@ const PostCardContent = () => {
         {/* Feeling 전용 표시 영역 (초기에는 hidden, feeling 선택 시 표시) */}
         <div className="feeling hidden" data-feeling="happy">
           <div className="feeling-badge">
-            <FontAwesomeIcon icon={feelingIdToIcon[FEELINGS[0].id]} className={`feeling-icon ${FEELINGS[0].color}`} />
+            <FontAwesomeIcon
+              icon={feelingIdToIcon[FEELINGS[0].id]}
+              className={`feeling-icon ${FEELINGS[0].color}`}
+            />
             <span className="feeling-text">Feeling {FEELINGS[0].label}</span>
           </div>
         </div>
