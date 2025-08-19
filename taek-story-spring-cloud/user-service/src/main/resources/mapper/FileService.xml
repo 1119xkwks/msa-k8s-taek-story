@@ -25,6 +25,9 @@
             ,   nickname
             ,   birth
             ,   phone
+            ,   file_profile_seq
+            ,   file_profile_status
+
             ,   crt_dt
             ,   crt_ip
             ,   crt_seq
