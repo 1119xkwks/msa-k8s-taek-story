@@ -14,6 +14,7 @@
 # Quick test:
 #   curl -i http://localhost:32290/user-service/test
 #   curl -i http://localhost:32290/file-service/test
+#   curl -i http://localhost:32290/posting-service/test
 
 ---
 apiVersion: v1
@@ -47,6 +48,17 @@ data:
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_pass http://host.docker.internal:91;
+      }
+
+      location ~ ^/posting-service(/|$)(.*) {
+        # rewrite first to avoid variables in proxy_pass (no resolver needed)
+        rewrite ^/posting-service(/|$)(.*) /$2 break;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass http://host.docker.internal:92;
       }
 
       # Add more mappings here following the same pattern

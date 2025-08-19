@@ -22,12 +22,20 @@ spec:
                 name: user-service
                 port:
                   number: 90
-          # /file-service/<anything> -> file-service:<91> /<anything>
+          # /file-service/<anything> -> file-service:<90> /<anything>
           - path: /file-service(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:
                 name: file-service
+                port:
+                  number: 90
+          # /posting-service/<anything> -> posting-service:<90> /<anything>
+          - path: /posting-service(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: posting-service
                 port:
                   number: 90
           # 다른 서비스도 동일한 패턴으로 추가하세요 (프리픽스 제거 리라이트)

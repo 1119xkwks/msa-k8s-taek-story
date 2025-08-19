@@ -1,0 +1,94 @@
+# How to re-create (kubectl):
+#   kubectl delete -f posting-service.yaml --ignore-not-found
+#   kubectl apply  -f posting-service.yaml
+#   kubectl get deploy posting-service-deploy
+#   kubectl get svc posting-service
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
+#   kubectl rollout restart deploy/posting-service-deploy
+#   kubectl rollout status deploy/posting-service-deploy
+#   # 필요 시 롤백
+#   kubectl rollout undo deploy/posting-service-deploy
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posting-service-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: posting-service
+  template:
+    metadata:
+      labels:
+        app: posting-service
+    spec:
+      containers:
+        - name: posting-service
+          image: ytkwon91/posting-service:0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 90
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: POSTING_DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: POSTING_DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: POSTING_DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: POSTING_DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: POSTING_DB_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 90
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 90
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            failureThreshold: 3
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posting-service
+spec:
+  type: NodePort
+  selector:
+    app: posting-service
+  ports:
+    - name: http
+      port: 90
+      targetPort: 90
+      nodePort: 32092
+
+
+

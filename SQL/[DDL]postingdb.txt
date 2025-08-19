@@ -1,0 +1,36 @@
+
+-- drop table posts;
+CREATE TABLE posts (
+	seq INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY   -- 순번
+,	user_seq INT NOT NULL                              -- 글쓴이seq
+,	contents text NOT NULL                              -- 내용
+,	contents_type VARCHAR(50) NOT NULL                  -- 내용종류
+,	contents_file_seq INT NOT NULL                      -- 첨부파일순번
+
+    -- 등록 정보
+,   crt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP       -- 생성일
+,   crt_ip VARCHAR(100)                               -- 생성 IP
+,   crt_seq INT                               -- 생성자 ID
+    -- 수정 정보
+,   udt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP       -- 수정일
+,   udt_ip VARCHAR(100)                               -- 수정 IP
+,   udt_seq INT                                -- 수정자 ID
+);
+
+-- 테이블 주석
+COMMENT ON TABLE posts IS '글쓰기 테이블';
+
+-- 컬럼 주석
+COMMENT ON COLUMN posts.seq IS '순번';
+COMMENT ON COLUMN posts.user_seq IS '글쓴이seq';
+COMMENT ON COLUMN posts.contents IS '내용';
+COMMENT ON COLUMN posts.contents_type IS '내용종류';
+COMMENT ON COLUMN posts.contents_file_seq IS '첨부파일순번';
+
+COMMENT ON COLUMN posts.crt_dt IS '생성일';
+COMMENT ON COLUMN posts.crt_ip IS '생성 IP';
+COMMENT ON COLUMN posts.crt_seq IS '생성자 seq';
+COMMENT ON COLUMN posts.udt_dt IS '수정일';
+COMMENT ON COLUMN posts.udt_ip IS '수정 IP';
+COMMENT ON COLUMN posts.udt_seq IS '수정자 seq';
+

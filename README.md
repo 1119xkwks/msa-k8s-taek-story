@@ -37,6 +37,7 @@
 |---|---:|---:|---:|---|
 | user-service |  | 90 | 32090 | ↔ pg-db-user |
 | file-service |  | 90 | 32091 | ↔ pg-db-file |
+| posting-service |  | 90 | 32092 | ↔ pg-db-posting |
 |  |  |  |  |  |
 |  |  |  |  |  |
 
