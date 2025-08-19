@@ -1,7 +1,7 @@
 # How to re-create (kubectl):
 #   kubectl delete -f pg-db-file-pvc.yaml --ignore-not-found
 #   kubectl apply  -f pg-db-file-pvc.yaml
-#   kubectl get pvc pg-db-file-pvc -o wide
+#   kubectl get pvc pg-db-file-pvc
 
 apiVersion: v1
 kind: PersistentVolumeClaim

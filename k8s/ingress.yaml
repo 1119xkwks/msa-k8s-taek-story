@@ -1,7 +1,7 @@
-# 재적용 명령어 (k8s 폴더에서 실행)
-# kubectl apply -f ingress.yaml
-# 삭제: kubectl delete -f ingress.yaml
-# 확인: kubectl get ingress taek-story-ingress
+# How to re-create (kubectl):
+#   kubectl delete -f ingress.yaml --ignore-not-found
+#   kubectl apply  -f ingress.yaml
+#   kubectl get ingress taek-story-ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

@@ -5,7 +5,7 @@
 #   kubectl get svc user-service
 #
 # Rollout / 이미지 교체 재배포:
-#   # 최신 이미지로 강제 롤링 업데이트 (이미지 태그 변경 없이 새로 pull 원하면 :latest 권장)
+#   # 최신 이미지로 강제 롤링 업데이트
 #   kubectl rollout restart deploy/user-service-deploy
 #   kubectl rollout status deploy/user-service-deploy
 #   # 필요 시 롤백

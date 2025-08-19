@@ -1,8 +1,17 @@
-# How to re-create (kubectl) from k8s folder
+# How to re-create (kubectl):
 #   kubectl delete -f dev-proxy.yaml --ignore-not-found
 #   kubectl apply  -f dev-proxy.yaml
 #   kubectl get deploy dev-proxy
-#   kubectl get svc dev-proxy -o wide
+#   kubectl get svc dev-proxy
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
+#   kubectl rollout restart deploy/dev-proxy
+#   kubectl rollout status deploy/dev-proxy
+#   # 필요 시 롤백
+#   kubectl rollout undo deploy/dev-proxy
+#
+# Quick test:
 #   curl -i http://localhost:32290/user-service/test
 #   curl -i http://localhost:32290/file-service/test
 

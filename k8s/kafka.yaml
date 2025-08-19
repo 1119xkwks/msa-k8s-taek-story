@@ -1,8 +1,18 @@
-# How to re-deploy (kubectl):
+# How to re-create (kubectl):
 #   kubectl delete -f kafka.yaml --ignore-not-found
 #   kubectl apply  -f kafka.yaml
-#   kubectl get pods,svc -l app=kafka -o wide
-#   # Access: PLAINTEXT on NodePort 30105 (Service port 9990)
+#   kubectl get deploy kafka
+#   kubectl get svc kafka
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
+#   kubectl rollout restart deploy/kafka
+#   kubectl rollout status deploy/kafka
+#   # 필요 시 롤백
+#   kubectl rollout undo deploy/kafka
+#
+# Access:
+#   # PLAINTEXT on NodePort 30105 (Service port 9990)
 
 ---
 apiVersion: apps/v1

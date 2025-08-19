@@ -1,10 +1,14 @@
-# 재적용 명령어 (k8s 폴더에서 실행)
-# kubectl apply -f taek-store-user.yaml
-# 삭제: kubectl delete -f taek-store-user.yaml
-# 확인: kubectl get deploy taek-store-user && kubectl get svc taek-store-user
-# 이미지 교체/롤아웃:
+# How to re-create (kubectl):
+#   kubectl delete -f taek-store-user.yaml --ignore-not-found
+#   kubectl apply  -f taek-store-user.yaml
+#   kubectl get deploy taek-store-user
+#   kubectl get svc taek-store-user
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
 #   kubectl rollout restart deploy/taek-store-user
 #   kubectl rollout status deploy/taek-store-user
+#   # 필요 시 롤백
 #   kubectl rollout undo deploy/taek-store-user
 
 ---

@@ -1,7 +1,15 @@
-# How to re-deploy (kubectl):
+# How to re-create (kubectl):
 #   kubectl delete -f pg-db-posting.yaml --ignore-not-found
 #   kubectl apply  -f pg-db-posting.yaml
-#   kubectl get pods,svc -l app=pg-db-posting -o wide
+#   kubectl get deploy pg-db-posting
+#   kubectl get svc pg-db-posting
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
+#   kubectl rollout restart deploy/pg-db-posting
+#   kubectl rollout status deploy/pg-db-posting
+#   # 필요 시 롤백
+#   kubectl rollout undo deploy/pg-db-posting
 
 apiVersion: apps/v1
 kind: Deployment

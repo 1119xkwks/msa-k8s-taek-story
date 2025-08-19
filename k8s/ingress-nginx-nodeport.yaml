@@ -1,7 +1,7 @@
-# 재적용 명령어 (k8s 폴더에서 실행)
-# kubectl apply -f ingress-nginx-nodeport.yaml
-# 삭제: kubectl delete -f ingress-nginx-nodeport.yaml
-# 확인: kubectl -n ingress-nginx get svc ingress-nginx-controller-nodeport
+# How to re-create (kubectl):
+#   kubectl delete -f ingress-nginx-nodeport.yaml --ignore-not-found
+#   kubectl apply  -f ingress-nginx-nodeport.yaml
+#   kubectl -n ingress-nginx get svc ingress-nginx-controller-nodeport
 apiVersion: v1
 kind: Service
 metadata:

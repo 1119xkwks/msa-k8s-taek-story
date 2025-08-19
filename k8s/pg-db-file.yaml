@@ -1,7 +1,15 @@
-# How to re-deploy (kubectl):
+# How to re-create (kubectl):
 #   kubectl delete -f pg-db-file.yaml --ignore-not-found
 #   kubectl apply  -f pg-db-file.yaml
-#   kubectl get pods,svc -l app=pg-db-file -o wide
+#   kubectl get deploy pg-db-file
+#   kubectl get svc pg-db-file
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
+#   kubectl rollout restart deploy/pg-db-file
+#   kubectl rollout status deploy/pg-db-file
+#   # 필요 시 롤백
+#   kubectl rollout undo deploy/pg-db-file
 
 apiVersion: apps/v1
 kind: Deployment

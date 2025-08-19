@@ -1,10 +1,14 @@
 # How to re-create (kubectl):
 #   kubectl delete -f file-service.yaml --ignore-not-found
 #   kubectl apply  -f file-service.yaml
-#   kubectl get deploy file-service && kubectl get svc file-service -o wide
-# Rollout / 이미지 교체:
+#   kubectl get deploy file-service
+#   kubectl get svc file-service
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
 #   kubectl rollout restart deploy/file-service
 #   kubectl rollout status deploy/file-service
+#   # 필요 시 롤백
 #   kubectl rollout undo deploy/file-service
 
 ---

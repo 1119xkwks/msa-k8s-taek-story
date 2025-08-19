@@ -1,7 +1,15 @@
-# How to re-deploy (kubectl):
+# How to re-create (kubectl):
 #   kubectl delete -f redisinsight.yaml --ignore-not-found
 #   kubectl apply  -f redisinsight.yaml
-#   kubectl get pods,svc -l app=redisinsight -o wide
+#   kubectl get deploy redisinsight
+#   kubectl get svc redisinsight
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
+#   kubectl rollout restart deploy/redisinsight
+#   kubectl rollout status deploy/redisinsight
+#   # 필요 시 롤백
+#   kubectl rollout undo deploy/redisinsight
 
 apiVersion: apps/v1
 kind: Deployment

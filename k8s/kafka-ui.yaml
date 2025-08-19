@@ -1,8 +1,18 @@
-# How to re-deploy (kubectl):
+# How to re-create (kubectl):
 #   kubectl delete -f kafka-ui.yaml --ignore-not-found
 #   kubectl apply  -f kafka-ui.yaml
-#   kubectl get pods,svc -l app=kafka-ui -o wide
-#   # Open: http://localhost:30106/
+#   kubectl get deploy kafka-ui
+#   kubectl get svc kafka-ui
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
+#   kubectl rollout restart deploy/kafka-ui
+#   kubectl rollout status deploy/kafka-ui
+#   # 필요 시 롤백
+#   kubectl rollout undo deploy/kafka-ui
+#
+# Open UI:
+#   # http://localhost:30106/
 
 ---
 apiVersion: apps/v1
