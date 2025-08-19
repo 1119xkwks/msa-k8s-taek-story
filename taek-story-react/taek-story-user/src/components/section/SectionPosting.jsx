@@ -4,17 +4,23 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import MyCard from "/src/components/layout/MyCard.jsx";
 import MyDivider from "/src/components/layout/MyDivider.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVideo, faImage, faSmile } from "@fortawesome/free-solid-svg-icons";
+import {
+  faVideo,
+  faImage,
+  faSmile,
+  faUserTie,
+} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { selectFeelings } from "/src/store/feelingsSlice.js";
 import PostingVideoPanel from "/src/components/post/posting/action/PostingVideoPanel.jsx";
 import PostingPhotoPanel from "/src/components/post/posting/action/PostingPhotoPanel.jsx";
 import PostingFeelingPanel from "/src/components/post/posting/action/PostingFeelingPanel.jsx";
-import { selectUser } from "../../store/sessionSlice.js";
+import { selectIsAuthenticated, selectUser } from "../../store/sessionSlice.js";
 import { makeMyProfileSrc } from "../../util/common.js";
 
 const SectionPosting = () => {
   const user = useSelector(selectUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const [postingText, setPostingText] = useState("");
   const [textareaRows, setTextareaRows] = useState(1); // 기본 rows 1
@@ -29,6 +35,9 @@ const SectionPosting = () => {
   };
 
   const handleToggle = (key) => {
+    if (!isAuthenticated) {
+      return;
+    }
     setActiveAction((prev) => (prev === key ? null : key));
   };
 
@@ -70,20 +79,29 @@ const SectionPosting = () => {
     <section className="section-posting">
       <MyCard className="section-posting-card">
         <div className="section-posting-card-main">
-          <Avatar
-            img={makeMyProfileSrc(user)}
-            alt={"나의 프로필 이미지"}
-            rounded
-            className="w-20"
-          />
+          {user?.fileProfileSeq ? (
+            <Avatar
+              img={makeMyProfileSrc(user)}
+              alt={"나의 프로필 이미지"}
+              rounded
+              className="mr-2"
+            />
+          ) : (
+            <div className="rounded-full bg-gray-300 w-14 h-10 flex items-center justify-center mr-2">
+              <FontAwesomeIcon className="text-2xl" icon={faUserTie} />
+            </div>
+          )}
           <textarea
             className="textarea-posting"
-            placeholder="What's on your mind?"
+            placeholder={
+              isAuthenticated ? "What's on your mind?" : "로그인 후 사용 가능"
+            }
             value={postingText}
             onChange={(e) => setPostingText(e.target.value)}
             rows={textareaRows}
             onFocus={() => setTextareaRows(3)} // focus 시 rows=3
             onBlur={() => !postingText && setTextareaRows(1)} // focus 해제 시 비어있으면 rows=1
+            disabled={!isAuthenticated}
           />
           <Button
             className="posting-button"
