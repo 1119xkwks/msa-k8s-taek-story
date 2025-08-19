@@ -5,7 +5,7 @@ import {
   faFaceTired,
   faHeart,
   faFaceSurprise,
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 
 export const feelingIdToIcon = {
   happy: faFaceSmile,
@@ -15,5 +15,3 @@ export const feelingIdToIcon = {
   love: faHeart,
   surprised: faFaceSurprise,
 };
-
-
