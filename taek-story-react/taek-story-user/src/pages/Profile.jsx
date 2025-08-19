@@ -14,6 +14,7 @@ import { $alert } from "../util/modals.js";
 import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "/src/store/sessionSlice.js";
 import { makeMyProfileSrc } from "../util/common.js";
+import usePageTitle from "../hooks/usePageTitle.jsx";
 
 const Profile = () => {
   const user = useSelector(selectUser);
@@ -21,6 +22,8 @@ const Profile = () => {
   const [previewUrl, setPreviewUrl] = useState("");
   const fileRef = useRef(null);
   const dispatch = useDispatch();
+
+  usePageTitle("프로필 이미지");
 
   const onSelectFile = (e) => {
     const file = e.target.files?.[0];

@@ -5,9 +5,12 @@ import AnchorHome from "../components/anchor/AnchorHome.jsx";
 import DisplayMyName from "../components/display/DisplayMyName.jsx";
 import AnchorSetting from "../components/anchor/AnchorSetting.jsx";
 import RightMenuDrawer from "../components/drawer/RightMenuDrawer.jsx";
+import usePageTitle from "../hooks/usePageTitle.jsx";
 
 const Notification = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  usePageTitle("알림");
 
   const notifications = [
     {
