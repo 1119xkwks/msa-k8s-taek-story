@@ -40,6 +40,22 @@ public class FileController {
 		return ResponseEntity.ok( fileMaster );
 	}
 
+	@PostMapping(value = "/upload/posting", consumes = "multipart/form-data")
+	public ResponseEntity<?> uploadPosting(
+			@RequestPart("file") MultipartFile file
+			, @RequestParam(value = "fileMasterSeq", required = false) Integer fileMasterSeq
+			, @RequestParam("fileType") String fileType
+			, @RequestParam("ip") String ip
+			, @RequestParam("userSeq") Integer userSeq
+	) throws Exception {
+		log.info("[uploadPosting] file : {}", file);
+		log.info("[uploadPosting] fileType : {}", fileType);
+		log.info("[uploadPosting] ip : {}", ip);
+		log.info("[uploadPosting] userSeq : {}", userSeq);
+		FileMaster fileMaster = fileService.uploadPosting(file, fileMasterSeq, fileType, ip, userSeq);
+		return ResponseEntity.ok( fileMaster );
+	}
+
 	@GetMapping("/view/profile/{seq}")
 	public ResponseEntity<byte[]> viewProfile(@PathVariable("seq") Integer seq) throws Exception {
 		log.info("[viewProfile] seq : {}", seq);

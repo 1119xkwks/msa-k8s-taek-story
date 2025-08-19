@@ -2,6 +2,7 @@ package com.example.postingservice.controller;
 
 import com.example.postingservice.common.CommonUtil;
 import com.example.postingservice.mapper.TimeMapper;
+import com.example.postingservice.model.Posts;
 import com.example.postingservice.model.Users;
 import com.example.postingservice.service.PostingService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,25 +21,27 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostingController {
     private final PostingService postingService;
 
-    @PostMapping(value = "/insert", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> insert(HttpSession session
+    @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> save(HttpSession session
 			, HttpServletRequest req
 			, @RequestPart("activeAction") String activeAction
 			, @RequestPart("contents") String contents
 			, @RequestPart(value = "file", required = false) MultipartFile file
 			, @RequestPart(value = "selectedFeeling", required = false) String selectedFeeling
 			) {
-        log.info("[insert] session ID : {}", session.getId());
+        log.info("[save] session ID : {}", session.getId());
 
-		String ip = CommonUtil.getClientIp(req);
 		Users loggedIn = Users.parseLoggedInfo(session);
+		String ip = CommonUtil.getClientIp(req);
 
-        log.info("[insert] ip : {}", ip);
-        log.info("[insert] loggedIn : {}", loggedIn);
-        log.info("[insert] file : {}", file);
-        log.info("[insert] activeAction : {}", activeAction);
-        log.info("[insert] selectedFeeling : {}", selectedFeeling);
-        log.info("[insert] contents : {}", contents);
+        log.info("[save] loggedIn : {}", loggedIn);
+        log.info("[save] ip : {}", ip);
+        log.info("[save] file : {}", file);
+        log.info("[save] activeAction : {}", activeAction);
+        log.info("[save] selectedFeeling : {}", selectedFeeling);
+        log.info("[save] contents : {}", contents);
+
+		postingService.savePosting(loggedIn, ip, file, activeAction, selectedFeeling, contents);
 
 		return ResponseEntity.ok(1);
     }

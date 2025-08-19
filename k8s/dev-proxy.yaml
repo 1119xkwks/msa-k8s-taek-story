@@ -34,25 +34,6 @@ data:
         # rewrite first to avoid variables in proxy_pass (no resolver needed)
         rewrite ^/user-service(/|$)(.*) /$2 break;
 
-        # CORS handling
-        if ($request_method = OPTIONS) {
-          add_header Access-Control-Allow-Origin "$http_origin" always;
-          add_header Access-Control-Allow-Credentials "true" always;
-          add_header Access-Control-Allow-Headers "*" always;
-          add_header Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS" always;
-          return 204;
-        }
-        add_header Access-Control-Allow-Origin "$http_origin" always;
-        add_header Access-Control-Allow-Credentials "true" always;
-        add_header Access-Control-Allow-Headers "*" always;
-        add_header Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS" always;
-
-        # prevent duplicate CORS headers from upstream
-        proxy_hide_header Access-Control-Allow-Origin;
-        proxy_hide_header Access-Control-Allow-Credentials;
-        proxy_hide_header Access-Control-Allow-Headers;
-        proxy_hide_header Access-Control-Allow-Methods;
-
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -64,25 +45,6 @@ data:
         # rewrite first to avoid variables in proxy_pass (no resolver needed)
         rewrite ^/file-service(/|$)(.*) /$2 break;
 
-        # CORS handling
-        if ($request_method = OPTIONS) {
-          add_header Access-Control-Allow-Origin "$http_origin" always;
-          add_header Access-Control-Allow-Credentials "true" always;
-          add_header Access-Control-Allow-Headers "*" always;
-          add_header Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS" always;
-          return 204;
-        }
-        add_header Access-Control-Allow-Origin "$http_origin" always;
-        add_header Access-Control-Allow-Credentials "true" always;
-        add_header Access-Control-Allow-Headers "*" always;
-        add_header Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS" always;
-
-        # prevent duplicate CORS headers from upstream
-        proxy_hide_header Access-Control-Allow-Origin;
-        proxy_hide_header Access-Control-Allow-Credentials;
-        proxy_hide_header Access-Control-Allow-Headers;
-        proxy_hide_header Access-Control-Allow-Methods;
-
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -93,25 +55,6 @@ data:
       location ~ ^/posting-service(/|$)(.*) {
         # rewrite first to avoid variables in proxy_pass (no resolver needed)
         rewrite ^/posting-service(/|$)(.*) /$2 break;
-
-        # CORS handling
-        if ($request_method = OPTIONS) {
-          add_header Access-Control-Allow-Origin "$http_origin" always;
-          add_header Access-Control-Allow-Credentials "true" always;
-          add_header Access-Control-Allow-Headers "*" always;
-          add_header Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS" always;
-          return 204;
-        }
-        add_header Access-Control-Allow-Origin "$http_origin" always;
-        add_header Access-Control-Allow-Credentials "true" always;
-        add_header Access-Control-Allow-Headers "*" always;
-        add_header Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS" always;
-
-        # prevent duplicate CORS headers from upstream
-        proxy_hide_header Access-Control-Allow-Origin;
-        proxy_hide_header Access-Control-Allow-Credentials;
-        proxy_hide_header Access-Control-Allow-Headers;
-        proxy_hide_header Access-Control-Allow-Methods;
 
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;

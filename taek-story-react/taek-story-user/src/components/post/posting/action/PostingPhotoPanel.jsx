@@ -8,7 +8,7 @@ const PostingPhotoPanel = ({
     <div className="action-panel">
       <div className="file-row">
         <label className="file-label">
-          <input type="file" accept="image/*" multiple onChange={onChoose} />
+          <input type="file" accept="image/jpeg" multiple onChange={onChoose} />
           <span className="file-button">Choose photos</span>
         </label>
         <span className="file-name">

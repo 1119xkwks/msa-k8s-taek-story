@@ -23,7 +23,7 @@ import {
 } from "../../store/sessionSlice.js";
 import { makeMyProfileSrc } from "../../util/common.js";
 import { apiFetch } from "../../util/api.js";
-import { $alert } from "../../util/modals.js";
+import { $alert } from "/src/util/modals.js";
 
 const SectionPosting = () => {
   const user = useSelector(selectUser);
@@ -32,15 +32,16 @@ const SectionPosting = () => {
   const [isSendPosting, setIsSendingPosting] = useState(false);
   const [postingText, setPostingText] = useState("");
   const [textareaRows, setTextareaRows] = useState(1); // 기본 rows 1
-  const [activeAction, setActiveAction] = useState(null); // 'video' | 'photo' | 'feeling' | null
+  const [activeAction, setActiveAction] = useState(null); // 'video' | 'image' | 'feeling' | null
   const [videoFile, setVideoFile] = useState(null);
   const [photoFile, setPhotoFile] = useState(null);
   const [selectedFeeling, setSelectedFeeling] = useState(null);
   const prevActionRef = useRef(null);
+  const [inputsKey, setInputsKey] = useState(0); // remount file inputs to clear selection
 
   // 포스팅 글 올리기
   const handlePost = async () => {
-    if (!postingText) {
+    if (!postingText || isSendPosting) {
       return;
     }
 
@@ -60,13 +61,13 @@ const SectionPosting = () => {
             form.append("file", videoFile);
           }
           break;
-        case "photo":
+        case "image":
           if (photoFile) {
             if (photoFile.size > 200 * 1024 * 1024) {
               await $alert("200MB를 초과할 수 없습니다.");
               return;
             }
-            finalAction = "photo";
+            finalAction = "image";
             form.append("file", photoFile);
           }
           break;
@@ -83,7 +84,7 @@ const SectionPosting = () => {
       form.append("activeAction", finalAction);
       form.append("contents", postingText);
 
-      const res = await apiFetch(`/posting-service/posting/insert`, {
+      const res = await apiFetch(`/posting-service/posting/save`, {
         method: "POST",
         body: form,
       });
@@ -102,7 +103,19 @@ const SectionPosting = () => {
       setIsSendingPosting(false);
     }
 
-    // setPostingText("");
+    await $alert("등록되었습니다.");
+    console.debug("[handlePost] 등록되었습니다.1");
+
+    // 작성 내용 초기화
+    setPostingText("");
+    setTextareaRows(1);
+    setActiveAction(null);
+    setVideoFile(null);
+    setPhotoFile(null);
+    setSelectedFeeling(null);
+    setInputsKey((k) => k + 1); // force remount inputs
+
+    // 목록 불러오기
   };
 
   const handleToggle = (key) => {
@@ -139,7 +152,7 @@ const SectionPosting = () => {
     const prev = prevActionRef.current;
     if (prev && prev !== activeAction) {
       if (prev === "video") setVideoFile(null);
-      if (prev === "photo") setPhotoFile(null);
+      if (prev === "image") setPhotoFile(null);
       if (prev === "feeling") setSelectedFeeling(null);
     }
     prevActionRef.current = activeAction;
@@ -204,11 +217,11 @@ const SectionPosting = () => {
           </div>
 
           <div
-            className={`action-item photo ${activeAction === "photo" ? "is-active" : ""}`}
+            className={`action-item photo ${activeAction === "image" ? "is-active" : ""}`}
             role="button"
             tabIndex={0}
             aria-label="Photo"
-            onClick={() => handleToggle("photo")}
+            onClick={() => handleToggle("image")}
           >
             <FontAwesomeIcon className="action-icon" icon={faImage} />
             <span className="action-label">Photo</span>
@@ -228,14 +241,16 @@ const SectionPosting = () => {
 
         {activeAction === "video" && (
           <PostingVideoPanel
+            key={`video-${inputsKey}`}
             videoFile={videoFile}
             onChoose={handleVideoChange}
             onClear={() => setVideoFile(null)}
           />
         )}
 
-        {activeAction === "photo" && (
+        {activeAction === "image" && (
           <PostingPhotoPanel
+            key={`photo-${inputsKey}`}
             photoFiles={photoFile ? [photoFile] : []}
             photoPreviews={photoPreviews}
             onChoose={handlePhotoChange}

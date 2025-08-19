@@ -10,7 +10,7 @@ import { API_BASE, apiFetch } from "/src/util/api.js";
 import MyDivider from "../components/layout/MyDivider.jsx";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/sessionSlice.js";
-import { $alert } from "../util/modals.js";
+import { $alert } from "/src/util/modals.js";
 import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "/src/store/sessionSlice.js";
 import { makeMyProfileSrc } from "../util/common.js";
@@ -129,7 +129,7 @@ const Profile = () => {
             <input
               ref={fileRef}
               type="file"
-              accept="image/*"
+              accept="image/jpeg"
               onChange={onSelectFile}
               className="profile-file-input"
             />

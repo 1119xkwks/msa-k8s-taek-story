@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
 
 	private final UsersMapper usersMapper;
 	private final FileServiceClient fileServiceClient;
-	private final ObjectMapper objectMapper;
 
 	@Override
 	public ResponseEntity<?> signUp(HttpServletRequest req, UsersInsert insertForm) {
@@ -89,7 +88,7 @@ public class UserServiceImpl implements UserService {
 			log.info("[profileSave] loggedIn {}", loggedIn);
 
 			// Call Feign Client
-			FileMaster fileMaster = fileServiceClient.uploadFile(file, loggedIn.getFileProfileSeq(), ip, loggedIn.getSeq());
+			FileMaster fileMaster = fileServiceClient.uploadFileProfile(file, loggedIn.getFileProfileSeq(), ip, loggedIn.getSeq());
 
 			// DB 프로필 상태 업데이트
 			loggedIn.setFileProfileSeq(fileMaster.getSeq());

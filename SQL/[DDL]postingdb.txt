@@ -5,7 +5,8 @@ CREATE TABLE posts (
 ,	user_seq INT NOT NULL                              -- 글쓴이seq
 ,	contents text NOT NULL                              -- 내용
 ,	contents_type VARCHAR(50) NOT NULL                  -- 내용종류
-,	contents_file_seq INT NOT NULL                      -- 첨부파일순번
+,	contents_file_seq INT                      -- 첨부파일순번
+,	selected_feeling VARCHAR(50)                        -- 감정선택
 
     -- 등록 정보
 ,   crt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP       -- 생성일
@@ -26,6 +27,7 @@ COMMENT ON COLUMN posts.user_seq IS '글쓴이seq';
 COMMENT ON COLUMN posts.contents IS '내용';
 COMMENT ON COLUMN posts.contents_type IS '내용종류';
 COMMENT ON COLUMN posts.contents_file_seq IS '첨부파일순번';
+COMMENT ON COLUMN posts.selected_feeling IS '감정선택';
 
 COMMENT ON COLUMN posts.crt_dt IS '생성일';
 COMMENT ON COLUMN posts.crt_ip IS '생성 IP';

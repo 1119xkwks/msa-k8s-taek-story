@@ -3,7 +3,7 @@ const PostingVideoPanel = ({ videoFile, onChoose, onClear }) => {
     <div className="action-panel">
       <div className="file-row">
         <label className="file-label">
-          <input type="file" accept="video/*" onChange={onChoose} />
+          <input type="file" accept="video/mp4" onChange={onChoose} />
           <span className="file-button">Choose video</span>
         </label>
         <span className="file-name">

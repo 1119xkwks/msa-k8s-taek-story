@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.postingservice.mapper.PostingMapper">
+
+    <insert id="insertPosts" parameterType="posts" useGeneratedKeys="true" >
+        /** insertPosts */
+        insert into posts(user_seq, contents, contents_type, contents_file_seq, selected_feeling, crt_dt, crt_ip, crt_seq)
+        values(#{userSeq}, #{contents}, #{contentsType}, #{contentsFileSeq}, #{selectedFeeling}, CURRENT_TIMESTAMP, #{crtIp}, #{crtSeq})
+    </insert>
+</mapper>
+
+

@@ -23,6 +23,8 @@ public class FileServiceImpl implements FileService {
 	private final MinioClient minio;
 	@Value("${minio.bucket.images}")
 	private String imagesBucket;
+	@Value("${minio.bucket.videos}")
+	private String videosBucket;
 
 	private final FileMapper fileMapper;
 
@@ -95,6 +97,93 @@ public class FileServiceImpl implements FileService {
 				.build();
 		fileMapper.insertFileDetail(fileDetail);
 		log.debug("[uploadProfileImage] inserted fileDetail : {}", fileDetail);
+
+		return fileMaster;
+	}
+
+	@Override
+	public FileMaster uploadPosting(MultipartFile file, Integer fileMasterSeq, String fileType, String ip, Integer userSeq) throws Exception {
+
+		// MinIO 저장
+		log.debug("[uploadPosting] imagesBucket : {}", imagesBucket);
+		ensureBucket(imagesBucket);
+
+		// file 분석
+		// 원본 파일명
+		String originalFilename = file.getOriginalFilename();
+
+		// MIME 타입
+		String contentType = file.getContentType();
+
+		// 파일 크기 (bytes)
+		long fileSize = file.getSize();
+
+		// 날짜 폴더
+		String yyyyMmDd = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+
+		// 확장자명
+		String ext = StringUtils.substringAfterLast(originalFilename, ".");
+
+		log.debug("[uploadPosting] fileType : {}", fileType);
+		String bucketName = null;
+		switch (fileType) {
+			case "video":
+				bucketName = videosBucket;
+				break;
+			case "image":
+				bucketName = imagesBucket;
+				break;
+			default:
+				throw new Exception("FILE TYPE NOT SUPPORTED");
+		}
+
+		String objectName = "/posting/" + yyyyMmDd + "/" + UUID.randomUUID();
+		if (StringUtils.isNotBlank(ext)) {
+			objectName += "." + ext;
+		}
+		log.debug("[uploadPosting] objectName : {}", objectName);
+
+		ObjectWriteResponse owr = minio.putObject(
+				PutObjectArgs.builder()
+						.bucket(imagesBucket)
+						.object(objectName)
+						.contentType("image/jpeg")
+						.stream(file.getInputStream(), fileSize, -1)
+						.build()
+		);
+		log.debug("[uploadPosting] ObjectWriteResponse : {}", owr);
+
+		// DB Insert
+		FileMaster fileMaster = FileMaster.builder()
+				.fileType("profile")
+				.crtIp(ip)
+				.crtSeq(userSeq)
+				.udtIp(ip)
+				.udtSeq(userSeq)
+				.build();
+		if (fileMasterSeq == null) {
+			fileMaster.setDescription("포스팅 파일 업로드");
+			fileMapper.insertFileMaster(fileMaster);
+		} else {
+			fileMaster.setDescription("포스팅 파일 수정 업로드");
+			fileMaster.setSeq(fileMasterSeq);
+			fileMapper.updateFileMaster(fileMaster);
+			fileMapper.deleteFileDetailByMasterSeq(fileMasterSeq);
+		}
+		log.debug("[uploadPosting] inserted fileMaster : {}", fileMaster);
+
+		FileDetail  fileDetail = FileDetail.builder()
+				.masterSeq( fileMaster.getSeq() )
+				.fileName(originalFilename)
+				.filePath(objectName)
+				.fileSize(fileSize)
+				.mimeType(contentType)
+				.crtIp(ip)
+				.crtSeq(userSeq)
+				.build();
+		fileMapper.insertFileDetail(fileDetail);
+		log.debug("[uploadPosting] inserted fileDetail : {}", fileDetail);
+
 
 		return fileMaster;
 	}

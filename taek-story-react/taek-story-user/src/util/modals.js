@@ -13,6 +13,7 @@ let configResolver = null;
 export const $confirm = (msg) => {
   // Open modal with message and return a promise that resolves on user action
   return new Promise((resolve) => {
+    console.debug("[$confirm] open", msg);
     configResolver = resolve;
     store.dispatch(setConfirmModalMsg(msg || ""));
     store.dispatch(openConfirmModal());
@@ -25,12 +26,16 @@ export const resolveConfirm = (value) => {
   // Close first, then resolve on next tick
   store.dispatch(closeConfirmModal());
   store.dispatch(setConfirmModalMsg(""));
-  if (r) setTimeout(() => r(value), 0);
+  if (r) {
+    console.debug("[resolveConfirm] value=", value);
+    setTimeout(() => r(value), 0);
+  }
 };
 
 let alertResolver = null;
 export const $alert = (msg) =>
   new Promise((resolve) => {
+    console.debug("[$alert] open", msg);
     alertResolver = resolve;
     store.dispatch(setAlertModalMsg(msg || ""));
     store.dispatch(openAlertModal());
@@ -39,8 +44,10 @@ export const $alert = (msg) =>
 export const resolveAlert = (value) => {
   const r = alertResolver;
   alertResolver = null;
-  // Close first, then resolve on next tick
+  console.debug("[resolveAlert] value=", value);
+  // Resolve immediately to avoid any race with modal closing
+  if (r) r(value);
+  // Then close modal state
   store.dispatch(closeAlertModal());
   store.dispatch(setAlertModalMsg(""));
-  if (r) setTimeout(() => r(value), 0);
 };
