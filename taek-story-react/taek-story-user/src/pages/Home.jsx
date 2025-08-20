@@ -95,7 +95,6 @@ const Home = () => {
     }
 
     await $alert("등록되었습니다.");
-    console.debug("[postingHandler] 등록되었습니다.1");
 
     // 작성 내용 초기화
     setPostingText("");
