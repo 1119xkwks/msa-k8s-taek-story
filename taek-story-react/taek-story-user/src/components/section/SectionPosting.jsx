@@ -37,7 +37,6 @@ const SectionPosting = () => {
   const [photoFile, setPhotoFile] = useState(null);
   const [selectedFeeling, setSelectedFeeling] = useState(null);
   const prevActionRef = useRef(null);
-  const [inputsKey, setInputsKey] = useState(0); // remount file inputs to clear selection
 
   // 포스팅 글 올리기
   const handlePost = async () => {
@@ -113,7 +112,6 @@ const SectionPosting = () => {
     setVideoFile(null);
     setPhotoFile(null);
     setSelectedFeeling(null);
-    setInputsKey((k) => k + 1); // force remount inputs
 
     // 목록 불러오기
   };
@@ -241,7 +239,6 @@ const SectionPosting = () => {
 
         {activeAction === "video" && (
           <PostingVideoPanel
-            key={`video-${inputsKey}`}
             videoFile={videoFile}
             onChoose={handleVideoChange}
             onClear={() => setVideoFile(null)}
@@ -250,7 +247,6 @@ const SectionPosting = () => {
 
         {activeAction === "image" && (
           <PostingPhotoPanel
-            key={`photo-${inputsKey}`}
             photoFiles={photoFile ? [photoFile] : []}
             photoPreviews={photoPreviews}
             onChoose={handlePhotoChange}
