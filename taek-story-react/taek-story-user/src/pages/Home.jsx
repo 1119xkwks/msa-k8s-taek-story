@@ -8,10 +8,103 @@ import RightMenuDrawer from "../components/drawer/RightMenuDrawer.jsx";
 import SectionPosting from "../components/section/SectionPosting";
 import SectionPostList from "../components/section/SectionPostList";
 
-import { useState } from "react";
+import { createContext, useState } from "react";
+import { apiFetch } from "../util/api.js";
+import { $alert } from "../util/modals.js";
+
+export const PostingDataContext = createContext();
+export const PostingDispatchContext = createContext();
 
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Posting states
+  const [isSendPosting, setIsSendingPosting] = useState(false);
+  const [postingText, setPostingText] = useState("");
+  const [textareaRows, setTextareaRows] = useState(1);
+  const [activeAction, setActiveAction] = useState(null); // 'video' | 'image' | 'feeling' | null
+  const [videoFile, setVideoFile] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [selectedFeeling, setSelectedFeeling] = useState(null);
+
+  /**
+   * 포스팅 글 올리기 핸들러는 상위 컨텍스트에서 제공
+   * @returns {Promise<void>}
+   */
+  const postingHandler = async () => {
+    if (!postingText || isSendPosting) {
+      return;
+    }
+
+    try {
+      setIsSendingPosting(true);
+      const form = new FormData();
+
+      let finalAction = "NONE";
+      switch (activeAction) {
+        case "video":
+          if (videoFile) {
+            if (videoFile.size > 200 * 1024 * 1024) {
+              await $alert("200MB를 초과할 수 없습니다.");
+              return;
+            }
+            finalAction = "video";
+            form.append("file", videoFile);
+          }
+          break;
+        case "image":
+          if (photoFile) {
+            if (photoFile.size > 200 * 1024 * 1024) {
+              await $alert("200MB를 초과할 수 없습니다.");
+              return;
+            }
+            finalAction = "image";
+            form.append("file", photoFile);
+          }
+          break;
+        case "feeling":
+          if (selectedFeeling) {
+            finalAction = "feeling";
+            form.append("selectedFeeling", selectedFeeling);
+          }
+          break;
+        default:
+          finalAction = "NONE";
+      }
+
+      form.append("activeAction", finalAction);
+      form.append("contents", postingText);
+
+      const res = await apiFetch(`/posting-service/posting/save`, {
+        method: "POST",
+        body: form,
+      });
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      const result = await res.json();
+      if (result) {
+        //
+        console.debug("[postingHandler] result", result);
+      }
+    } catch (_e) {
+      console.error(_e);
+    } finally {
+      setIsSendingPosting(false);
+    }
+
+    await $alert("등록되었습니다.");
+    console.debug("[postingHandler] 등록되었습니다.1");
+
+    // 작성 내용 초기화
+    setPostingText("");
+    setTextareaRows(1);
+    setActiveAction(null);
+    setVideoFile(null);
+    setPhotoFile(null);
+    setSelectedFeeling(null);
+  };
 
   return (
     <div className="home">
@@ -22,11 +115,35 @@ const Home = () => {
         right={<AnchorSetting clickHandler={() => setIsMenuOpen(true)} />}
       />
 
-      {/*글쓰기*/}
-      <SectionPosting />
+      <PostingDataContext.Provider
+        value={{
+          isSendPosting,
+          postingText,
+          textareaRows,
+          activeAction,
+          videoFile,
+          photoFile,
+          selectedFeeling,
+        }}
+      >
+        <PostingDispatchContext.Provider
+          value={{
+            setPostingText,
+            setTextareaRows,
+            setActiveAction,
+            setVideoFile,
+            setPhotoFile,
+            setSelectedFeeling,
+            postingHandler,
+          }}
+        >
+          {/*글쓰기*/}
+          <SectionPosting />
 
-      {/*글목록*/}
-      <SectionPostList />
+          {/*글목록*/}
+          <SectionPostList />
+        </PostingDispatchContext.Provider>
+      </PostingDataContext.Provider>
 
       {/*사이드바*/}
       <RightMenuDrawer

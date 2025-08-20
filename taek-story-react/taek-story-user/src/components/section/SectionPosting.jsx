@@ -1,6 +1,6 @@
 import "./SectionPosting.css";
 import { Button, Avatar, Textarea } from "flowbite-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef } from "react";
 import MyCard from "/src/components/layout/MyCard.jsx";
 import MyDivider from "/src/components/layout/MyDivider.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,106 +15,36 @@ import { selectFeelings } from "/src/store/feelingsSlice.js";
 import PostingVideoPanel from "/src/components/post/posting/action/PostingVideoPanel.jsx";
 import PostingPhotoPanel from "/src/components/post/posting/action/PostingPhotoPanel.jsx";
 import PostingFeelingPanel from "/src/components/post/posting/action/PostingFeelingPanel.jsx";
-import {
-  clearUser,
-  selectIsAuthenticated,
-  selectUser,
-  setUser,
-} from "../../store/sessionSlice.js";
+import { selectIsAuthenticated, selectUser } from "../../store/sessionSlice.js";
 import { makeMyProfileSrc } from "../../util/common.js";
-import { apiFetch } from "../../util/api.js";
-import { $alert } from "/src/util/modals.js";
+import {
+  PostingDataContext,
+  PostingDispatchContext,
+} from "/src/pages/Home.jsx";
 
 const SectionPosting = () => {
   const user = useSelector(selectUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  const [isSendPosting, setIsSendingPosting] = useState(false);
-  const [postingText, setPostingText] = useState("");
-  const [textareaRows, setTextareaRows] = useState(1); // 기본 rows 1
-  const [activeAction, setActiveAction] = useState(null); // 'video' | 'image' | 'feeling' | null
-  const [videoFile, setVideoFile] = useState(null);
-  const [photoFile, setPhotoFile] = useState(null);
-  const [selectedFeeling, setSelectedFeeling] = useState(null);
+  const {
+    isSendPosting,
+    postingText,
+    textareaRows,
+    activeAction,
+    videoFile,
+    photoFile,
+    selectedFeeling,
+  } = useContext(PostingDataContext);
+  const {
+    setPostingText,
+    setTextareaRows,
+    setActiveAction,
+    setVideoFile,
+    setPhotoFile,
+    setSelectedFeeling,
+    postingHandler,
+  } = useContext(PostingDispatchContext);
   const prevActionRef = useRef(null);
-
-  // 포스팅 글 올리기
-  const handlePost = async () => {
-    if (!postingText || isSendPosting) {
-      return;
-    }
-
-    try {
-      setIsSendingPosting(true);
-      const form = new FormData();
-
-      let finalAction = "NONE";
-      switch (activeAction) {
-        case "video":
-          if (videoFile) {
-            if (videoFile.size > 200 * 1024 * 1024) {
-              await $alert("200MB를 초과할 수 없습니다.");
-              return;
-            }
-            finalAction = "video";
-            form.append("file", videoFile);
-          }
-          break;
-        case "image":
-          if (photoFile) {
-            if (photoFile.size > 200 * 1024 * 1024) {
-              await $alert("200MB를 초과할 수 없습니다.");
-              return;
-            }
-            finalAction = "image";
-            form.append("file", photoFile);
-          }
-          break;
-        case "feeling":
-          if (selectedFeeling) {
-            finalAction = "feeling";
-            form.append("selectedFeeling", selectedFeeling);
-          }
-          break;
-        default:
-          finalAction = "NONE";
-      }
-
-      form.append("activeAction", finalAction);
-      form.append("contents", postingText);
-
-      const res = await apiFetch(`/posting-service/posting/save`, {
-        method: "POST",
-        body: form,
-      });
-      if (!res.ok) {
-        await $alert("처리도중 에러가 발생하였습니다.");
-        return;
-      }
-      const result = await res.json();
-      if (result) {
-        //
-        console.debug("[handlePost] result", result);
-      }
-    } catch (_e) {
-      console.error(_e);
-    } finally {
-      setIsSendingPosting(false);
-    }
-
-    await $alert("등록되었습니다.");
-    console.debug("[handlePost] 등록되었습니다.1");
-
-    // 작성 내용 초기화
-    setPostingText("");
-    setTextareaRows(1);
-    setActiveAction(null);
-    setVideoFile(null);
-    setPhotoFile(null);
-    setSelectedFeeling(null);
-
-    // 목록 불러오기
-  };
 
   const handleToggle = (key) => {
     if (!isAuthenticated) {
@@ -189,7 +119,7 @@ const SectionPosting = () => {
           <Button
             className="posting-button"
             color="blue"
-            onClick={handlePost}
+            onClick={postingHandler}
             disabled={isSendPosting || !postingText.trim()}
           >
             {isSendPosting ? "Posting.." : "Post"}
