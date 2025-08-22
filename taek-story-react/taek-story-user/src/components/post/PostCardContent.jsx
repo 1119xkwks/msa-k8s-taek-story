@@ -55,7 +55,14 @@ const PostCardContent = ({
   const [cleanedContents, setCleanedContents] = useState("");
   useEffect(() => {
     if (contents) {
-      setCleanedContents(DOMPurify.sanitize(marked(contents)));
+      setCleanedContents(
+        DOMPurify.sanitize(
+          marked.parse(contents, {
+            gfm: true,
+            breaks: true,
+          }),
+        ),
+      );
     }
   }, [contents]);
 
