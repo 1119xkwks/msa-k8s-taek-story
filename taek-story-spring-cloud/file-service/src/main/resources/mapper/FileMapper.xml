@@ -24,7 +24,7 @@
         values (#{masterSeq}, #{fileName}, #{filePath}, #{fileSize}, #{mimeType}, CURRENT_TIMESTAMP, #{crtIp}, #{crtSeq})
     </insert>
 
-    <update id="deleteFileDetailByMasterSeq" parameterType="java.lang.Integer">
+    <update id="deleteFileDetailByMasterSeq" parameterType="long">
         /** deleteFileDetailByMasterSeq */
         update  file_detail
         set del_yn  =   'Y'

@@ -7,8 +7,14 @@ import com.example.postingservice.model.Posts;
 import com.example.postingservice.model.Users;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -40,5 +46,16 @@ public class PostingServiceImpl implements PostingService {
 			e.printStackTrace();
 			return 0;
 		}
+	}
+
+	@Override
+	public Page<Posts> selectPages(Users loggedIn, String ip, Pageable pageable) {
+		if (loggedIn == null) {
+			log.debug("[selectPages] user is null");
+			return new PageImpl<Posts>(new ArrayList<>(), pageable, 0);
+		}
+		List<Posts> list = postingMapper.selectPages(loggedIn.getSeq(), pageable);
+		int total = postingMapper.countPages(loggedIn.getSeq(), pageable);
+		return new PageImpl<Posts>(list, pageable, total);
 	}
 }

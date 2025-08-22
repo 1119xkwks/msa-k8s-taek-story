@@ -1,7 +1,6 @@
 package com.example.postingservice.controller;
 
 import com.example.postingservice.common.CommonUtil;
-import com.example.postingservice.mapper.TimeMapper;
 import com.example.postingservice.model.Posts;
 import com.example.postingservice.model.Users;
 import com.example.postingservice.service.PostingService;
@@ -9,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,15 +35,25 @@ public class PostingController {
 		Users loggedIn = Users.parseLoggedInfo(session);
 		String ip = CommonUtil.getClientIp(req);
 
-        log.info("[save] loggedIn : {}", loggedIn);
-        log.info("[save] ip : {}", ip);
-        log.info("[save] file : {}", file);
-        log.info("[save] activeAction : {}", activeAction);
-        log.info("[save] selectedFeeling : {}", selectedFeeling);
-        log.info("[save] contents : {}", contents);
+        log.debug("[save] loggedIn : {}", loggedIn);
+        log.debug("[save] ip : {}", ip);
+        log.debug("[save] file : {}", file);
+        log.debug("[save] activeAction : {}", activeAction);
+        log.debug("[save] selectedFeeling : {}", selectedFeeling);
+        log.debug("[save] contents : {}", contents);
 
 		postingService.savePosting(loggedIn, ip, file, activeAction, selectedFeeling, contents);
 
 		return ResponseEntity.ok(1);
     }
+
+	@GetMapping("/list")
+	public ResponseEntity<Page<Posts>> list(HttpSession session
+			, HttpServletRequest req
+			, Pageable pageable) {
+		Users loggedIn = Users.parseLoggedInfo(session);
+		String ip = CommonUtil.getClientIp(req);
+		return ResponseEntity.ok( postingService.selectPages(loggedIn, ip, pageable) );
+	}
+
 }

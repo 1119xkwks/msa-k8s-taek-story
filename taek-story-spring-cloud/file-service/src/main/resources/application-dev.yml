@@ -10,11 +10,11 @@ spring:
       max-request-size: 200MB
   data:
     redis:
-      host: localhost
+      host: 127.0.0.1
       port: 30101
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:31004/filedb
+    url: jdbc:postgresql://127.0.0.1:31004/filedb
     username: postgres
     password: postgres
   sql:
@@ -41,7 +41,7 @@ p6spy:
   sql-format: true
 
 minio:
-  endpoint: http://localhost:30103
+  endpoint: http://127.0.0.1:30103
   accessKey: minioadmin
   secretKey: minioadmin123!
   bucket:

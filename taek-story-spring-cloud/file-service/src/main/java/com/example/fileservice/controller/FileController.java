@@ -29,9 +29,9 @@ public class FileController {
 	@PostMapping(value = "/upload/profile", consumes = "multipart/form-data")
 	public ResponseEntity<?> uploadProfile(
 			@RequestPart("file") MultipartFile file
-			, @RequestParam(value = "fileMasterSeq", required = false) Integer fileMasterSeq
+			, @RequestParam(value = "fileMasterSeq", required = false) Long fileMasterSeq
 			, @RequestParam("ip") String ip
-			, @RequestParam("userSeq") Integer userSeq
+			, @RequestParam("userSeq") Long userSeq
 	) throws Exception {
 		log.info("[uploadProfile] file : {}", file);
 		log.info("[uploadProfile] ip : {}", ip);
@@ -43,10 +43,10 @@ public class FileController {
 	@PostMapping(value = "/upload/posting", consumes = "multipart/form-data")
 	public ResponseEntity<?> uploadPosting(
 			@RequestPart("file") MultipartFile file
-			, @RequestParam(value = "fileMasterSeq", required = false) Integer fileMasterSeq
+			, @RequestParam(value = "fileMasterSeq", required = false) Long fileMasterSeq
 			, @RequestParam("fileType") String fileType
 			, @RequestParam("ip") String ip
-			, @RequestParam("userSeq") Integer userSeq
+			, @RequestParam("userSeq") Long userSeq
 	) throws Exception {
 		log.info("[uploadPosting] file : {}", file);
 		log.info("[uploadPosting] fileType : {}", fileType);
@@ -56,17 +56,24 @@ public class FileController {
 		return ResponseEntity.ok( fileMaster );
 	}
 
-	@GetMapping("/view/profile/{seq}")
-	public ResponseEntity<byte[]> viewProfile(@PathVariable("seq") Integer seq) throws Exception {
-		log.info("[viewProfile] seq : {}", seq);
+	@GetMapping("/image/content/{seq}")
+	public ResponseEntity<byte[]> imageContent(@PathVariable("seq") Long seq) throws Exception {
+		log.info("[imageContent] seq : {}", seq);
 
-		byte[] bytes = fileService.viewProfile(seq);
+		byte[] bytes = fileService.imageContent(seq);
 
 		// MIME 타입 설정 (jpg/png 등)
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.IMAGE_JPEG); // 필요시 동적으로 mime type 판단
 
 		return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+	}
+
+	// seq 로 요청하면 실제 MinIO의 presigned URL 반환
+	@GetMapping("/video/presigned/uri/{seq}")
+	public ResponseEntity<String> getVideoPresignedUri(@PathVariable Long seq) {
+		log.info("[getVideoPresignedUrl] seq : {}", seq);
+		return ResponseEntity.ok( fileService.getVideoPresignedUri(seq) );
 	}
 
 }

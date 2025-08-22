@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 public class FileDetail {
 
 	/** 순번 */
-	private Integer seq;
+	private Long seq;
 
 	/** 파일 마스터 ID */
-	private Integer masterSeq;
+	private Long masterSeq;
 
 	/** 원본 파일명 */
 	private String fileName;
@@ -37,8 +37,8 @@ public class FileDetail {
 
 	private LocalDateTime crtDt;
 	private String crtIp;
-	private Integer crtSeq;
+	private Long crtSeq;
 	private LocalDateTime udtDt;
 	private String udtIp;
-	private Integer udtSeq;
+	private Long udtSeq;
 }

@@ -36,5 +36,5 @@ export async function signOut() {
 export function makeMyProfileSrc(user) {
   if (!user?.fileProfileSeq) return; // 아직 세션 없음
   const { fileProfileSeq } = user; // 필요 키 사용
-  return `${API_BASE}/file-service/file/view/profile/${fileProfileSeq}`;
+  return `${API_BASE}/file-service/file/image/content/${fileProfileSeq}`;
 }

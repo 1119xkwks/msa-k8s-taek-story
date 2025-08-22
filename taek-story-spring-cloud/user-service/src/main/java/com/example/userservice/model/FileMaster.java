@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class FileMaster {
 
 	/** 순번 */
-	private Integer seq;
+	private Long seq;
 
 	/** 파일 종류 (profile, image_single, image_multi, video 등) */
 	private String fileType;
@@ -18,8 +18,8 @@ public class FileMaster {
 
 	private LocalDateTime crtDt;
 	private String crtIp;
-	private Integer crtSeq;
+	private Long crtSeq;
 	private LocalDateTime udtDt;
 	private String udtIp;
-	private Integer udtSeq;
+	private Long udtSeq;
 }

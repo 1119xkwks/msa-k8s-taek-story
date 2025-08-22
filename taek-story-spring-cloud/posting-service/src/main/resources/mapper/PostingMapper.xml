@@ -7,6 +7,41 @@
         insert into posts(user_seq, contents, contents_type, contents_file_seq, selected_feeling, crt_dt, crt_ip, crt_seq)
         values(#{userSeq}, #{contents}, #{contentsType}, #{contentsFileSeq}, #{selectedFeeling}, CURRENT_TIMESTAMP, #{crtIp}, #{crtSeq})
     </insert>
+
+    <sql id="selectPages_WHERE">
+        <where>
+            <if test="userSeq != null">
+                and user_seq    =   #{userSeq}
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectPages" resultType="posts">
+        /** selectPages */
+        select  seq
+            ,   user_seq
+            ,   contents
+            ,   contents_type
+            ,   contents_file_seq
+            ,   selected_feeling
+
+            ,   crt_dt
+            ,   crt_ip
+            ,   crt_seq
+            ,   udt_dt
+            ,   udt_ip
+            ,   udt_seq
+        from    posts
+        <include refid="selectPages_WHERE" />
+        order by    seq    desc
+    </select>
+
+    <select id="countPages" resultType="int">
+        /** countPages */
+        select  count(1)
+        from    posts
+        <include refid="selectPages_WHERE" />
+    </select>
 </mapper>
 
 

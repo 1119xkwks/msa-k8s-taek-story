@@ -5,6 +5,7 @@ import com.example.fileservice.model.FileDetail;
 import com.example.fileservice.model.FileMaster;
 import io.minio.*;
 import io.minio.errors.*;
+import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -20,7 +22,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class FileServiceImpl implements FileService {
-	private final MinioClient minio;
+
+	private final MinioClient minioClient;
 	@Value("${minio.bucket.images}")
 	private String imagesBucket;
 	@Value("${minio.bucket.videos}")
@@ -29,7 +32,7 @@ public class FileServiceImpl implements FileService {
 	private final FileMapper fileMapper;
 
 	@Override
-	public FileMaster uploadProfileImage(MultipartFile file, Integer fileMasterSeq, String ip, Integer userSeq) throws Exception {
+	public FileMaster uploadProfileImage(MultipartFile file, Long fileMasterSeq, String ip, Long userSeq) throws Exception {
 
 		// MinIO 저장
 		log.debug("[uploadProfileImage] imagesBucket : {}", imagesBucket);
@@ -51,13 +54,13 @@ public class FileServiceImpl implements FileService {
 		// 확장자명
 		String ext = StringUtils.substringAfterLast(originalFilename, ".");
 
-		String objectName = "/profile/" + yyyyMmDd + "/" + UUID.randomUUID();
+		String objectName = "profile/" + yyyyMmDd + "/" + UUID.randomUUID();
 		if (StringUtils.isNotBlank(ext)) {
 			objectName += "." + ext;
 		}
 		log.debug("[uploadProfileImage] objectName : {}", objectName);
 
-		ObjectWriteResponse owr = minio.putObject(
+		ObjectWriteResponse owr = minioClient.putObject(
 				PutObjectArgs.builder()
 						.bucket(imagesBucket)
 						.object(objectName)
@@ -102,11 +105,10 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public FileMaster uploadPosting(MultipartFile file, Integer fileMasterSeq, String fileType, String ip, Integer userSeq) throws Exception {
+	public FileMaster uploadPosting(MultipartFile file, Long fileMasterSeq, String fileType, String ip, Long userSeq) throws Exception {
 
 		// MinIO 저장
-		log.debug("[uploadPosting] imagesBucket : {}", imagesBucket);
-		ensureBucket(imagesBucket);
+		log.debug("[uploadPosting] requested fileType : {}", fileType);
 
 		// file 분석
 		// 원본 파일명
@@ -124,7 +126,6 @@ public class FileServiceImpl implements FileService {
 		// 확장자명
 		String ext = StringUtils.substringAfterLast(originalFilename, ".");
 
-		log.debug("[uploadPosting] fileType : {}", fileType);
 		String bucketName = null;
 		switch (fileType) {
 			case "video":
@@ -136,18 +137,20 @@ public class FileServiceImpl implements FileService {
 			default:
 				throw new Exception("FILE TYPE NOT SUPPORTED");
 		}
+		log.debug("[uploadPosting] resolved bucketName : {}", bucketName);
+		ensureBucket(bucketName);
 
-		String objectName = "/posting/" + yyyyMmDd + "/" + UUID.randomUUID();
+		String objectName = "posting/" + yyyyMmDd + "/" + UUID.randomUUID();
 		if (StringUtils.isNotBlank(ext)) {
 			objectName += "." + ext;
 		}
 		log.debug("[uploadPosting] objectName : {}", objectName);
 
-		ObjectWriteResponse owr = minio.putObject(
+		ObjectWriteResponse owr = minioClient.putObject(
 				PutObjectArgs.builder()
-						.bucket(imagesBucket)
+						.bucket(bucketName)
 						.object(objectName)
-						.contentType("image/jpeg")
+						.contentType(contentType != null ? contentType : ("video".equals(fileType) ? "video/mp4" : "image/jpeg"))
 						.stream(file.getInputStream(), fileSize, -1)
 						.build()
 		);
@@ -155,7 +158,7 @@ public class FileServiceImpl implements FileService {
 
 		// DB Insert
 		FileMaster fileMaster = FileMaster.builder()
-				.fileType("profile")
+				.fileType(fileType)
 				.crtIp(ip)
 				.crtSeq(userSeq)
 				.udtIp(ip)
@@ -189,13 +192,13 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public byte[] viewProfile(Integer seq) {
+	public byte[] imageContent(Long seq) {
 		FileDetail fileDetail = fileMapper.selectFileDetailOneByMasterSeq( seq );
-		log.debug("[viewProfile] fileDetail : {}", fileDetail);
+		log.debug("[imageContent] fileDetail : {}", fileDetail);
 
 		String objectName = fileDetail.getFilePath();
 
-		try (GetObjectResponse is = minio.getObject(
+		try (GetObjectResponse is = minioClient.getObject(
 				GetObjectArgs.builder()
 						.bucket(imagesBucket)
 						.object(objectName)
@@ -207,10 +210,42 @@ public class FileServiceImpl implements FileService {
 		}
 	}
 
+	@Override
+	public String getVideoPresignedUri(Long seq) {
+		FileDetail fileDetail = fileMapper.selectFileDetailOneByMasterSeq( seq );
+		String objectName = fileDetail.getFilePath();
+
+		try {
+			String fullUrl = minioClient.getPresignedObjectUrl(
+					GetPresignedObjectUrlArgs.builder()
+							.method(Method.GET)
+							.bucket(videosBucket)
+							.object(objectName)
+							.expiry(60 * 60) // presigned url 1시간 유효
+							.build()
+			);
+
+//			// scheme + host + port 자르는 작업
+//			// http://localhost:30103/videos.. 를
+//			// /videos.. 으로 자르는 작업
+//			URI uri = URI.create(fullUrl);
+//
+//			// schema + host + port 조합
+//			String baseUrl = uri.getScheme() + "://" + uri.getHost() + (uri.getPort() != -1 ? ":" + uri.getPort() : "");
+//
+//			// 나머지 path + query
+//			String pathAndQuery = uri.getRawPath() + (uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "");
+
+			return fullUrl;
+		} catch (Exception e) {
+			throw new RuntimeException("Video Presigned URL 생성 실패", e);
+		}
+	}
+
 	private void ensureBucket(String bucket) throws Exception {
-		boolean exists = minio.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
+		boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
 		if (!exists) {
-			minio.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
+			minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
 		}
 	}
 }

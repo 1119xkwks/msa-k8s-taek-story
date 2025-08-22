@@ -40,6 +40,16 @@
         and pw   =   hash_password_fixed_salt(#{pw})
     </select>
 
+    <select id="selectBasicUserInfoBySeq" resultType="users">
+        /** selectBasicUserInfoBySeq    */
+        select  seq
+            ,   email
+            ,   nickname
+            ,   file_profile_seq
+        from    users
+        where   seq   =   #{seq}
+    </select>
+
     <update id="updateProfile" parameterType="users">
         /** updateProfile   */
         update  users

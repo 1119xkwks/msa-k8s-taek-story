@@ -1,5 +1,6 @@
 package com.example.userservice.service;
 
+import com.example.userservice.model.Users;
 import com.example.userservice.model.UsersInsert;
 import com.example.userservice.model.UsersLogin;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,10 +15,12 @@ public interface UserService {
 	ResponseEntity<?> login(HttpSession session, UsersLogin request);
 
 	Object me(HttpSession session);
+	Users basicInfo(HttpSession session, Long seq);
 
 	ResponseEntity<?> signOut(HttpSession session);
 
 	Object profileSave(HttpSession session, HttpServletRequest req, MultipartFile file);
+
 }
 
 

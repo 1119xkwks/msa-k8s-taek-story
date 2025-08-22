@@ -17,6 +17,8 @@ public interface UsersMapper {
 	Users selectByLogin(@Valid UsersLogin usersLogin);
 
 	int updateProfile(Users users);
+
+	Users selectBasicUserInfoBySeq(Long seq);
 }
 
 

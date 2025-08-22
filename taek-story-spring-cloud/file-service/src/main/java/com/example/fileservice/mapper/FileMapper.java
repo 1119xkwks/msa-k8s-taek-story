@@ -10,7 +10,7 @@ public interface FileMapper {
 	int updateFileMaster(FileMaster fileMaster);
 
 	int insertFileDetail(FileDetail fileDetail);
-	int deleteFileDetailByMasterSeq(Integer fileMasterSeq);
+	int deleteFileDetailByMasterSeq(Long fileMasterSeq);
 
-	FileDetail selectFileDetailOneByMasterSeq(Integer seq);
+	FileDetail selectFileDetailOneByMasterSeq(Long seq);
 }

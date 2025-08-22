@@ -67,8 +67,8 @@ public class UsersInsert {
 
 	private LocalDateTime crtDt;
 	private String crtIp;
-	private Integer crtSeq;
+	private Long crtSeq;
 	private LocalDateTime udtDt;
 	private String udtIp;
-	private Integer udtSeq;
+	private Long udtSeq;
 }

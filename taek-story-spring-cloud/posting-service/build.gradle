@@ -32,7 +32,8 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:3.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.data:spring-data-commons' // Pageable, Page 지원
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     implementation 'org.postgresql:postgresql:42.7.7'
@@ -58,6 +59,7 @@ dependencies {
 
 dependencyManagement {
     imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }

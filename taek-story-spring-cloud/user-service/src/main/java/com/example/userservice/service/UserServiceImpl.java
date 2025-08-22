@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -63,6 +62,15 @@ public class UserServiceImpl implements UserService {
 		Object value = session.getAttribute("logged:user");
 		log.info("[me] value {}", value);
 		return value;
+	}
+
+	@Override
+	public Users basicInfo(HttpSession session, Long seq) {
+		Users loggedIn = Users.parseLoggedInfo(session);
+		if (loggedIn == null) {
+			return null;
+		}
+		return usersMapper.selectBasicUserInfoBySeq(seq);
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import RightMenuDrawer from "../components/drawer/RightMenuDrawer.jsx";
 import SectionPosting from "../components/section/SectionPosting";
 import SectionPostList from "../components/section/SectionPostList";
 
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { apiFetch } from "../util/api.js";
 import { $alert } from "../util/modals.js";
 
@@ -26,6 +26,11 @@ const Home = () => {
   const [videoFile, setVideoFile] = useState(null);
   const [photoFile, setPhotoFile] = useState(null);
   const [selectedFeeling, setSelectedFeeling] = useState(null);
+
+  // Posts states
+  const [isSelectingPosts, setIsSelectingPosts] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [pagePosts, setPagePosts] = useState(1);
 
   /**
    * 포스팅 글 올리기 핸들러는 상위 컨텍스트에서 제공
@@ -103,7 +108,53 @@ const Home = () => {
     setVideoFile(null);
     setPhotoFile(null);
     setSelectedFeeling(null);
+
+    // 목록 1페이지부터 다시 조회
+    await selectPosts(1);
   };
+
+  /**
+   * 포스팅 글 불러오기
+   * @returns {Promise<void>}
+   */
+  const selectPosts = async (paging) => {
+    if (isSelectingPosts) {
+      return;
+    }
+    try {
+      setIsSelectingPosts(true);
+
+      if (paging) {
+        setPagePosts(paging);
+      }
+
+      const res = await apiFetch(
+        `/posting-service/posting/list?page=${pagePosts}&size=10`,
+        {
+          method: "GET",
+        },
+      );
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      const result = await res.json();
+      if (result) {
+        //
+        console.debug("[selectPosts] result", result);
+
+        setPosts(result?.content || []);
+      }
+    } catch (_e) {
+      console.error(_e);
+    } finally {
+      setIsSelectingPosts(false);
+    }
+  };
+
+  useEffect(() => {
+    selectPosts();
+  }, []);
 
   return (
     <div className="home">
@@ -140,7 +191,7 @@ const Home = () => {
           <SectionPosting />
 
           {/*글목록*/}
-          <SectionPostList />
+          <SectionPostList posts={posts} />
         </PostingDispatchContext.Provider>
       </PostingDataContext.Provider>
 

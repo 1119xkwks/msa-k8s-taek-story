@@ -17,9 +17,9 @@ public interface FileServiceClient {
 	@PostMapping(value = "/file/upload/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	FileMaster uploadFileProfile(
 			@RequestPart("file") MultipartFile file,
-			@RequestParam(value = "fileMasterSeq", required = false) Integer fileMasterSeq,
+			@RequestParam(value = "fileMasterSeq", required = false) Long fileMasterSeq,
 			@RequestParam("ip") String ip,
-			@RequestParam("userSeq") Integer userSeq
+			@RequestParam("userSeq") Long userSeq
 	);
 
 }

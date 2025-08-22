@@ -1,5 +1,7 @@
 export const API_BASE =
   (import.meta.env && import.meta.env.VITE_API_BASE) || "";
+export const MINIO_API_BASE =
+  (import.meta.env && import.meta.env.VITE_MINIO_API_BASE) || "";
 
 export const apiFetch = (path, options = {}) => {
   // Same-origin when absolute path to leverage Vite dev proxy

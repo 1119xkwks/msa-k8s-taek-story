@@ -2,16 +2,12 @@ import "./SectionPostList.css";
 
 import PostCard from "/src/components/card/PostCard";
 
-const SectionPostList = () => {
+const SectionPostList = ({ posts }) => {
   return (
     <section className="section-postlist">
-      <PostCard />
-      {/*<PostCard />*/}
-      {/*<PostCard />*/}
-      {/*<PostCard />*/}
-      {/*<PostCard />*/}
-      {/*<PostCard />*/}
-      {/*<PostCard />*/}
+      {posts.map((post, idx) => (
+        <PostCard key={post.seq} post={post} idx={idx} />
+      ))}
     </section>
   );
 };

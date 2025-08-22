@@ -20,10 +20,10 @@ import java.util.Objects;
 public class Posts {
 
 	/** 순번 (자동 증가, PK) */
-	private Integer seq;
+	private Long seq;
 
 	/** 글쓴이 seq */
-	private Integer userSeq;
+	private Long userSeq;
 
 	/** 내용 */
 	private String contents;
@@ -32,7 +32,7 @@ public class Posts {
 	private String contentsType;
 
 	/** 첨부파일 순번 */
-	private Integer contentsFileSeq;
+	private Long contentsFileSeq;
 
 	/** 감정 선택 */
 	private String selectedFeeling;
@@ -44,7 +44,7 @@ public class Posts {
 	private String crtIp;
 
 	/** 생성자 seq */
-	private Integer crtSeq;
+	private Long crtSeq;
 
 	/** 수정일 */
 	private LocalDateTime udtDt;
@@ -53,7 +53,7 @@ public class Posts {
 	private String udtIp;
 
 	/** 수정자 seq */
-	private Integer udtSeq;
+	private Long udtSeq;
 
 	public static Posts ofRequests(Users loggedIn, String ip, String activeAction, String selectedFeeling, String contents, FileMaster fileMaster) {
 		Posts posts = new Posts();
