@@ -35,6 +35,16 @@ spec:
           ports:
             - containerPort: 90
           env:
+            - name: FILE_SERVICE_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: FILE_SERVICE_BASE_URL
+            - name: USER_SERVICE_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: USER_SERVICE_BASE_URL
             - name: SPRING_PROFILES_ACTIVE
               value: k8s
             - name: MINIO_ENDPOINT

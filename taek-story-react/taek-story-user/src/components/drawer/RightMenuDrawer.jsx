@@ -90,14 +90,12 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                     </SidebarItem>
                   ) : null}
                   {isAuthenticated ? (
-                    <>
-                      <SidebarItem
-                        href="/friends"
-                        icon={() => <FontAwesomeIcon icon={faUsers} />}
-                      >
-                        친구
-                      </SidebarItem>
-                    </>
+                    <SidebarItem
+                      href="/friends"
+                      icon={() => <FontAwesomeIcon icon={faUsers} />}
+                    >
+                      친구
+                    </SidebarItem>
                   ) : null}
                   {isAuthenticated ? (
                     <SidebarItem
