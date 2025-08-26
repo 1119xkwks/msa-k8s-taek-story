@@ -39,6 +39,14 @@ spec:
                 name: posting-service
                 port:
                   number: 90
+          # /notification-service/<anything> -> notification-service:<90> /<anything>
+          - path: /notification-service(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: notification-service
+                port:
+                  number: 90
           # 다른 서비스도 동일한 패턴으로 추가하세요 (프리픽스 제거 리라이트)
           # 예) /post-service/<anything> -> post-service:<PORT> /<anything>
           # - path: ^/post-service(/|$)(.*)

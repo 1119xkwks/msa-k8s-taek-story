@@ -37,7 +37,7 @@ const Notification = () => {
         await $alert("처리도중 에러가 발생하였습니다.");
         return;
       }
-      const result = await res.await();
+      const result = await res.text();
       setNotifications(notifications.map((x) => ({ ...x, isRead: true })));
     } catch (e) {
       console.error(e);
@@ -114,7 +114,10 @@ const Notification = () => {
           <div className="notification-page__header">
             <h1 className="notification-page__title">알림</h1>
             <div className="notification-page__actions">
-              <button className="notification-page__btn" onClick={setReadAll}>
+              <button
+                className="notification-page__btn"
+                onClick={() => setReadAll()}
+              >
                 모두 읽음 처리
               </button>
               {/*<button className="notification-page__btn">설정</button>*/}
