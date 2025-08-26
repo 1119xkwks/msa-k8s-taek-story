@@ -42,6 +42,11 @@ spec:
                 configMapKeyRef:
                   name: config-map
                   key: MINIO_ENDPOINT
+            - name: MINIO_PUBLIC_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: MINIO_PUBLIC_ENDPOINT
             - name: MINIO_BUCKET_IMAGES
               valueFrom:
                 configMapKeyRef:

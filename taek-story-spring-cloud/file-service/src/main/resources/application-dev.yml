@@ -42,6 +42,7 @@ p6spy:
 
 minio:
   endpoint: http://127.0.0.1:30103
+  publicEndpoint: http://127.0.0.1:30103
   accessKey: minioadmin
   secretKey: minioadmin123!
   bucket:

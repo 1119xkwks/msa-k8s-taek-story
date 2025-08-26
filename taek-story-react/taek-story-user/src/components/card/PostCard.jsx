@@ -2,9 +2,7 @@ import "./PostCard.css";
 import MyCard from "/src/components/layout/MyCard";
 import PostCardHeader from "/src/components/post/PostCardHeader.jsx";
 import PostCardContent from "/src/components/post/PostCardContent.jsx";
-import PostCardComment from "/src/components/post/PostCardComment.jsx";
 import PostCardFooter from "/src/components/post/PostCardFooter.jsx";
-import MyDivider from "../layout/MyDivider.jsx";
 import { useEffect, useState } from "react";
 import { apiFetch } from "../../util/api.js";
 import { $alert } from "../../util/modals.js";
@@ -60,8 +58,8 @@ const PostCard = ({ post, idx }) => {
         contentsFileSeq={contentsFileSeq}
         selectedFeeling={selectedFeeling}
       />
-      <MyDivider className="my-1" />
-      <PostCardComment />
+      {/*<MyDivider className="my-1" />*/}
+      {/*<PostCardComment />*/}
       <PostCardFooter />
     </MyCard>
   );

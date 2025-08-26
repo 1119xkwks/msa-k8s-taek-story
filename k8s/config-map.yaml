@@ -18,10 +18,13 @@ data:
   POSTING_DB_PORT: "15433"
   # MinIO (K8s)
   MINIO_ENDPOINT: http://minio-s3:9000
+  # Public endpoint used by presigned URLs (NodePort or external LB)
   MINIO_BUCKET_IMAGES: images
   MINIO_BUCKET_VIDEOS: videos
   # File Service Endpoint (K8s)
   FILE_SERVICE_BASE_URL: http://file-service:90
+  # User Service Endpoint (K8s)
+  USER_SERVICE_BASE_URL: http://user-service:90
   # FILE DB
   FILE_DB_NAME: filedb
   FILE_DB_HOST: pg-db-file

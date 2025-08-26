@@ -47,3 +47,44 @@ IMMUTABLE
 AS $$
   SELECT crypt(p_plain, '$2a$04$abcdefghijklmnopqrstuv'); 
 $$;
+
+
+
+-- friends (친구 관계) 테이블 생성
+-- drop table friends;
+CREATE TABLE friends (
+    user1_seq INT NOT NULL,                   -- 사용자1 순번
+    user2_seq INT NOT NULL,                   -- 사용자2 순번
+    status    VARCHAR(20),                       -- 상태 (예: 요청, 수락, 차단 등)
+
+    -- 등록 정보
+    crt_dt    TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성일
+    crt_ip    VARCHAR(100),                        -- 생성 IP
+    crt_seq   INT,                                 -- 생성자 순번
+
+    -- 수정 정보
+    udt_dt    TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 수정일
+    udt_ip    VARCHAR(100),                        -- 수정 IP
+    udt_seq   INT,                                 -- 수정자 순번
+
+    -- 복합 PK 설정
+    CONSTRAINT pk_friends PRIMARY KEY (user1_seq, user2_seq)
+);
+
+-- 테이블 COMMENT
+COMMENT ON TABLE friends IS '친구 관계 테이블';
+
+-- 컬럼 COMMENT
+COMMENT ON COLUMN friends.user1_seq IS '사용자1 순번 (친구 관계의 한쪽)';
+COMMENT ON COLUMN friends.user2_seq IS '사용자2 순번 (친구 관계의 다른 쪽)';
+COMMENT ON COLUMN friends.status    IS '친구 상태 (요청, 수락, 차단 등)';
+
+COMMENT ON COLUMN friends.crt_dt    IS '생성일시';
+COMMENT ON COLUMN friends.crt_ip    IS '생성 IP';
+COMMENT ON COLUMN friends.crt_seq   IS '생성자 순번';
+
+COMMENT ON COLUMN friends.udt_dt    IS '수정일시';
+COMMENT ON COLUMN friends.udt_ip    IS '수정 IP';
+COMMENT ON COLUMN friends.udt_seq   IS '수정자 순번';
+
+

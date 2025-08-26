@@ -10,8 +10,8 @@ import java.util.List;
 public interface PostingMapper {
     int insertPosts(Posts posts);
 
-	List<Posts> selectPages(Long userSeq, Pageable pageable);
-	int countPages(Long userSeq, Pageable pageable);
+	List<Posts> selectPages(Long userSeq, List<Long> friendUserSeqs, Pageable pageable);
+	int countPages(Long userSeq, List<Long> friendUserSeqs, Pageable pageable);
 }
 
 

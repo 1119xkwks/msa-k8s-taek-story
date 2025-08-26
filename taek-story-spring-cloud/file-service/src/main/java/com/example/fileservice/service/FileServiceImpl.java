@@ -3,8 +3,8 @@ package com.example.fileservice.service;
 import com.example.fileservice.mapper.FileMapper;
 import com.example.fileservice.model.FileDetail;
 import com.example.fileservice.model.FileMaster;
+import com.example.fileservice.model.StreamResult;
 import io.minio.*;
-import io.minio.errors.*;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -211,34 +210,66 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public String getVideoPresignedUri(Long seq) {
-		FileDetail fileDetail = fileMapper.selectFileDetailOneByMasterSeq( seq );
+	public StreamResult streamVideo(Long seq, String rangeHeader) {
+		FileDetail fileDetail = fileMapper.selectFileDetailOneByMasterSeq(seq);
 		String objectName = fileDetail.getFilePath();
-
+		String contentType = StringUtils.defaultIfBlank(fileDetail.getMimeType(), "video/mp4");
 		try {
-			String fullUrl = minioClient.getPresignedObjectUrl(
-					GetPresignedObjectUrlArgs.builder()
-							.method(Method.GET)
+			// Get total size
+			StatObjectResponse stat = minioClient.statObject(
+					StatObjectArgs.builder()
 							.bucket(videosBucket)
 							.object(objectName)
-							.expiry(60 * 60) // presigned url 1시간 유효
 							.build()
 			);
+			long total = stat.size();
 
-//			// scheme + host + port 자르는 작업
-//			// http://localhost:30103/videos.. 를
-//			// /videos.. 으로 자르는 작업
-//			URI uri = URI.create(fullUrl);
-//
-//			// schema + host + port 조합
-//			String baseUrl = uri.getScheme() + "://" + uri.getHost() + (uri.getPort() != -1 ? ":" + uri.getPort() : "");
-//
-//			// 나머지 path + query
-//			String pathAndQuery = uri.getRawPath() + (uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "");
+			long start = 0L;
+			long end = total - 1;
+			boolean partial = false;
+			if (StringUtils.isNotBlank(rangeHeader) && rangeHeader.startsWith("bytes=")) {
+				partial = true;
+				String rangeVal = rangeHeader.substring(6).trim(); // after 'bytes='
+				// forms: N- or N-M
+				if (rangeVal.contains("-")) {
+					String[] parts = rangeVal.split("-", 2);
+					String startStr = parts[0].trim();
+					String endStr = parts[1].trim();
+					if (StringUtils.isNotBlank(startStr)) {
+						start = Long.parseLong(startStr);
+					}
+					if (StringUtils.isNotBlank(endStr)) {
+						end = Long.parseLong(endStr);
+					} else {
+						end = total - 1;
+					}
+				}
+				if (start > end) {
+					start = 0;
+					end = total - 1;
+					partial = false;
+				}
+			}
 
-			return fullUrl;
+			long length = end - start + 1;
+			GetObjectArgs.Builder builder = GetObjectArgs.builder()
+					.bucket(videosBucket)
+					.object(objectName);
+			if (partial) {
+				builder.offset(start).length(length);
+			}
+			GetObjectResponse is = minioClient.getObject(builder.build());
+			return StreamResult.builder()
+					.inputStream(is)
+					.start(start)
+					.end(end)
+					.total(total)
+					.contentLength(length)
+					.contentType(contentType)
+					.partial(partial)
+					.build();
 		} catch (Exception e) {
-			throw new RuntimeException("Video Presigned URL 생성 실패", e);
+			throw new RuntimeException("Video streaming 실패", e);
 		}
 	}
 

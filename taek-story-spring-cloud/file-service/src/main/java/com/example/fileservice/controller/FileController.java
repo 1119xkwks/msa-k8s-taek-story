@@ -2,6 +2,7 @@ package com.example.fileservice.controller;
 
 import com.example.fileservice.model.FileMaster;
 import com.example.fileservice.service.FileService;
+import com.example.fileservice.model.StreamResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
 
 @RestController
 @Slf4j
@@ -69,11 +72,26 @@ public class FileController {
 		return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
 	}
 
-	// seq 로 요청하면 실제 MinIO의 presigned URL 반환
-	@GetMapping("/video/presigned/uri/{seq}")
-	public ResponseEntity<String> getVideoPresignedUri(@PathVariable Long seq) {
-		log.info("[getVideoPresignedUrl] seq : {}", seq);
-		return ResponseEntity.ok( fileService.getVideoPresignedUri(seq) );
-	}
+	// Video streaming with Range support
+	@GetMapping("/video/stream/{seq}")
+	public ResponseEntity<byte[]> streamVideo(
+			@PathVariable("seq") Long seq,
+			@RequestHeader(value = "Range", required = false) String range
+	) throws Exception {
+		log.info("[streamVideo] seq: {}, Range: {}", seq, range);
+		StreamResult sr = fileService.streamVideo(seq, range);
 
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Accept-Ranges", "bytes");
+		headers.set("Content-Type", sr.getContentType());
+		if (sr.isPartial()) {
+			headers.set("Content-Range", String.format("bytes %d-%d/%d", sr.getStart(), sr.getEnd(), sr.getTotal()));
+		}
+		headers.setContentLength(sr.getContentLength());
+
+		try (InputStream is = sr.getInputStream()) {
+			byte[] data = is.readAllBytes();
+			return new ResponseEntity<>(data, headers, sr.isPartial() ? HttpStatus.PARTIAL_CONTENT : HttpStatus.OK);
+		}
+	}
 }

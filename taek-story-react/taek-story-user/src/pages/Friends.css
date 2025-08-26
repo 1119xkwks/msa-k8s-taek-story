@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+.friends-page {
+  @apply min-h-screen flex flex-col;
+}
+
+.friends-page .friends-wrap {
+  @apply max-w-2xl w-full mx-auto p-4 flex flex-col gap-4;
+}
+
+.friends-page .friends-card {
+  @apply bg-white rounded-xl shadow-2xl border-0 p-4;
+}
+
+.friends-page .friends-title {
+  @apply text-xl font-bold mb-3;
+}
+
+.friends-page .friends-subtitle {
+  @apply text-lg font-semibold mb-2;
+}
+
+.friends-page .friends-search {
+  @apply flex gap-2;
+}
+
+.friends-page .friends-list {
+  @apply flex flex-col divide-y divide-gray-100;
+}
+
+.friends-page .friends-empty {
+  @apply text-center text-gray-500 py-6;
+}
+
+.friends-page .friends-item {
+  @apply flex items-center justify-between py-3;
+}
+
+.friends-page .friends-user {
+  @apply flex-1;
+}
+
+.friends-page .friends-actions {
+  @apply flex flex-col items-end gap-2;
+}
+
+.friends-page .friends-action-group {
+  @apply flex gap-2;
+}
+
+@import "tailwindcss";
+
+.friends-page {}

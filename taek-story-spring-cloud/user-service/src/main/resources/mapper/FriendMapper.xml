@@ -1,9 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.userservice.mapper.TimeMapper">
-    <select id="selectNow" resultType="string">
-        select now()::text
+<mapper namespace="com.example.userservice.mapper.FriendMapper">
+
+    <select id="friendsByUserSeq" resultType="friends">
+        /** friendsByUserSeq    */
+        select  user1_seq
+            ,   user2_seq
+            ,   status
+
+            ,   crt_dt
+            ,   crt_ip
+            ,   crt_seq
+            ,   udt_dt
+            ,   udt_ip
+            ,   udt_seq
+        from    friends
+        where   1=1
+        and status   =   'accepted'
+        and (user1_seq   =   #{userSeq} or  user2_seq   =   #{userSeq})
+        order by    user1_seq,  user2_seq
     </select>
+
+    <select id="friendUserSeqsByUserSeq" resultType="java.lang.Long">
+        /** friendUserSeqsByUserSeq */
+        select  a.seq
+        from    (
+            select  user1_seq   as  seq
+            from    friends
+            where   1=1
+            and status   =   'accepted'
+            and user2_seq   =   #{userSeq}
+            union
+            select  user2_seq   as  seq
+            from    friends
+            where   1=1
+            and status   =   'accepted'
+            and user1_seq   =   #{userSeq}
+        )   a
+        order by    a.seq   asc
+    </select>
+
 </mapper>
 
 

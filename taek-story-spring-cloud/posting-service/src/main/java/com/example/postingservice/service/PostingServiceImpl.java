@@ -1,6 +1,7 @@
 package com.example.postingservice.service;
 
 import com.example.postingservice.feign.FileServiceClient;
+import com.example.postingservice.feign.UserServiceClient;
 import com.example.postingservice.mapper.PostingMapper;
 import com.example.postingservice.model.FileMaster;
 import com.example.postingservice.model.Posts;
@@ -22,6 +23,7 @@ import java.util.List;
 public class PostingServiceImpl implements PostingService {
 
 	private final FileServiceClient fileServiceClient;
+	private final UserServiceClient userServiceClient;
 	private final PostingMapper postingMapper;
 
 	@Override
@@ -54,8 +56,13 @@ public class PostingServiceImpl implements PostingService {
 			log.debug("[selectPages] user is null");
 			return new PageImpl<Posts>(new ArrayList<>(), pageable, 0);
 		}
-		List<Posts> list = postingMapper.selectPages(loggedIn.getSeq(), pageable);
-		int total = postingMapper.countPages(loggedIn.getSeq(), pageable);
+
+		// 친구 user seq 가져오기
+		List<Long> friendUserSeqs = userServiceClient.friendUserSeqsByUserSeq(loggedIn.getSeq());
+		log.debug("[selectPages] friendUserSeqs: {}", friendUserSeqs);
+
+		List<Posts> list = postingMapper.selectPages(loggedIn.getSeq(), friendUserSeqs, pageable);
+		int total = postingMapper.countPages(loggedIn.getSeq(), friendUserSeqs, pageable);
 		return new PageImpl<Posts>(list, pageable, total);
 	}
 }

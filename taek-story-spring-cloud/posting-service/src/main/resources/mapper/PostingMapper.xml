@@ -11,7 +11,13 @@
     <sql id="selectPages_WHERE">
         <where>
             <if test="userSeq != null">
-                and user_seq    =   #{userSeq}
+                and (
+                user_seq    =   #{userSeq}
+                <if test="@org.apache.commons.collections4.CollectionUtils@isNotEmpty( friendUserSeqs )">
+                    or  user_seq    in
+                    <foreach collection="friendUserSeqs" item="item" open="(" close=")" separator=",">#{item}</foreach>
+                </if>
+                )
             </if>
         </where>
     </sql>

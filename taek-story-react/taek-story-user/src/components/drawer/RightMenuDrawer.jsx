@@ -8,6 +8,7 @@ import {
   faHome,
   faBell,
   faUserGear,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -83,6 +84,16 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                   >
                     알림
                   </SidebarItem>
+                  {isAuthenticated ? (
+                    <SidebarItem
+                      href="/friends"
+                      icon={() => <FontAwesomeIcon icon={faUsers} />}
+                    >
+                      친구
+                    </SidebarItem>
+                  ) : (
+                    <></>
+                  )}
                   {isAuthenticated ? (
                     <SidebarItem
                       href="/profile"

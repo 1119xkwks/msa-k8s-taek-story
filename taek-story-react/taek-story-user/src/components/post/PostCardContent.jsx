@@ -6,7 +6,11 @@ import { feelingIdToIcon } from "/src/icons/feelingIcons.js";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
-import { API_BASE, MINIO_API_BASE, apiFetch } from "/src/util/api.js";
+import {
+  API_BASE,
+  VITE_MINIO_PUBLIC_API_BASE,
+  apiFetch,
+} from "/src/util/api.js";
 
 const PostCardContent = ({
   contents,
@@ -30,6 +34,7 @@ const PostCardContent = ({
     if ("video" === contentsType && contentsFileSeq) {
       (async () => {
         try {
+          /*
           const res = await apiFetch(
             `${API_BASE}/file-service/file/video/presigned/uri/${contentsFileSeq}`,
             {
@@ -41,7 +46,15 @@ const PostCardContent = ({
             return;
           }
           const result = await res.text();
-          setVideoPresignedURL(result || "");
+          const url = new URL(result);
+          const uriFull =
+            VITE_MINIO_PUBLIC_API_BASE + url.pathname + url.search + url.hash;
+          //console.log("uriFull", uriFull);
+          // setVideoPresignedURL(uriFull);
+          */
+          setVideoPresignedURL(
+            `${API_BASE}/file-service/file/video/stream/${contentsFileSeq}`,
+          );
         } catch (_e) {
           console.error(_e);
           setVideoPresignedURL("");
