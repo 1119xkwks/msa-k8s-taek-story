@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+.anchor-setting {
+	@apply relative;
+}
+
+.anchor-setting .anchor-setting__badge {
+	@apply absolute -top-1 -right-1;
+}
+
+

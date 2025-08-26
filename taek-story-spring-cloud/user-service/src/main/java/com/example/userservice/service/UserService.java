@@ -16,6 +16,7 @@ public interface UserService {
 
 	Object me(HttpSession session);
 	Users basicInfo(HttpSession session, Long seq);
+	Users basicInfoAuth(Long seq);
 
 	ResponseEntity<?> signOut(HttpSession session);
 

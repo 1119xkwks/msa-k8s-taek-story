@@ -34,24 +34,6 @@ const PostCardContent = ({
     if ("video" === contentsType && contentsFileSeq) {
       (async () => {
         try {
-          /*
-          const res = await apiFetch(
-            `${API_BASE}/file-service/file/video/presigned/uri/${contentsFileSeq}`,
-            {
-              method: "GET",
-            },
-          );
-          if (!res.ok) {
-            await $alert("처리도중 에러가 발생하였습니다.");
-            return;
-          }
-          const result = await res.text();
-          const url = new URL(result);
-          const uriFull =
-            VITE_MINIO_PUBLIC_API_BASE + url.pathname + url.search + url.hash;
-          //console.log("uriFull", uriFull);
-          // setVideoPresignedURL(uriFull);
-          */
           setVideoPresignedURL(
             `${API_BASE}/file-service/file/video/stream/${contentsFileSeq}`,
           );

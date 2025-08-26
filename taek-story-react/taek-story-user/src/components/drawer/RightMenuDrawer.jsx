@@ -78,22 +78,27 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                   >
                     홈
                   </SidebarItem>
-                  <SidebarItem
-                    href="/notification"
-                    icon={() => <FontAwesomeIcon icon={faBell} />}
-                  >
-                    알림
-                  </SidebarItem>
                   {isAuthenticated ? (
                     <SidebarItem
-                      href="/friends"
-                      icon={() => <FontAwesomeIcon icon={faUsers} />}
+                      href="/notification"
+                      icon={() => <FontAwesomeIcon icon={faBell} />}
                     >
-                      친구
+                      알림
+                      <span className="menu-item--notification">
+                        <span className="menu-item__badge badge-blue"></span>
+                      </span>
                     </SidebarItem>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
+                  {isAuthenticated ? (
+                    <>
+                      <SidebarItem
+                        href="/friends"
+                        icon={() => <FontAwesomeIcon icon={faUsers} />}
+                      >
+                        친구
+                      </SidebarItem>
+                    </>
+                  ) : null}
                   {isAuthenticated ? (
                     <SidebarItem
                       href="/profile"
@@ -101,9 +106,7 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                     >
                       프로필 이미지
                     </SidebarItem>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </SidebarItemGroup>
                 {isAuthenticated ? (
                   <SidebarItemGroup>

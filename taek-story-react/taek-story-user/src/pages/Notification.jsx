@@ -1,56 +1,104 @@
 import "./Notification.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header.jsx";
 import AnchorHome from "../components/anchor/AnchorHome.jsx";
 import DisplayMyName from "../components/display/DisplayMyName.jsx";
 import AnchorSetting from "../components/anchor/AnchorSetting.jsx";
 import RightMenuDrawer from "../components/drawer/RightMenuDrawer.jsx";
 import usePageTitle from "../hooks/usePageTitle.jsx";
+import { API_BASE, apiFetch } from "/src/util/api.js";
+import { $alert } from "../util/modals.js";
+import { classifyDate } from "../util/common.js";
+import { Avatar } from "flowbite-react";
 
 const Notification = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [filterType, setFilterType] = useState("");
 
   usePageTitle("알림");
 
-  const notifications = [
-    {
-      id: 1,
-      group: "오늘",
-      name: "홍길동",
-      message: "님이 회원님의 게시글에 댓글을 남겼습니다",
-      time: "5분 전",
-      unread: true,
-    },
-    {
-      id: 2,
-      group: "오늘",
-      name: "이영희",
-      message: "님이 회원님을 팔로우하기 시작했습니다",
-      time: "1시간 전",
-      unread: true,
-    },
-    {
-      id: 3,
-      group: "이번 주",
-      name: "김철수",
-      message: "님이 회원님의 게시글을 좋아합니다",
-      time: "어제",
-      unread: false,
-    },
-    {
-      id: 4,
-      group: "이번 주",
-      name: "운영팀",
-      message: " 보안 알림: 새로운 기기에서 로그인되었습니다",
-      time: "3일 전",
-      unread: false,
-    },
-  ];
+  const [notifications, setNotifications] = useState([]);
 
   const groups = [
-    { key: "오늘", label: "오늘" },
-    { key: "이번 주", label: "이번 주" },
+    { key: "today", label: "오늘" },
+    { key: "lastweek", label: "이번 주" },
+    { key: "old", label: "오래됨." },
   ];
+
+  const setReadAll = async () => {
+    try {
+      const res = await apiFetch(
+        `${API_BASE}/notification-service/notification/read/all`,
+        {
+          method: "GET",
+        },
+      );
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      const result = await res.await();
+      setNotifications(notifications.map((x) => ({ ...x, isRead: true })));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const setRead = async (seq) => {
+    if (!seq) {
+      return;
+    }
+    try {
+      const res = await apiFetch(
+        `${API_BASE}/notification-service/notification/read/${seq}`,
+        {
+          method: "GET",
+        },
+      );
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      const result = await res.text();
+      setNotifications(
+        notifications.map((x) => (x.seq === seq ? { ...x, isRead: true } : x)),
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const selectNotification = async () => {
+    try {
+      const res = await apiFetch(
+        `${API_BASE}/notification-service/notification/all`,
+        {
+          method: "GET",
+        },
+      );
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      const result = await res.json();
+      console.debug("result", result);
+      setNotifications(
+        result.map((x) => {
+          x.group = classifyDate(x.crtDt);
+          return x;
+        }),
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  useEffect(() => {
+    if (!notifications?.length) {
+      (async () => {
+        await selectNotification();
+      })();
+    }
+  }, [notifications]);
 
   return (
     <>
@@ -66,17 +114,25 @@ const Notification = () => {
           <div className="notification-page__header">
             <h1 className="notification-page__title">알림</h1>
             <div className="notification-page__actions">
-              <button className="notification-page__btn">모두 읽음 처리</button>
-              <button className="notification-page__btn">설정</button>
+              <button className="notification-page__btn" onClick={setReadAll}>
+                모두 읽음 처리
+              </button>
+              {/*<button className="notification-page__btn">설정</button>*/}
             </div>
           </div>
 
           {/* Filters */}
           <div className="notification-page__filters">
-            <button className="notification-page__filter-btn notification-page__filter-btn--primary">
+            <button
+              className={`notification-page__filter-btn notification-page__filter-btn--${filterType === "" ? "primary" : "secondary"}`}
+              onClick={() => setFilterType("")}
+            >
               전체
             </button>
-            <button className="notification-page__filter-btn notification-page__filter-btn--secondary">
+            <button
+              className={`notification-page__filter-btn notification-page__filter-btn--${filterType === "unread" ? "primary" : "secondary"}`}
+              onClick={() => setFilterType("unread")}
+            >
               읽지 않음
             </button>
           </div>
@@ -84,7 +140,16 @@ const Notification = () => {
           {/* List */}
           <div className="notification-page__list">
             {groups.map((g) => {
-              const items = notifications.filter((n) => n.group === g.key);
+              const items = notifications
+                .filter((n) => {
+                  switch (filterType) {
+                    case "":
+                      return true;
+                    case "unread":
+                      return !n.isRead;
+                  }
+                })
+                .filter((n) => n.group === g.key);
               if (items.length === 0) return null;
               return (
                 <div key={g.key} className="p-0">
@@ -94,17 +159,27 @@ const Notification = () => {
                   <ul className="notification-page__ul">
                     {items.map((n) => (
                       <li
-                        key={n.id}
+                        key={n.seq}
                         className={`notification-page__item ${n.unread ? "is-unread" : ""}`}
                       >
                         <div className="notification-page__row">
                           {/* Avatar */}
                           <div className="notification-page__avatar-wrap">
-                            <div className="notification-page__avatar">
-                              {n.name?.slice(0, 1) || "N"}
-                            </div>
-                            {n.unread && (
-                              <span className="notification-page__badge"></span>
+                            {n.fromUserSeq ? (
+                              <Avatar
+                                className="poster-avatar"
+                                img={`${API_BASE}/file-service/file/image/content/profile-by-user-seq/${n.fromUserSeq}`}
+                                alt={`${n.fromUserSeq} 프로필 이미지`}
+                                rounded
+                              />
+                            ) : (
+                              <div className="notification-page__avatar">
+                                {n.name?.slice(0, 1) || "N"}
+                              </div>
+                            )}
+
+                            {!n.isRead && (
+                              <span className="notification-page__badge badge-blue"></span>
                             )}
                           </div>
 
@@ -123,10 +198,10 @@ const Notification = () => {
 
                           {/* Actions */}
                           <div className="notification-page__item-actions">
-                            <button className="notification-page__action-btn">
-                              숨기기
-                            </button>
-                            <button className="notification-page__action-btn">
+                            <button
+                              className="notification-page__action-btn"
+                              onClick={() => setRead(n.seq)}
+                            >
                               읽음
                             </button>
                           </div>

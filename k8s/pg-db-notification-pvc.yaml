@@ -1,0 +1,22 @@
+# How to re-create (kubectl):
+#   kubectl delete -f pg-db-notification-pvc.yaml --ignore-not-found
+#   kubectl apply  -f pg-db-notification-pvc.yaml
+#   kubectl get pvc pg-db-notification-pvc
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg-db-notification-pvc
+  labels:
+    app: pg-db-notification
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  # storageClassName: <your-storageclass-name>
+  # If you have a default StorageClass, you can omit storageClassName.
+
+
+

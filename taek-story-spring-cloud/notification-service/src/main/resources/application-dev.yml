@@ -1,0 +1,60 @@
+server:
+  port: 93
+  servlet:
+    session:
+      cookie:
+        same-site: Lax
+        secure: false
+
+spring:
+  application:
+    name: notification-service
+  data:
+    redis:
+      host: localhost
+      port: 30101
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:31005/notificationdb
+    username: postgres
+    password: postgres
+  sql:
+    init:
+      mode: never
+
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.example.notificationservice.model
+
+
+
+logging:
+  level:
+    com.example.notificationservice: DEBUG
+    org.mybatis: DEBUG
+    org.apache.ibatis: DEBUG
+    com.p6spy: DEBUG
+
+p6spy:
+  logging: sysout
+  multiline: true
+  sql-format: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, info
+
+
+file:
+  service:
+    base-url: http://localhost:91
+
+user:
+  service:
+    base-url: http://localhost:90
+

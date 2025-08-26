@@ -1,0 +1,106 @@
+# How to re-create (kubectl):
+#   kubectl delete -f pg-db-notification.yaml --ignore-not-found
+#   kubectl apply  -f pg-db-notification.yaml
+#   kubectl get deploy pg-db-notification
+#   kubectl get svc pg-db-notification
+#
+# Rollout / 이미지 교체 재배포:
+#   # 최신 이미지로 강제 롤링 업데이트
+#   kubectl rollout restart deploy/pg-db-notification
+#   kubectl rollout status deploy/pg-db-notification
+#   # 필요 시 롤백
+#   kubectl rollout undo deploy/pg-db-notification
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-db-notification
+  labels:
+    app: pg-db-notification
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-db-notification
+  template:
+    metadata:
+      labels:
+        app: pg-db-notification
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          imagePullPolicy: IfNotPresent
+          args:
+            - "-c"
+            - "port=15435"
+          ports:
+            - containerPort: 15435
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: NOTIFICATION_DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: NOTIFICATION_DB_PASSWORD
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: NOTIFICATION_DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: NOTIFICATION_DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: NOTIFICATION_DB_NAME
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: NOTIFICATION_DB_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: NOTIFICATION_DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: NOTIFICATION_DB_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pg-db-notification-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-db-notification
+  labels:
+    app: pg-db-notification
+spec:
+  type: NodePort
+  selector:
+    app: pg-db-notification
+  ports:
+    - name: postgres
+      port: 15435
+      targetPort: 15435
+      nodePort: 31005
+
+
+

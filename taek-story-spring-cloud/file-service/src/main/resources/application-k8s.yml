@@ -54,3 +54,10 @@ management:
       exposure:
         include: refresh, health, beans, info
 
+file:
+  service:
+    base-url: ${FILE_SERVICE_BASE_URL}
+
+user:
+  service:
+    base-url: ${USER_SERVICE_BASE_URL}

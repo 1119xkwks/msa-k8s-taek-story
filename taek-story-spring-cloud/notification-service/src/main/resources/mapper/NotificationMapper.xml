@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.notificationservice.mapper.NotificationMapper">
+
+    <select id="allNotifications" resultType="notification">
+        /* allNotifications */
+        select seq
+            ,   to_user_seq
+            ,   from_user_seq
+            ,   type
+            ,   message
+            ,   is_read
+
+            ,   crt_dt
+            ,   crt_ip
+            ,   crt_seq
+            ,   udt_dt
+            ,   udt_ip
+            ,   udt_seq
+        from    notification
+        where   1=1
+        and to_user_seq =   #{userSeq}
+        <if test="searchWord != null and searchWord != ''"></if>
+        order by    seq desc
+    </select>
+
+    <update id="readBySeq" parameterType="java.lang.Long">
+        /** readBySeq   */
+        update  notification
+        set is_read =   true
+        where   seq =   #{seq}
+    </update>
+
+    <update id="readAll" parameterType="java.lang.Long">
+        /** readAll   */
+        update  notification
+        set is_read =   true
+        where   to_user_seq =   #{userSeq}
+    </update>
+
+</mapper>
+
+

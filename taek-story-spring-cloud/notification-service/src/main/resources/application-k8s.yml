@@ -1,0 +1,53 @@
+server:
+  port: 90
+
+spring:
+  application:
+    name: notification-service
+  data:
+    redis:
+      host: redis
+      port: 6379
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  sql:
+    init:
+      mode: never
+
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.example.notificationservice.model
+
+logging:
+  level:
+    com.example.notificationservice: DEBUG
+    org.mybatis: INFO
+    org.apache.ibatis: INFO
+    com.p6spy: INFO
+
+p6spy:
+  logging: sysout
+  multiline: true
+  sql-format: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, info
+
+
+file:
+  service:
+    base-url: ${FILE_SERVICE_BASE_URL}
+
+user:
+  service:
+    base-url: ${USER_SERVICE_BASE_URL}
+

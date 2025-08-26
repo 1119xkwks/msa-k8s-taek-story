@@ -28,6 +28,7 @@
 | pg-db-user |  | 15432 | 31001 | userdb: 사용자/친구 계정 DB |
 | pg-db-posting |  | 15433 | 31002 | postingdb: 글쓰기 DB |
 | pg-db-file |  | 15434 | 31004 | filedb: 파일 정보 DB |
+| pg-db-notification |  | 15435 | 31005 | notificationdb: 알림 관련 DB |
 |  |  |  |  |  |
 
 
@@ -38,7 +39,7 @@
 | user-service |  | 90 | 32090 | ↔ pg-db-user |
 | file-service |  | 90 | 32091 | ↔ pg-db-file |
 | posting-service |  | 90 | 32092 | ↔ pg-db-posting |
-|  |  |  |  |  |
+| notification-service |  | 90 | 32093 | ↔ pg-db-notification |
 |  |  |  |  |  |
 
 

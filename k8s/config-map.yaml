@@ -16,6 +16,10 @@ data:
   POSTING_DB_NAME: postingdb
   POSTING_DB_HOST: pg-db-posting
   POSTING_DB_PORT: "15433"
+  # NOTIFICATION DB
+  NOTIFICATION_DB_NAME: notificationdb
+  NOTIFICATION_DB_HOST: pg-db-notification
+  NOTIFICATION_DB_PORT: "15435"
   # MinIO (K8s)
   MINIO_ENDPOINT: http://minio-s3:9000
   # Public endpoint used by presigned URLs (NodePort or external LB)

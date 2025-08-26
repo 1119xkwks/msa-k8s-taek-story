@@ -55,3 +55,12 @@ management:
       exposure:
         include: refresh, health, beans, info
 
+
+
+file:
+  service:
+    base-url: http://localhost:91
+
+user:
+  service:
+    base-url: http://localhost:90

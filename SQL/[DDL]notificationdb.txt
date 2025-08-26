@@ -1,0 +1,38 @@
+
+-- drop table notification;
+CREATE TABLE notification (
+    seq INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY     -- 순번
+    , to_user_seq INT NOT NULL                            -- 알림 대상 사용자 순번
+    , from_user_seq INT                                   -- 알림 발생 사용자 순번
+    , type VARCHAR(20)                                    -- 알림 종류
+    , message TEXT                                        -- 알림 메시지
+    , is_read BOOLEAN NOT NULL DEFAULT FALSE             -- 읽음 여부
+
+    -- 등록 정보
+    , crt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP         -- 생성일
+    , crt_ip VARCHAR(100)                                 -- 생성 IP
+    , crt_seq INT                                         -- 생성자 seq
+
+    -- 수정 정보
+    , udt_dt TIMESTAMP DEFAULT CURRENT_TIMESTAMP         -- 수정일
+    , udt_ip VARCHAR(100)                                 -- 수정 IP
+    , udt_seq INT                                         -- 수정자 seq
+);
+
+-- 테이블 주석
+COMMENT ON TABLE notification IS '알림 테이블';
+
+-- 컬럼 주석
+COMMENT ON COLUMN notification.seq IS '순번';
+COMMENT ON COLUMN notification.to_user_seq IS '알림 대상 사용자 순번';
+COMMENT ON COLUMN notification.from_user_seq IS '알림 발생 사용자 순번';
+COMMENT ON COLUMN notification.type IS '알림 종류';
+COMMENT ON COLUMN notification.message IS '알림 메시지';
+COMMENT ON COLUMN notification.is_read IS '읽음 여부';
+COMMENT ON COLUMN notification.crt_dt IS '생성일';
+COMMENT ON COLUMN notification.crt_ip IS '생성 IP';
+COMMENT ON COLUMN notification.crt_seq IS '생성자 seq';
+COMMENT ON COLUMN notification.udt_dt IS '수정일';
+COMMENT ON COLUMN notification.udt_ip IS '수정 IP';
+COMMENT ON COLUMN notification.udt_seq IS '수정자 seq';
+
