@@ -1,0 +1,76 @@
+---
+description: Java 프로젝트 파일 생성 및 수정 규칙
+globs:
+  - "**/*.java"
+alwaysApply: true
+---
+
+# Java 프로젝트 파일 생성 및 수정 규칙
+
+1. **소스 주석 관리**
+   - 기존 소스 코드에 작성된 주석(`//`, `/** */`)은 절대 삭제하지 않습니다.  
+   - 필요 시 새로운 주석을 추가하는 것은 허용됩니다.  
+   - Cursor AI는 파일 수정 시 반드시 기존 주석을 보존해야 합니다.  
+
+2. **Lombok 활용 규칙**
+   - Lombok 어노테이션을 최대한 활용합니다.  
+   - Getter/Setter/Constructor/Builder 메서드는 직접 작성하지 않습니다.  
+   - 권장 사용하는 Lombok 어노테이션:
+     - `@Data`
+     - `@Builder`
+     - `@NoArgsConstructor`
+     - `@AllArgsConstructor`
+     - `@RequiredArgsConstructor`
+     - `@Slf4j`
+
+   - 예시 (좋은 코드):
+     ```java
+     @Data
+     @Builder
+     public class FileMaster {
+         /** 순번 */
+         private Long seq;
+         /** 파일 종류 */
+         private String fileType;
+     }
+     ```
+
+3. **의존성 주입 규칙**
+   - `@RequiredArgsConstructor` + `final` 필드를 활용한 생성자 주입 방식을 사용합니다.  
+   - `@Autowired` 필드 주입은 절대 사용하지 않습니다.  
+
+   - 예시 (좋은 코드):
+     ```java
+     @Service
+     @RequiredArgsConstructor
+     public class FileServiceImpl implements FileService {
+         private final FileMapper fileMapper;
+     }
+     ```
+
+4. **패키지 구조 규칙**
+   - Model/DTO/VO 객체 → `model` 패키지에 생성합니다.  
+   - Service 구현체 → `service.impl` 패키지에 생성합니다.  
+   - Mapper 인터페이스 → `mapper` 패키지에 생성합니다.  
+   - 공통 유틸 클래스 → `util` 패키지에 생성합니다.  
+
+5. **코딩 컨벤션 규칙**
+   - 클래스명: `PascalCase`  
+   - 메서드명/변수명: `camelCase`  
+   - 상수명: `UPPER_SNAKE_CASE`  
+   - 파일명은 클래스명과 동일하게 작성합니다.  
+
+6. **나쁜 예시 (Lombok 미사용, 주석 없음)**
+   ```java
+   public class StreamResult {
+       private final InputStream inputStream;
+       private final long start;
+       private final long end;
+       // ...
+       public StreamResult(InputStream inputStream, long start, long end) {
+           this.inputStream = inputStream;
+           this.start = start;
+           this.end = end;
+       }
+       public InputStream getInputStream() { return inputStream; }
+   }

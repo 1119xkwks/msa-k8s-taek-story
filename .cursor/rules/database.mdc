@@ -1,0 +1,37 @@
+---
+description: 데이터베이스 DDL 관리 규칙
+globs:
+  - "SQL/**/*.txt"
+alwaysApply: true
+---
+
+# 데이터베이스 DDL 관리 규칙
+
+1. **각 데이터베이스별 테이블 DDL은 반드시 `SQL` 폴더에 저장합니다.**  
+   - 예: `postingdb` 데이터베이스 → `[DDL]postingdb.txt`  
+   - 파일 이름 규칙: `[DDL]{데이터베이스명}.txt`
+
+2. **DDL 파일에는 반드시 CREATE TABLE 구문과 컬럼/테이블 주석이 포함되어야 합니다.**  
+   - 컬럼 주석: `COMMENT ON COLUMN {테이블명}.{컬럼명} IS '설명';`  
+   - 테이블 주석: `COMMENT ON TABLE {테이블명} IS '설명';`
+
+3. **기존 테이블을 삭제하는 DROP 구문은 주석 처리합니다.**  
+   - 예: `-- drop table posts;`  
+   - 실수로 DROP되는 것을 방지합니다.
+
+4. **컬럼 주석과 테이블 주석은 반드시 한글로 작성하고, 컬럼 의미를 명확히 기재합니다.**  
+   - 예시:
+     ```sql
+     COMMENT ON TABLE posts IS '글쓰기 테이블';
+     COMMENT ON COLUMN posts.seq IS '순번';
+     COMMENT ON COLUMN posts.contents IS '내용';
+     ```
+
+5. **DDL 파일 관리 시, 데이터베이스와 테이블 구조가 변경되면 반드시 해당 DDL 파일을 업데이트합니다.**  
+   - 새로운 테이블 생성 → DDL 파일에 CREATE TABLE 및 COMMENT 추가  
+   - 컬럼 추가/삭제/수정 → DDL 파일 반영  
+
+6. **Cursor AI는 DDL 관련 요청 시 SQL 폴더의 `[DDL]{DB명}.txt`를 우선 참조합니다.**  
+   - 새로운 테이블이나 컬럼을 생성할 때는 반드시 기존 DDL 파일 확인 후 추가/수정  
+   - 존재하지 않는 DB나 테이블 요청 시 사용자에게 확인하도록 안내
+

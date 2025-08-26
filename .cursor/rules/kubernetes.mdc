@@ -1,0 +1,57 @@
+---
+description: Kubernetes 프로젝트 규칙
+globs:
+  - "k8s/**/*.yaml"
+  - "k8s/**/*.yml"
+  - "README.md"
+alwaysApply: true
+---
+
+# Kubernetes 프로젝트 규칙
+
+1. **모든 Kubernetes 리소스 파일은 반드시 상단에 실행 방법 주석을 포함해야 합니다.**  
+   - 각 폴더 내에서 해당 yaml 기준으로 실행되는 명령어를 적어야 합니다.  
+   - 예시:
+     ```yaml
+     # How to re-create (kubectl):
+     #   kubectl delete -f user-service.yaml --ignore-not-found
+     #   kubectl apply  -f user-service.yaml
+     #   kubectl get deploy user-service-deploy
+     #   kubectl get svc user-service
+     #
+     # Rollout / 이미지 교체 재배포:
+     #   # 최신 이미지로 강제 롤링 업데이트
+     #   kubectl rollout restart deploy/user-service-deploy
+     #   kubectl rollout status deploy/user-service-deploy
+     #   # 필요 시 롤백
+     #   kubectl rollout undo deploy/user-service-deploy
+     ```
+
+2. **서비스와 관련된 ConfigMap, Secret 파일을 항상 함께 관리해야 합니다.**  
+   - `deployment.yaml` 또는 `*-service.yaml` 수정 시, 필요한 경우 반드시 `config-map.yaml`, `secret.yaml`을 같이 수정하세요.  
+   - 환경 변수를 Deployment에 주입할 때는 ConfigMap / Secret을 우선 사용해야 하며, 직접 `env`에 하드코딩하지 않습니다.
+
+3. **Deployment, Service, ConfigMap, Secret 네이밍 규칙**  
+   - 리소스 이름은 서비스명을 prefix로 붙입니다.  
+     - 예: `user-service-deploy`, `user-service-svc`, `user-service-config`, `user-service-secret`.
+
+4. **이미지 업데이트 정책**  
+   - Docker 이미지 네이밍은 다음 규칙을 반드시 따릅니다:  
+     ```
+     ytkwon91/{service-name}:{version}
+     ```
+     - 예: `ytkwon91/user-service:0.1`, `ytkwon91/posting-service:0.3`  
+   - 새 버전 배포 시에는 반드시 이미지 태그를 변경 (`0.1` → `0.2`)해야 합니다.  
+   - 테스트 용도로 태그를 고정하지 않고 다시 pull 하려면 `:latest`도 가능하나, 기본은 **버전 태그 사용**입니다.  
+   - 새 배포 시 반드시 `kubectl rollout restart`를 사용하여 업데이트를 보장하세요.
+
+5. **README.md 기반 서비스 인벤토리 관리**  
+   - 각 서비스는 반드시 `README.md`의 인벤토리 표에 추가되어야 합니다.  
+   - 새로운 서비스 YAML을 요청했을 때, 해당 서비스가 README.md에 존재하지 않으면 반드시 사용자에게 확인을 요청하세요.  
+   - 포트(`servicePort`, `nodePort`)는 README.md 표의 값을 기준으로 작성해야 합니다.  
+   - **중요:** README.md 파일은 역으로 제안하지 않는 한 자동 수정하지 않습니다. → 반드시 사람이 직접 갱신합니다.
+
+6. **배포 및 로그 확인 규칙**  
+   - 배포 후 문제가 발생하면 반드시 `kubectl logs`로 로그를 확인합니다.  
+   - Cursor는 로그 분석 시 해당 Spring Cloud 프로젝트 코드를 참고하여 문제 원인을 파악해야 합니다.  
+   - 단순히 로그만 보고 추측하지 않고, 코드와 함께 진단합니다.
