@@ -16,6 +16,13 @@ spring:
   sql:
     init:
       mode: never
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: notification-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
 
 mybatis:
   mapper-locations: classpath*:mapper/**/*.xml
@@ -35,6 +42,7 @@ p6spy:
   logging: sysout
   multiline: true
   sql-format: true
+
 
 management:
   endpoints:

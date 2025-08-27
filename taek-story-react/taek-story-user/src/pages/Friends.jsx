@@ -169,7 +169,7 @@ const Friends = () => {
                           <span className="status-request">친구 요청</span>
                         )}
                         {user.friendStatus === "requested" && (
-                          <span className="status-sent">요청 보냄</span>
+                          <span className="status-sent">친구 요청 보냄</span>
                         )}
                         {user.friendStatus === "rejected" && (
                           <span className="status-declined">거절됨</span>

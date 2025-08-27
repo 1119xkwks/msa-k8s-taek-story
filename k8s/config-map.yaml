@@ -34,5 +34,7 @@ data:
   FILE_DB_NAME: filedb
   FILE_DB_HOST: pg-db-file
   FILE_DB_PORT: "15434"
+  # Kafka
+  KAFKA_BOOTSTRAP_SERVERS: kafka:9990
 
 

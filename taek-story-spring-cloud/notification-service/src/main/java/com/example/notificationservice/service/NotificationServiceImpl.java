@@ -1,6 +1,7 @@
 package com.example.notificationservice.service;
 
 import com.example.notificationservice.mapper.NotificationMapper;
+import com.example.notificationservice.model.FriendRequestPayload;
 import com.example.notificationservice.model.Notification;
 import com.example.notificationservice.model.Users;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,13 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	public void readAll(Users loggedIn) {
 		notificationMapper.readAll(loggedIn.getSeq());
+	}
+
+	@Override
+	public int insertNotificationByPayload(FriendRequestPayload payload) {
+		Notification notification = Notification.fromFriendRequestPayload( payload );
+		log.debug("[insertNotificationByPayload] notification : {}", notification);
+		int insertCnt = notificationMapper.insertNotification(notification);
+		return insertCnt;
 	}
 }

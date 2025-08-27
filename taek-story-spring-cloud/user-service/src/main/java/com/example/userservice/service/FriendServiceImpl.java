@@ -1,6 +1,8 @@
 package com.example.userservice.service;
 
 import com.example.userservice.mapper.FriendMapper;
+import com.example.userservice.kafka.UserEventProducer;
+import com.example.userservice.model.FriendRequestPayload;
 import com.example.userservice.model.FriendUser;
 import com.example.userservice.model.Friends;
 import com.example.userservice.model.Users;
@@ -10,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -17,6 +20,7 @@ import java.util.List;
 public class FriendServiceImpl  implements FriendService {
 
 	private final FriendMapper friendMapper;
+	private final UserEventProducer userEventProducer;
 
 	@Override
 	public List<Friends> friendsByUserSeq(Long userSeq) {
@@ -53,6 +57,16 @@ public class FriendServiceImpl  implements FriendService {
 			throw new RuntimeException("사용자 정보 없음.");
 		}
 		int insertCnt = friendMapper.request(loggedIn.getSeq(), userSeq, ip);
+		if (insertCnt > 0) {
+			FriendRequestPayload payload = FriendRequestPayload.builder()
+					.key( UUID.randomUUID().toString() )
+					.type( "requested" )
+					.userSeq1( loggedIn.getSeq() )
+					.userSeq2( loggedIn.getSeq() )
+					.ip( ip )
+					.build();
+			userEventProducer.sendFriendRequested(payload);
+		}
 		return 1;
 	}
 
@@ -62,7 +76,17 @@ public class FriendServiceImpl  implements FriendService {
 		if (loggedIn == null || loggedIn.getSeq() == null) {
 			throw new RuntimeException("사용자 정보 없음.");
 		}
-		int insertCnt = friendMapper.accept(loggedIn.getSeq(), userSeq, ip);
+		int udpateCnt = friendMapper.accept(loggedIn.getSeq(), userSeq, ip);
+		if (udpateCnt > 0) {
+			FriendRequestPayload payload = FriendRequestPayload.builder()
+					.key( UUID.randomUUID().toString() )
+					.type( "accepted" )
+					.userSeq1( loggedIn.getSeq() )
+					.userSeq2( loggedIn.getSeq() )
+					.ip( ip )
+					.build();
+			userEventProducer.sendFriendRequested(payload);
+		}
 		return 1;
 	}
 
@@ -72,7 +96,17 @@ public class FriendServiceImpl  implements FriendService {
 		if (loggedIn == null || loggedIn.getSeq() == null) {
 			throw new RuntimeException("사용자 정보 없음.");
 		}
-		int insertCnt = friendMapper.reject(loggedIn.getSeq(), userSeq, ip);
+		int udpateCnt = friendMapper.reject(loggedIn.getSeq(), userSeq, ip);
+		if (udpateCnt > 0) {
+			FriendRequestPayload payload = FriendRequestPayload.builder()
+					.key( UUID.randomUUID().toString() )
+					.type( "rejected" )
+					.userSeq1( loggedIn.getSeq() )
+					.userSeq2( loggedIn.getSeq() )
+					.ip( ip )
+					.build();
+			userEventProducer.sendFriendRequested(payload);
+		}
 		return 1;
 	}
 }

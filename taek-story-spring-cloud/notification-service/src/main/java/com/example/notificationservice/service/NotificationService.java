@@ -1,5 +1,6 @@
 package com.example.notificationservice.service;
 
+import com.example.notificationservice.model.FriendRequestPayload;
 import com.example.notificationservice.model.Notification;
 import com.example.notificationservice.model.Users;
 
@@ -11,4 +12,6 @@ public interface NotificationService {
 	void readBySeq(Long seq);
 
 	void readAll(Users loggedIn);
+
+	int insertNotificationByPayload(FriendRequestPayload payload);
 }

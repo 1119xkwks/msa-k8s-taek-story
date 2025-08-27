@@ -1,6 +1,7 @@
 package com.example.notificationservice.model;
 
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
@@ -77,6 +78,41 @@ public class Notification {
 
 		notification.setCrtDt(LocalDateTime.now());
 		notification.setUdtDt(LocalDateTime.now());
+
+		return notification;
+	}
+
+	public static Notification fromFriendRequestPayload(FriendRequestPayload payload) {
+		Notification notification = new Notification();
+
+		notification.setToUserSeq(payload.getUserSeq2());
+		notification.setFromUserSeq(payload.getUserSeq1());
+		switch (payload.getType()) {
+		case  "requested":
+			notification.setType("friend_requested");
+			notification.setMessage("님이 회원님과 친구되고 싶어합니다..");
+			break;
+		case  "accepted":
+			notification.setType("friend_accepted");
+			notification.setMessage("님이 회원님과 친구가 되었습니다.");
+			break;
+		case  "rejected":
+			notification.setType("friend_rejected");
+			notification.setMessage("님이 회원님의 친구 요청을 거절했습니다.");
+			break;
+		}
+		notification.setIsRead(false);
+
+		if (StringUtils.isNotBlank( payload.getIp() )) {
+			notification.setCrtIp( payload.getIp() );
+			notification.setUdtIp( payload.getIp() );
+		}
+
+		notification.setCrtDt( LocalDateTime.now() );
+		notification.setUdtDt( LocalDateTime.now() );
+
+		notification.setCrtSeq( payload.getUserSeq1() );
+		notification.setUdtSeq( payload.getUserSeq1() );
 
 		return notification;
 	}

@@ -65,6 +65,11 @@ spec:
                 configMapKeyRef:
                   name: config-map
                   key: FILE_SERVICE_BASE_URL
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: KAFKA_BOOTSTRAP_SERVERS
           readinessProbe:
             httpGet:
               path: /actuator/health

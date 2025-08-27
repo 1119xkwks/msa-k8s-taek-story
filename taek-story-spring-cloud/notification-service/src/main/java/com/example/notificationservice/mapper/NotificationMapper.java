@@ -12,4 +12,6 @@ public interface NotificationMapper {
 	int readBySeq(Long seq);
 
 	int readAll(Long userSeq);
+
+	int insertNotification(Notification notification);
 }
