@@ -83,27 +83,33 @@ const Notification = () => {
       }
       const result = await res.json();
       setNotifications(
-        result.map((x) => {
-          x.group = classifyDate(x.crtDt);
-          return x;
-        }),
+        result.map((x) => ({
+          ...x,
+          group: classifyDate(x.crtDt),
+        })),
       );
     } catch (e) {
       console.error(e);
     }
   };
+  // 최초 1회: 알림 목록 조회
+  useEffect(() => {
+    (async () => {
+      await selectNotification();
+    })();
+  }, []);
+
+  // 알림 목록이 채워진 후: 사용자 기본정보 조회
   useEffect(() => {
     if (!notifications?.length) {
-      (async () => {
-        await selectNotification();
-      })();
-    } else if (notifications?.length) {
+      return;
+    }
+    (async () => {
       let temp = notifications
         .filter((x) => x.fromUserSeq)
         .map((x) => x.fromUserSeq);
       const userSeqs = [...new Set(temp)];
-      userSeqs.forEach(async (x) => {
-        //
+      for (const x of userSeqs) {
         try {
           const res = await apiFetch(`/user-service/users/basic-info/${x}`, {
             method: "GET",
@@ -121,8 +127,8 @@ const Notification = () => {
           console.error(_e);
           return;
         }
-      });
-    }
+      }
+    })();
   }, [notifications]);
 
   return (
