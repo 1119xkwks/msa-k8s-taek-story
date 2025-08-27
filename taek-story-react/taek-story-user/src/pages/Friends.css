@@ -37,7 +37,19 @@
 }
 
 .friends-page .friends-user {
-  @apply flex-1;
+  @apply flex flex-1 items-center gap-3 min-w-0;
+}
+
+.friends-page .poster-avatar {
+  @apply w-12 h-12 rounded-full overflow-hidden flex-shrink-0;
+}
+
+.friends-page .poster-avatar img {
+  @apply w-full h-full object-cover;
+}
+
+.friends-page .poster-name {
+  @apply flex-1 text-left font-medium text-gray-900 truncate;
 }
 
 .friends-page .friends-actions {
@@ -48,6 +60,23 @@
   @apply flex gap-2;
 }
 
-@import "tailwindcss";
+/* 상태 텍스트 스타일 - 가시성 밸런스 조정 */
+.friends-page .status-friend {
+    @apply font-medium text-black/70 p-1;
+}
 
-.friends-page {}
+.friends-page .status-request {
+  @apply font-medium text-blue-600/80 p-1;
+}
+
+.friends-page .status-sent {
+  @apply font-medium text-gray-800/90 p-1;
+}
+
+.friends-page .status-declined {
+  @apply font-medium text-red-700/80 p-1;
+}
+
+.friends-page .status-friend {
+  @apply font-semibold text-emerald-700/90 p-1;
+}

@@ -40,6 +40,162 @@
         order by    a.seq   asc
     </select>
 
+    <select id="friends" resultType="friendUser">
+        /** search  */
+        select  a.seq
+            ,   a.email
+            ,   a.nickname
+            ,   a.birth
+            ,   a.phone
+            ,   a.file_profile_seq
+            ,   a.file_profile_status
+
+            ,   'friend'  as  friend_status
+
+            ,   a.crt_dt
+            ,   a.crt_ip
+            ,   a.crt_seq
+            ,   a.udt_dt
+            ,   a.udt_ip
+            ,   a.udt_seq
+        from    users   a
+        where   1=1
+        and exists  (
+            select 1
+            from friends b
+            where 1=1
+            and (
+                (b.user1_seq = a.seq and b.user2_seq = #{userSeq})
+                or
+                (b.user1_seq = #{userSeq} and b.user2_seq = a.seq)
+            )
+            and b.status = 'accepted'
+        )
+        order by    a.seq   desc
+    </select>
+
+    <select id="search" resultType="friendUser">
+        /** search  */
+        select  t1.*
+        from    (
+            select  a.seq
+                ,   a.email
+                ,   a.nickname
+                ,   a.birth
+                ,   a.phone
+                ,   a.file_profile_seq
+                ,   a.file_profile_status
+
+                ,   (
+                    case
+                    when    a.seq = #{userSeq}
+                    then    'me'
+                    when    (
+                        select count(1)
+                        from friends b
+                        where 1=1
+                        and (
+                            (b.user1_seq = a.seq and b.user2_seq = #{userSeq})
+                            or
+                            (b.user1_seq = #{userSeq} and b.user2_seq = a.seq)
+                        )
+                        and b.status = 'accepted'
+                    ) &gt; 0
+                    then    'friend'
+                    when    (
+                        select count(1)
+                        from friends b
+                        where 1=1
+                        and (
+                            (b.user1_seq = a.seq and b.user2_seq = #{userSeq})
+                            or
+                            (b.user1_seq = #{userSeq} and b.user2_seq = a.seq)
+                        )
+                        and b.status = 'rejected'
+                    ) &gt; 0
+                    then    'rejected'
+                    when    (
+                        select count(1)
+                        from friends b
+                        where (b.user1_seq = #{userSeq} and b.user2_seq = a.seq)
+                        and b.status = 'requested'
+                    ) &gt; 0
+                    then    'requested'
+                    when    (
+                        select count(1)
+                        from friends b
+                        where (b.user1_seq = a.seq and b.user2_seq = #{userSeq})
+                        and b.status = 'requested'
+                    ) &gt; 0
+                    then    'received'
+                    else    ''
+                    end
+                )  as  friend_status
+
+                ,   a.crt_dt
+                ,   a.crt_ip
+                ,   a.crt_seq
+                ,   a.udt_dt
+                ,   a.udt_ip
+                ,   a.udt_seq
+            from    users   a
+            where   1=1
+            <if test="keyword != null and keyword != ''">
+                and (
+                    upper( a.email )    like    concat('%', upper(#{keyword}), '%')
+                    or
+                    upper( a.nickname )    like    concat('%', upper(#{keyword}), '%')
+                )
+            </if>
+        )  t1
+        order by    (
+            case    t1.friend_status
+            when    'received'
+            then    1
+            when    'friend'
+            then    2
+            when    'requested'
+            then    3
+            when    'rejected'
+            then    4
+            when    'me'
+            then    9999
+            else    99
+            end
+        )
+            ,   t1.nickname   asc
+    </select>
+
+    <insert id="request">
+        /** request */
+        insert into friends (user1_seq, user2_seq, status, crt_dt, crt_ip, crt_seq)
+        values (#{userSeq1}, #{userSeq2}, 'requested', CURRENT_TIMESTAMP, #{ip}, #{userSeq1})
+    </insert>
+
+    <update id="accept">
+        /** accept  */
+        update friends
+        set status  =   'accepted'
+        ,   udt_dt  =   CURRENT_TIMESTAMP
+        ,   udt_ip  =    #{ip}
+        ,   udt_seq  =    #{userSeq1}
+        where 1=1
+        and user1_seq   =   #{userSeq2}
+        and user2_seq   =   #{userSeq1}
+    </update>
+
+    <update id="reject">
+        /** reject  */
+        update friends
+        set status  =   'rejected'
+        ,   udt_dt  =   CURRENT_TIMESTAMP
+        ,   udt_ip  =    #{ip}
+        ,   udt_seq  =    #{userSeq1}
+        where 1=1
+        and user1_seq   =   #{userSeq2}
+        and user2_seq   =   #{userSeq1}
+    </update>
+
 </mapper>
 
 

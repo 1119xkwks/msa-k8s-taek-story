@@ -5,54 +5,109 @@ import AnchorHome from "../components/anchor/AnchorHome.jsx";
 import DisplayMyName from "../components/display/DisplayMyName.jsx";
 import AnchorSetting from "../components/anchor/AnchorSetting.jsx";
 import RightMenuDrawer from "../components/drawer/RightMenuDrawer.jsx";
-import PostCardHeader from "../components/post/PostCardHeader.jsx";
 
 import { useEffect, useState } from "react";
 import { Avatar, Button, Card, TextInput } from "flowbite-react";
-import { API_BASE } from "../util/api.js";
-
-const mockUsers = [
-  {
-    seq: 1,
-    nickname: "홍길동",
-    email: "hong@example.com",
-    fileProfileSeq: 0,
-  },
-  {
-    seq: 2,
-    nickname: "김철수",
-    email: "kim@example.com",
-    fileProfileSeq: 0,
-  },
-  {
-    seq: 3,
-    nickname: "박영희",
-    email: "park@example.com",
-    fileProfileSeq: 0,
-  },
-];
+import { API_BASE, apiFetch } from "../util/api.js";
+import { $alert } from "../util/modals.js";
+import { useSelector } from "react-redux";
+import { selectUser } from "../store/sessionSlice.js";
 
 const Friends = () => {
+  const loggedUser = useSelector(selectUser);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [results, setResults] = useState([]);
 
-  useEffect(() => {
-    // 초기에는 빈 결과
-    setResults([]);
-  }, []);
-
-  const onSearch = (e) => {
+  const onSearch = async (e) => {
     e?.preventDefault?.();
     if (!keyword) {
       setResults([]);
       return;
     }
-    // 백엔드 연동 전까지는 프론트 목 데이터로 필터
-    const filtered = mockUsers.filter((u) =>
-      u.nickname.toLowerCase().includes(keyword.toLowerCase()),
-    );
-    setResults(filtered);
+    await sendFriendSearch();
+  };
+
+  useEffect(() => {
+    if (results) {
+      (async () => {
+        await sendFriendList();
+      })();
+    }
+  }, []);
+
+  const sendFriendList = async (e) => {
+    try {
+      const res = await apiFetch(`/user-service/friend/friends`);
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      const result = await res.json();
+      setResults(result);
+    } catch (_e) {
+      console.error(_e);
+      return;
+    }
+  };
+  const sendFriendSearch = async (e) => {
+    try {
+      const res = await apiFetch(
+        `/user-service/friend/search?keyword=${keyword}`,
+      );
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      const result = await res.json();
+      setResults(result);
+    } catch (_e) {
+      console.error(_e);
+      return;
+    }
+  };
+  const sendFriendRequest = async (seq) => {
+    try {
+      const res = await apiFetch(`/user-service/friend/request/${seq}`);
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      // const result = await res.json();
+      await sendFriendSearch();
+    } catch (_e) {
+      console.error(_e);
+      return;
+    }
+  };
+  const sendFriendAccept = async (seq) => {
+    try {
+      const res = await apiFetch(`/user-service/friend/accept/${seq}`);
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      // const result = await res.json();
+      await sendFriendSearch();
+    } catch (_e) {
+      console.error(_e);
+      return;
+    }
+  };
+  const sendFriendReject = async (seq) => {
+    try {
+      const res = await apiFetch(`/user-service/friend/reject/${seq}`);
+      if (!res.ok) {
+        await $alert("처리도중 에러가 발생하였습니다.");
+        return;
+      }
+      // const result = await res.json();
+      await sendFriendSearch();
+    } catch (_e) {
+      console.error(_e);
+      return;
+    }
   };
 
   return (
@@ -92,34 +147,68 @@ const Friends = () => {
                   <div className="friends-user">
                     <Avatar
                       className="poster-avatar"
-                      img={`${API_BASE}/file-service/file/image/content/1`}
-                      alt={`11 프로필 이미지`}
+                      img={`${API_BASE}/file-service/file/image/content/${user.fileProfileSeq}`}
+                      alt={`${user.nickname} 프로필 이미지`}
                       rounded
                     />
-                    <div className="poster-name">nickname</div>
-                  </div>
-                  <div className="friends-actions">
-                    {/* 두 가지 상태 예시 */}
-                    <div className="friends-action-group">
-                      <Button color="blue" size="sm">
-                        친구 요청
-                      </Button>
-                      <Button color="light" size="sm">
-                        요청 보냄
-                      </Button>
-                      <Button color="failure" size="sm">
-                        거절됨
-                      </Button>
-                    </div>
-                    <div className="friends-action-group">
-                      <Button color="success" size="sm">
-                        수락
-                      </Button>
-                      <Button color="failure" size="sm">
-                        거절
-                      </Button>
+                    <div className="poster-name">
+                      {user.nickname}{" "}
+                      <span className="text-gray-800/50">({user.email})</span>
                     </div>
                   </div>
+                  {user.seq === loggedUser?.seq ? (
+                    <div className="friends-actions">(나)</div>
+                  ) : (
+                    <div className="friends-actions">
+                      {/* 두 가지 상태 예시 */}
+                      <div className="friends-action-group">
+                        {user.friendStatus === "friend" && (
+                          <span className="status-friend">친구</span>
+                        )}
+                        {user.friendStatus === "received" && (
+                          <span className="status-request">친구 요청</span>
+                        )}
+                        {user.friendStatus === "requested" && (
+                          <span className="status-sent">요청 보냄</span>
+                        )}
+                        {user.friendStatus === "rejected" && (
+                          <span className="status-declined">거절됨</span>
+                        )}
+                        {![
+                          "friend",
+                          "received",
+                          "requested",
+                          "rejected",
+                        ].includes(user.friendStatus) && (
+                          <Button
+                            color="blue"
+                            size="sm"
+                            onClick={() => sendFriendRequest(user.seq)}
+                          >
+                            친구 요청
+                          </Button>
+                        )}
+                      </div>
+                      {user.friendStatus === "received" && (
+                        <div className="friends-action-group">
+                          <Button
+                            color="green"
+                            size="sm"
+                            onClick={() => sendFriendAccept(user.seq)}
+                          >
+                            수락
+                          </Button>
+                          <Button
+                            color="light"
+                            size="sm"
+                            onClick={() => sendFriendReject(user.seq)}
+                          >
+                            거절
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))
             )}

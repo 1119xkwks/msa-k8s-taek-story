@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser, clearUser } from "/src/store/sessionSlice.js";
 import { apiFetch } from "/src/util/api.js";
@@ -8,6 +8,7 @@ import { apiFetch } from "/src/util/api.js";
  * 페이지 이동할 때마다 회원 정보 가져오기
  */
 export default function useSessionRefresher() {
+  const nav = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -20,28 +21,39 @@ export default function useSessionRefresher() {
 
     const controller = new AbortController();
 
-    async function loadProfile() {
-      try {
-        const res = await apiFetch(`/user-service/users/me`, {
-          method: "POST",
-          signal: controller.signal,
-        });
-        if (!res.ok) {
+    (async () => {
+      async function loadProfile() {
+        let profile = undefined;
+        try {
+          const res = await apiFetch(`/user-service/users/me`, {
+            method: "POST",
+            signal: controller.signal,
+          });
+          if (!res.ok) {
+            dispatch(clearUser());
+            return;
+          }
+          profile = await res.json();
+          if (profile) {
+            delete profile.password;
+            delete profile.pw;
+            dispatch(setUser(profile));
+          } else {
+            dispatch(clearUser());
+          }
+        } catch (_) {
           dispatch(clearUser());
-          return;
+        } finally {
+          if (!profile) {
+            if (!["/", "/login", "/signup"].includes(pathname)) {
+              nav("/login");
+            }
+          }
         }
-        const profile = await res.json();
-        if (profile) {
-          delete profile.password;
-          delete profile.pw;
-        }
-        dispatch(setUser(profile));
-      } catch (_) {
-        dispatch(clearUser());
       }
-    }
 
-    loadProfile();
+      loadProfile();
+    })();
     return () => controller.abort();
   }, [location.pathname, location.search, location, dispatch]);
 }
