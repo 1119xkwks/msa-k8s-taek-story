@@ -9,7 +9,6 @@ public interface FileService {
 	FileMaster uploadPosting(MultipartFile file, Long fileMasterSeq, String fileType, String ip, Long userSeq) throws Exception;
 
 	byte[] imageContent(Long seq);
-	byte[] imageContentProfileByUserSeq(Long userSeq);
 
 
 	/**

@@ -74,11 +74,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Users basicInfoAuth(Long seq) {
-		return usersMapper.selectBasicUserInfoBySeq(seq);
-	}
-
-	@Override
 	public ResponseEntity<?> signOut(HttpSession session) {
 		log.info("[signOut] session ID {}", session.getId());
 		Object value = session.getAttribute("logged:user");

@@ -1,13 +1,10 @@
 package com.example.fileservice.service;
 
-import com.example.fileservice.feign.UserServiceClient;
 import com.example.fileservice.mapper.FileMapper;
 import com.example.fileservice.model.FileDetail;
 import com.example.fileservice.model.FileMaster;
 import com.example.fileservice.model.StreamResult;
-import com.example.fileservice.model.Users;
 import io.minio.*;
-import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +27,6 @@ public class FileServiceImpl implements FileService {
 	@Value("${minio.bucket.videos}")
 	private String videosBucket;
 
-	private final UserServiceClient userServiceClient;
 	private final FileMapper fileMapper;
 
 	@Override
@@ -197,32 +193,6 @@ public class FileServiceImpl implements FileService {
 	public byte[] imageContent(Long seq) {
 		FileDetail fileDetail = fileMapper.selectFileDetailOneByMasterSeq( seq );
 		log.debug("[imageContent] fileDetail : {}", fileDetail);
-
-		String objectName = fileDetail.getFilePath();
-
-		try (GetObjectResponse is = minioClient.getObject(
-				GetObjectArgs.builder()
-						.bucket(imagesBucket)
-						.object(objectName)
-						.build()
-		)) {
-			return is.readAllBytes(); // Java 9+, JDK 21 OK
-		} catch (Exception e) {
-			return new byte[0];
-		}
-	}
-
-	@Override
-	public byte[] imageContentProfileByUserSeq(Long userSeq) {
-		Users user = userServiceClient.usersBasicInfoByUserSeq(userSeq);
-
-		if (user == null || user.getFileProfileSeq() == null) {
-			log.warn("[imageContentProfileByUserSeq] user or user.getFileProfileSeq() is null.");
-			return new byte[0];
-		}
-
-		FileDetail fileDetail = fileMapper.selectFileDetailOneByMasterSeq( user.getFileProfileSeq() );
-		log.debug("[imageContentProfileByUserSeq] fileDetail : {}", fileDetail);
 
 		String objectName = fileDetail.getFilePath();
 

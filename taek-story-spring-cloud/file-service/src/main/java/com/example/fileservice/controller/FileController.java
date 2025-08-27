@@ -72,18 +72,6 @@ public class FileController {
 		return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
 	}
 
-	@GetMapping("/image/content/profile-by-user-seq/{userSeq}")
-	public ResponseEntity<byte[]> imageContentProfileByUserSeq(@PathVariable("userSeq") Long userSeq) throws Exception {
-		log.info("[imageContent] imageContentProfileByUserSeq : {}", userSeq);
-
-		byte[] bytes = fileService.imageContentProfileByUserSeq(userSeq);
-
-		// MIME 타입 설정 (jpg/png 등)
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.IMAGE_JPEG); // 필요시 동적으로 mime type 판단
-
-		return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
-	}
 
 	// Video streaming with Range support
 	@GetMapping("/video/stream/{seq}")

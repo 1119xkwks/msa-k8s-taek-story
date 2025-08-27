@@ -45,12 +45,6 @@ public class UserController {
 		return ResponseEntity.ok(userService.basicInfo(session, seq));
 	}
 
-	// 회원 기본 정보
-	@GetMapping("/basic-info-no-auth/{seq}")
-	public ResponseEntity<?> basicInfoNoAuth(@PathVariable("seq") Long seq) {
-		return ResponseEntity.ok(userService.basicInfoAuth(seq));
-	}
-
 	// 로그아웃 (세션 제거 -> Redis Spring Session에서 삭제됨)
 	@GetMapping("/signout")
 	public ResponseEntity<?> signOut(HttpSession session) {

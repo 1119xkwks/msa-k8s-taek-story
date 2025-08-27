@@ -18,6 +18,7 @@ const Notification = () => {
   usePageTitle("알림");
 
   const [notifications, setNotifications] = useState([]);
+  const [userMap, setUserMap] = useState({});
 
   const groups = [
     { key: "today", label: "오늘" },
@@ -81,7 +82,6 @@ const Notification = () => {
         return;
       }
       const result = await res.json();
-      console.debug("result", result);
       setNotifications(
         result.map((x) => {
           x.group = classifyDate(x.crtDt);
@@ -97,6 +97,31 @@ const Notification = () => {
       (async () => {
         await selectNotification();
       })();
+    } else if (notifications?.length) {
+      let temp = notifications
+        .filter((x) => x.fromUserSeq)
+        .map((x) => x.fromUserSeq);
+      const userSeqs = [...new Set(temp)];
+      userSeqs.forEach(async (x) => {
+        //
+        try {
+          const res = await apiFetch(`/user-service/users/basic-info/${x}`, {
+            method: "GET",
+          });
+          if (!res.ok) {
+            await $alert("처리도중 에러가 발생하였습니다.");
+            return;
+          }
+          const result = await res.json();
+          setUserMap((prev) => ({
+            ...prev,
+            [x]: result,
+          }));
+        } catch (_e) {
+          console.error(_e);
+          return;
+        }
+      });
     }
   }, [notifications]);
 
@@ -168,11 +193,11 @@ const Notification = () => {
                         <div className="notification-page__row">
                           {/* Avatar */}
                           <div className="notification-page__avatar-wrap">
-                            {n.fromUserSeq ? (
+                            {userMap[n.fromUserSeq]?.fileProfileSeq ? (
                               <Avatar
                                 className="poster-avatar"
-                                img={`${API_BASE}/file-service/file/image/content/profile-by-user-seq/${n.fromUserSeq}`}
-                                alt={`${n.fromUserSeq} 프로필 이미지`}
+                                img={`${API_BASE}/file-service/file/image/content/${userMap[n.fromUserSeq]?.fileProfileSeq}`}
+                                alt={`${userMap[n.fromUserSeq]?.nickname} 프로필 이미지`}
                                 rounded
                               />
                             ) : (
@@ -190,7 +215,7 @@ const Notification = () => {
                           <div className="notification-page__content">
                             <p className="notification-page__text">
                               <span className="notification-page__name">
-                                {n.name}
+                                {userMap[n.fromUserSeq]?.nickname}
                               </span>
                               <span className="notification-page__message">
                                 {n.message}
