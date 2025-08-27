@@ -10,6 +10,7 @@ import Friends from "/src/pages/Friends.jsx";
 import NotFound from "/src/pages/NotFound";
 import ConfirmModal from "/src/components/modal/ConfirmModal.jsx";
 import AlertModal from "/src/components/modal/AlertModal.jsx";
+import NotificationToast from "/src/components/toast/NotificationToast.jsx";
 import useSessionRefresher from "/src/hooks/useSessionRefresher.jsx";
 import Notification from "./pages/Notification.jsx";
 
@@ -33,6 +34,7 @@ function App() {
       {/*alert/confirm modals*/}
       <ConfirmModal />
       <AlertModal />
+      <NotificationToast />
     </>
   );
 }

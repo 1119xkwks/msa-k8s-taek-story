@@ -84,9 +84,9 @@ const RightMenuDrawer = ({ isMenuOpen, menuCloseHandler }) => {
                       icon={() => <FontAwesomeIcon icon={faBell} />}
                     >
                       알림
-                      <span className="menu-item--notification">
-                        <span className="menu-item__badge badge-blue"></span>
-                      </span>
+                      {/*<span className="menu-item--notification">*/}
+                      {/*  <span className="menu-item__badge badge-blue"></span>*/}
+                      {/*</span>*/}
                     </SidebarItem>
                   ) : null}
                   {isAuthenticated ? (
