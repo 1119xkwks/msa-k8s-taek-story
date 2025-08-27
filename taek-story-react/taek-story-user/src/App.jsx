@@ -34,6 +34,7 @@ function App() {
       {/*alert/confirm modals*/}
       <ConfirmModal />
       <AlertModal />
+      {/* [TOAST] $notificationToast(message, type); */}
       <NotificationToast />
     </>
   );
