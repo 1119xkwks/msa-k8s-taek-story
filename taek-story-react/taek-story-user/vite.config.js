@@ -16,4 +16,7 @@ export default defineConfig({
       plugins: [flowbitePlugin],
     }),
   ],
+  define: {
+    global: 'window',
+  },
 });

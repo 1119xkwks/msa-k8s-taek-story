@@ -38,7 +38,7 @@
         where   to_user_seq =   #{userSeq}
     </update>
 
-    <insert id="insertNotification" parameterType="notification">
+    <insert id="insertNotification" parameterType="notification" useGeneratedKeys="true" keyProperty="seq" keyColumn="seq" >
         /** insertNotification  */
         insert into notification (to_user_seq, from_user_seq, type, message, is_read, crt_dt, crt_ip, crt_seq)
         values (#{toUserSeq}, #{fromUserSeq}, #{type}, #{message}, #{isRead}, CURRENT_TIMESTAMP, #{crtIp}, #{crtSeq})

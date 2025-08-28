@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.userservice.mapper.UsersMapper">
 
-    <insert id="insert" parameterType="usersInsert" useGeneratedKeys="true">
+    <insert id="insert" parameterType="usersInsert" useGeneratedKeys="true" keyProperty="seq" keyColumn="seq">
         /** insert  */
         insert into users (
             email, pw, nickname, birth, phone, crt_dt, crt_ip, crt_seq

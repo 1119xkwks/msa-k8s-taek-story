@@ -124,7 +124,8 @@ const Friends = () => {
         <Card className="friends-card">
           <h2 className="friends-title">친구 찾기</h2>
           <form className="friends-search" onSubmit={onSearch}>
-            <TextInput
+            <input
+              className="rounded-xl"
               type="text"
               placeholder="닉네임을 입력하세요"
               value={keyword}

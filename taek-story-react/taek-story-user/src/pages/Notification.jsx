@@ -1,5 +1,6 @@
 import "./Notification.css";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Header from "../components/Header.jsx";
 import AnchorHome from "../components/anchor/AnchorHome.jsx";
 import DisplayMyName from "../components/display/DisplayMyName.jsx";
@@ -12,6 +13,8 @@ import { classifyDate } from "../util/common.js";
 import { Avatar } from "flowbite-react";
 
 const Notification = () => {
+  const location = useLocation();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [filterType, setFilterType] = useState("");
 
@@ -92,12 +95,13 @@ const Notification = () => {
       console.error(e);
     }
   };
-  // 최초 1회: 알림 목록 조회
+
+  // 최초 및 토스트에서 refreshAt 전달 시 재조회
   useEffect(() => {
     (async () => {
       await selectNotification();
     })();
-  }, []);
+  }, [location.state?.refreshAt]);
 
   // 알림 목록이 채워진 후: 사용자 기본정보 조회
   useEffect(() => {

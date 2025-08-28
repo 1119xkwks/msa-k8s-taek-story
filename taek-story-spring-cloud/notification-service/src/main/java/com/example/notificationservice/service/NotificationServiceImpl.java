@@ -4,6 +4,7 @@ import com.example.notificationservice.mapper.NotificationMapper;
 import com.example.notificationservice.model.FriendRequestPayload;
 import com.example.notificationservice.model.Notification;
 import com.example.notificationservice.model.Users;
+import com.example.notificationservice.websocket.NotificationPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 	private final NotificationMapper notificationMapper;
+	private final NotificationPublisher notificationPublisher;
 
 	@Override
 	public List<Notification> allNotifications(Users loggedIn, String searchWord) {
@@ -36,6 +38,9 @@ public class NotificationServiceImpl implements NotificationService {
 		Notification notification = Notification.fromFriendRequestPayload( payload );
 		log.debug("[insertNotificationByPayload] notification : {}", notification);
 		int insertCnt = notificationMapper.insertNotification(notification);
+		if (insertCnt > 0) {
+			notificationPublisher.publishToUser(notification);
+		}
 		return insertCnt;
 	}
 }

@@ -62,7 +62,7 @@ public class FriendServiceImpl  implements FriendService {
 					.key( UUID.randomUUID().toString() )
 					.type( "requested" )
 					.userSeq1( loggedIn.getSeq() )
-					.userSeq2( loggedIn.getSeq() )
+					.userSeq2( userSeq )
 					.ip( ip )
 					.build();
 			userEventProducer.sendFriendRequested(payload);
@@ -82,7 +82,7 @@ public class FriendServiceImpl  implements FriendService {
 					.key( UUID.randomUUID().toString() )
 					.type( "accepted" )
 					.userSeq1( loggedIn.getSeq() )
-					.userSeq2( loggedIn.getSeq() )
+					.userSeq2( userSeq )
 					.ip( ip )
 					.build();
 			userEventProducer.sendFriendRequested(payload);
@@ -102,7 +102,7 @@ public class FriendServiceImpl  implements FriendService {
 					.key( UUID.randomUUID().toString() )
 					.type( "rejected" )
 					.userSeq1( loggedIn.getSeq() )
-					.userSeq2( loggedIn.getSeq() )
+					.userSeq2( userSeq )
 					.ip( ip )
 					.build();
 			userEventProducer.sendFriendRequested(payload);

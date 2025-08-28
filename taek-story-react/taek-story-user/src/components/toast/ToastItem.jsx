@@ -9,9 +9,11 @@ import {
 import { useDispatch } from "react-redux";
 import { removeToast } from "/src/store/notificationToastSlice.js";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ToastItem = ({ id, type, content }) => {
   const dispatch = useDispatch();
+  const nav = useNavigate();
 
   const [iconColorName, setIconColorName] = useState(
     " bg-green-100 text-green-500",
@@ -31,14 +33,26 @@ const ToastItem = ({ id, type, content }) => {
       break;
   }
 
+  const contentClick = async () => {
+    dispatch(removeToast(id));
+    nav("/notification", { state: { refreshAt: Date.now() } });
+  };
+
   return (
     <Toast>
       <div
-        className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${iconColorName}`}
+        className={`cursor-pointer inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg 
+                    ${iconColorName}`}
+        onClick={() => contentClick()}
       >
         <FontAwesomeIcon icon={theIcon} className="h-5 w-5" />
       </div>
-      <div className="ml-3 text-sm font-normal">{content}</div>
+      <div
+        className="cursor-pointer ml-3 text-sm font-normal"
+        onClick={() => contentClick()}
+      >
+        {content}
+      </div>
       <ToastToggle onDismiss={() => dispatch(removeToast(id))} />
     </Toast>
   );
