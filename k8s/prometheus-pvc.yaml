@@ -1,0 +1,19 @@
+# How to re-create (kubectl):
+#   kubectl delete -f prometheus-pvc.yaml --ignore-not-found
+#   kubectl apply  -f prometheus-pvc.yaml
+#   kubectl get pvc prometheus-pvc
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+
+
+

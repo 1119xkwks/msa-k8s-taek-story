@@ -60,6 +60,8 @@ dependencies {
     implementation 'io.micrometer:micrometer-tracing-bridge-otel'
     // OpenTelemetry Exporter (Trace 데이터를 Tempo/Jaeger로 전송)
     implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
+    // Prometeus
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 
     //MinIO
     implementation 'io.minio:minio:8.5.10'

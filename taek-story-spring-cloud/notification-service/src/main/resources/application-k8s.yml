@@ -52,7 +52,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, info
+        include: refresh, health, beans, info, prometheus
+  endpoint:
+    prometheus:
+      access: read_only
   tracing:
     enabled: true
     sampling:

@@ -9,7 +9,7 @@
 | dev-proxy |  | 80 | 32290 | 개발 pc 프록시 |
 
 
-## 캐쉬서버 (Redis), 파일서버 (MinIO), 메시지 브로커 서버 (kafka), 모니터링/tracing 툴 (grafana)
+## 캐쉬서버 (Redis), 파일서버 (MinIO), 메시지 브로커 서버 (kafka), 모니터링/tracing 툴
 
 | 서비스명 | namespace | 서비스 포트 | 노드 포트 | 메모 |
 |---|---:|---:|---:|---|
@@ -21,6 +21,7 @@
 | Kafka UI |  | 9991 | 30106 | Topic/Consumer 관리, 메시지 브라우징, Schema Registry 지원 |
 | Tempo |  | 4317 (gRPC), 4318 (HTTP OTLP), 3200 (UI) | 30107, 30108, 30109 | tracing 저장소 |
 | Grafana |  | 3000 | 30110 | tracing 시각화 |
+| Prometheus |  | 9090 | 30111 | 시계열 데이터(time-series data)를 수집 |
 
 
 ## Database
