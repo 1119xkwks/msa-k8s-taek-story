@@ -19,7 +19,7 @@ metadata:
   labels:
     app: taek-store-user
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: taek-store-user
