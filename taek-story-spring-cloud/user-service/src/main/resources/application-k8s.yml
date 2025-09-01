@@ -47,3 +47,12 @@ file:
   service:
     base-url: ${FILE_SERVICE_BASE_URL}
 
+# OpenFeign global timeout settings (milliseconds)
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000   # 10s
+        readTimeout: 120000     # 120s for large uploads/downloads
+        loggerLevel: BASIC
+

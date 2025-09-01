@@ -2,6 +2,7 @@ package com.example.notificationservice.service;
 
 import com.example.notificationservice.model.FriendRequestPayload;
 import com.example.notificationservice.model.Notification;
+import com.example.notificationservice.model.PostingEventPayload;
 import com.example.notificationservice.model.Users;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface NotificationService {
 
 	void readAll(Users loggedIn);
 
-	int insertNotificationByPayload(FriendRequestPayload payload);
+	int insertNotification(Notification notification);
 }

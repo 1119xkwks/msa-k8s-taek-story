@@ -1,6 +1,7 @@
 package com.example.userservice.kafka;
 
 import com.example.userservice.model.FriendRequestPayload;
+import com.example.userservice.model.PostingEventPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -18,6 +19,12 @@ public class UserEventProducer {
         log.info("[Kafka] sending to {} payload={}", topic, payload);
         kafkaTemplate.send(topic, payload.getKey(), payload.toString());
     }
+
+	public void sendUserPosting(PostingEventPayload payload) {
+		String topic = "user.notifications.posting";
+		log.info("[Kafka]  sending to {} payload={}", topic, payload);
+		kafkaTemplate.send(topic, payload.getKey(), payload.toString());
+	}
 }
 
 

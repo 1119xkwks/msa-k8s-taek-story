@@ -3,6 +3,7 @@ package com.example.notificationservice.service;
 import com.example.notificationservice.mapper.NotificationMapper;
 import com.example.notificationservice.model.FriendRequestPayload;
 import com.example.notificationservice.model.Notification;
+import com.example.notificationservice.model.PostingEventPayload;
 import com.example.notificationservice.model.Users;
 import com.example.notificationservice.websocket.NotificationPublisher;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,8 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public int insertNotificationByPayload(FriendRequestPayload payload) {
-		Notification notification = Notification.fromFriendRequestPayload( payload );
-		log.debug("[insertNotificationByPayload] notification : {}", notification);
+	public int insertNotification(Notification notification) {
+		log.debug("[insertNotification] notification : {}", notification);
 		int insertCnt = notificationMapper.insertNotification(notification);
 		if (insertCnt > 0) {
 			notificationPublisher.publishToUser(notification);

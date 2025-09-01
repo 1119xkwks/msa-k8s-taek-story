@@ -1,10 +1,13 @@
 package com.example.notificationservice.model;
 
 import lombok.*;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 알림 DTO
@@ -115,6 +118,34 @@ public class Notification {
 		notification.setUdtSeq( payload.getUserSeq1() );
 
 		return notification;
+	}
+
+	public static List<Notification> fromPostingEventPayload(PostingEventPayload payload) {
+		List<Notification> list = new ArrayList<>();
+
+		if (payload == null || CollectionUtils.isEmpty( payload.getFriendSeqs() )) {
+			return list;
+		}
+
+		payload.getFriendSeqs().forEach(friendSeq -> {
+			list.add(
+					Notification.builder()
+							.fromUserSeq( payload.getUserSeq() )
+							.toUserSeq( friendSeq )
+							.type( "friend_posted" )
+							.message( "님이 게시글을 올렸습니다." )
+							.isRead( false )
+							.crtDt( LocalDateTime.now() )
+							.crtIp( payload.getIp() )
+							.crtSeq( payload.getUserSeq() )
+							.udtDt( LocalDateTime.now() )
+							.udtIp( payload.getIp() )
+							.udtSeq( payload.getUserSeq() )
+							.build()
+			);
+		});	// LOOP
+
+		return list;
 	}
 }
 

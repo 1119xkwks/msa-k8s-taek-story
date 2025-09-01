@@ -2,8 +2,10 @@ package com.example.postingservice.service;
 
 import com.example.postingservice.feign.FileServiceClient;
 import com.example.postingservice.feign.UserServiceClient;
+import com.example.postingservice.kafka.PostingEventProducer;
 import com.example.postingservice.mapper.PostingMapper;
 import com.example.postingservice.model.FileMaster;
+import com.example.postingservice.model.PostingEventPayload;
 import com.example.postingservice.model.Posts;
 import com.example.postingservice.model.Users;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -25,6 +28,7 @@ public class PostingServiceImpl implements PostingService {
 	private final FileServiceClient fileServiceClient;
 	private final UserServiceClient userServiceClient;
 	private final PostingMapper postingMapper;
+	private final PostingEventProducer postingEventProducer;
 
 	@Override
 	public int savePosting(Users loggedIn, String ip, MultipartFile file, String activeAction, String selectedFeeling, String contents) {
@@ -42,6 +46,17 @@ public class PostingServiceImpl implements PostingService {
 			// post 정보 DB 저장
 			Posts posting = Posts.ofRequests(loggedIn, ip, activeAction, selectedFeeling, contents, fileMaster);
 			int insertCnt = postingMapper.insertPosts(posting);
+
+			if (insertCnt > 0) {
+				PostingEventPayload payload = PostingEventPayload.builder()
+						.key( UUID.randomUUID().toString() )
+						.type( "posted" )
+						.userSeq( loggedIn.getSeq() )
+						.friendSeqs( new ArrayList<>() )
+						.ip( ip )
+						.build();
+				postingEventProducer.sendPostingFriends( payload );
+			}
 
 			return 1;
 		} catch (Exception e) {
