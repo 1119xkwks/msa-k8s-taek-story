@@ -1,0 +1,16 @@
+package com.example.fileservice.config;
+
+import feign.micrometer.MicrometerCapability;
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class FeignMicrometerConfig {
+    @Bean
+    public MicrometerCapability micrometerCapability(MeterRegistry meterRegistry) {
+        return new MicrometerCapability(meterRegistry);
+    }
+}
+
+

@@ -1,0 +1,18 @@
+# How to re-create (kubectl):
+#   kubectl delete -f grafana-pvc.yaml --ignore-not-found
+#   kubectl apply  -f grafana-pvc.yaml
+#   kubectl get pvc grafana-pvc
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+
+

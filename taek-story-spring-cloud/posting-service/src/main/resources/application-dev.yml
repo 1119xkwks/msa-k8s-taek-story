@@ -9,6 +9,10 @@ server:
 spring:
   application:
     name: posting-service
+  cloud:
+    openfeign:
+      observations:
+        enabled: true
   servlet:
     multipart:
       max-file-size: 200MB
@@ -52,6 +56,17 @@ management:
     web:
       exposure:
         include: refresh, health, beans, info
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0   # 100% 수집 (운영은 0.1 ~ 0.3 권장)
+    propagation:
+      type: w3c
+  otlp:
+    tracing:
+      endpoint: http://127.0.0.1:30108/v1/traces  # 추적 데이터 보낼 곳 (Tempo or Jaeger)
+    sampling:
+      probability: 1.0
 
 
 file:

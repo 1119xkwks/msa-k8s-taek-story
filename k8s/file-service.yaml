@@ -102,6 +102,11 @@ spec:
                 secretKeyRef:
                   name: secret
                   key: FILE_DB_PASSWORD
+            - name: OTLP_TRACING_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: OTLP_TRACING_ENDPOINT
           readinessProbe:
             httpGet:
               path: /actuator/health

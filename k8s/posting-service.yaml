@@ -70,6 +70,11 @@ spec:
                 secretKeyRef:
                   name: secret
                   key: POSTING_DB_PASSWORD
+            - name: OTLP_TRACING_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: OTLP_TRACING_ENDPOINT
           readinessProbe:
             httpGet:
               path: /actuator/health

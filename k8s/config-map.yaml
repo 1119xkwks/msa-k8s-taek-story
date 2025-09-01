@@ -36,5 +36,7 @@ data:
   FILE_DB_PORT: "15434"
   # Kafka
   KAFKA_BOOTSTRAP_SERVERS: kafka:9990
+  # OTLP Tracing Endpoint (K8s)
+  OTLP_TRACING_ENDPOINT: http://tempo-otlp-http:4318/v1/traces
 
 

@@ -29,6 +29,7 @@ public class FriendServiceImpl  implements FriendService {
 
 	@Override
 	public List<Long> friendUserSeqsByUserSeq(Long userSeq) {
+		log.debug("[friendUserSeqsByUserSeq] userSeq: {}", userSeq);
 		return friendMapper.friendUserSeqsByUserSeq( userSeq );
 	}
 

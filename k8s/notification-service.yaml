@@ -65,6 +65,11 @@ spec:
                 configMapKeyRef:
                   name: config-map
                   key: KAFKA_BOOTSTRAP_SERVERS
+            - name: OTLP_TRACING_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: OTLP_TRACING_ENDPOINT
           readinessProbe:
             httpGet:
               path: /actuator/health

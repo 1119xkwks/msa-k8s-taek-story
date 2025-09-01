@@ -1,0 +1,18 @@
+# How to re-create (kubectl):
+#   kubectl delete -f tempo-pvc.yaml --ignore-not-found
+#   kubectl apply  -f tempo-pvc.yaml
+#   kubectl get pvc tempo-pvc
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tempo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+
+

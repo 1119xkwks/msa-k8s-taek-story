@@ -73,6 +73,7 @@ public class PostingServiceImpl implements PostingService {
 		}
 
 		// 친구 user seq 가져오기
+		log.debug("[selectPages] // 친구 user seq 가져오기");
 		List<Long> friendUserSeqs = userServiceClient.friendUserSeqsByUserSeq(loggedIn.getSeq());
 		log.debug("[selectPages] friendUserSeqs: {}", friendUserSeqs);
 

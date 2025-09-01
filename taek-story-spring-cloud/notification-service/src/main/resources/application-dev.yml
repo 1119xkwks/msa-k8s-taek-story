@@ -9,6 +9,10 @@ server:
 spring:
   application:
     name: notification-service
+  cloud:
+    openfeign:
+      observations:
+        enabled: true
   data:
     redis:
       host: localhost
@@ -48,6 +52,17 @@ management:
     web:
       exposure:
         include: refresh, health, beans, info
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+    propagation:
+      type: w3c
+  otlp:
+    tracing:
+      endpoint: http://127.0.0.1:30108/v1/traces  # 추적 데이터 보낼 곳 (Tempo or Jaeger)
+    sampling:
+      probability: 1.0
 
 
 file:

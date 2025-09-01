@@ -35,6 +35,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.data:spring-data-commons' // Pageable, Page 지원
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'io.github.openfeign:feign-micrometer'
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
@@ -51,6 +52,11 @@ dependencies {
 
     // Pretty SQL logging
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
+
+    // Micrometer Tracing (Spring Boot 3.5.x 기본 관측 시스템)
+    implementation 'io.micrometer:micrometer-tracing-bridge-otel'
+    // OpenTelemetry Exporter (Trace 데이터를 Tempo/Jaeger로 전송)
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
