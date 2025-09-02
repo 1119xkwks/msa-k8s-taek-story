@@ -1,0 +1,29 @@
+
+# file-service
+cd file-service
+./gradlew clean build -x test
+docker build -t ytkwon91/file-service:0.1 .
+docker push ytkwon91/file-service:0.1
+cd ..
+
+# notification-service
+cd notification-service
+./gradlew clean build -x test
+docker build -t ytkwon91/notification-service:0.1 .
+docker push ytkwon91/notification-service:0.1
+cd ..
+
+# posting-service
+cd posting-service
+./gradlew clean build -x test
+docker build -t ytkwon91/posting-service:0.1 .
+docker push ytkwon91/posting-service:0.1
+cd ..
+
+# user-service
+cd user-service
+./gradlew clean build -x test
+docker build -t ytkwon91/user-service:0.1 .
+docker push ytkwon91/user-service:0.1
+cd ..
+
