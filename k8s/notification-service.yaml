@@ -65,6 +65,11 @@ spec:
                 configMapKeyRef:
                   name: config-map
                   key: KAFKA_BOOTSTRAP_SERVERS
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: KAFKA_BOOTSTRAP_SERVERS
             - name: OTLP_TRACING_ENDPOINT
               valueFrom:
                 configMapKeyRef:

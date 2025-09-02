@@ -35,6 +35,16 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: k8s
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: KAFKA_BOOTSTRAP_SERVERS
             - name: FILE_SERVICE_BASE_URL
               valueFrom:
                 configMapKeyRef:
