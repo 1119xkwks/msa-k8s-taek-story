@@ -22,6 +22,8 @@
 | Tempo |  | 4317 (gRPC), 4318 (HTTP OTLP), 3200 (UI) | 30107, 30108, 30109 | tracing 저장소 |
 | Grafana |  | 3000 | 30110 | tracing 시각화 |
 | Prometheus |  | 9090 | 30111 | 시계열 데이터(time-series data)를 수집 |
+| kube-state-metrics |  | 8080 |  | Kubernetes 리소스 메트릭 |
+| node-exporter |  | 9100 |  | 노드 OS 메트릭 |
 
 
 ## Database

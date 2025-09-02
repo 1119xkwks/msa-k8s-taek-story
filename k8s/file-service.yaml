@@ -10,6 +10,9 @@
 #   kubectl rollout status deploy/file-service
 #   # 필요 시 롤백
 #   kubectl rollout undo deploy/file-service
+#
+# 로그 확인 (현재 로그 상태 확인)
+#   kubectl logs deploy/file-service --since=10m --tail=200 -f
 
 ---
 apiVersion: apps/v1

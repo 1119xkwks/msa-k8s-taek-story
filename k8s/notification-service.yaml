@@ -10,6 +10,9 @@
 #   kubectl rollout status deploy/notification-service-deploy
 #   # 필요 시 롤백
 #   kubectl rollout undo deploy/notification-service-deploy
+#
+# 로그 확인 (현재 로그 상태 확인)
+#   kubectl logs deploy/notification-service-deploy --since=10m --tail=200 -f
 
 ---
 apiVersion: apps/v1

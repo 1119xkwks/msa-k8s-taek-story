@@ -1,0 +1,64 @@
+# How to re-create (kubectl):
+#   kubectl delete -f node-exporter.yaml --ignore-not-found
+#   kubectl apply  -f node-exporter.yaml
+#   kubectl get ds node-exporter
+#   kubectl get svc node-exporter
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  labels:
+    app: node-exporter
+spec:
+  selector:
+    matchLabels:
+      app: node-exporter
+  template:
+    metadata:
+      labels:
+        app: node-exporter
+    spec:
+      hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: node-exporter
+          image: quay.io/prometheus/node-exporter:v1.8.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - --path.rootfs=/host
+          ports:
+            - name: http
+              containerPort: 9100
+          volumeMounts:
+            - name: root
+              mountPath: /host
+              readOnly: true
+      tolerations:
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
+          effect: "NoSchedule"
+      volumes:
+        - name: root
+          hostPath:
+            path: /
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-exporter
+  labels:
+    app: node-exporter
+spec:
+  clusterIP: None
+  selector:
+    app: node-exporter
+  ports:
+    - name: http
+      port: 9100
+      targetPort: 9100
+
+

@@ -10,6 +10,9 @@
 #   kubectl rollout status deploy/posting-service-deploy
 #   # 필요 시 롤백
 #   kubectl rollout undo deploy/posting-service-deploy
+#
+# 로그 확인 (현재 로그 상태 확인)
+#   kubectl logs deploy/posting-service-deploy --since=10m --tail=200 -f
 
 ---
 apiVersion: apps/v1
