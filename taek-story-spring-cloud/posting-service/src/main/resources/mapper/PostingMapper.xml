@@ -40,6 +40,10 @@
         from    posts
         <include refid="selectPages_WHERE" />
         order by    seq    desc
+        <if test="pageable != null">
+            limit   #{pageable.pageSize}
+            offset  #{pageable.offset}
+        </if>
     </select>
 
     <select id="countPages" resultType="int">

@@ -31,6 +31,7 @@ const Home = () => {
   const [isSelectingPosts, setIsSelectingPosts] = useState(false);
   const [posts, setPosts] = useState([]);
   const [pagePosts, setPagePosts] = useState(1);
+  const [isLastPosts, setIsLastPosts] = useState(false);
 
   /**
    * 포스팅 글 올리기 핸들러는 상위 컨텍스트에서 제공
@@ -123,13 +124,10 @@ const Home = () => {
     }
     try {
       setIsSelectingPosts(true);
-
-      if (paging) {
-        setPagePosts(paging);
-      }
+      const nextPage = typeof paging === "number" ? paging : pagePosts;
 
       const res = await apiFetch(
-        `/posting-service/posting/list?page=${pagePosts}&size=10`,
+        `/posting-service/posting/list?page=${nextPage}&size=5`,
         {
           method: "GET",
         },
@@ -142,8 +140,13 @@ const Home = () => {
       if (result) {
         //
         console.debug("[selectPosts] result", result);
-
-        setPosts(result?.content || []);
+        setIsLastPosts(Boolean(result?.last));
+        if (nextPage > 1) {
+          setPosts((prev) => [...prev, ...(result?.content || [])]);
+        } else {
+          setPosts(result?.content || []);
+        }
+        setPagePosts(nextPage);
       }
     } catch (_e) {
       console.error(_e);
@@ -191,7 +194,13 @@ const Home = () => {
           <SectionPosting />
 
           {/*글목록*/}
-          <SectionPostList posts={posts} />
+          <SectionPostList
+            posts={posts}
+            selectPosts={selectPosts}
+            isSelectingPosts={isSelectingPosts}
+            pagePosts={pagePosts}
+            isLastPosts={isLastPosts}
+          />
         </PostingDispatchContext.Provider>
       </PostingDataContext.Provider>
 
