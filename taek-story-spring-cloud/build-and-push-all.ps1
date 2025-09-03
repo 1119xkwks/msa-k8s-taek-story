@@ -48,9 +48,15 @@ function Build-And-Push {
 }
 
 # 실행 순서
-#Build-And-Push -ServiceName file-service
-#Build-And-Push -ServiceName notification-service
-#Build-And-Push -ServiceName posting-service
-#Build-And-Push -ServiceName user-service
+$Services = @(
+    "file-service",
+    "notification-service",
+    "posting-service",
+    "user-service"
+)
+
+foreach ($svc in $Services) {
+    Build-And-Push -ServiceName $svc
+}
 
 Write-Host "✅ 모든 서비스 빌드 및 푸시 완료" -ForegroundColor Yellow
