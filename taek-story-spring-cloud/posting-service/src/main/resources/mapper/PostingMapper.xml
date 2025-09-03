@@ -42,7 +42,7 @@
         order by    seq    desc
         <if test="pageable != null">
             limit   #{pageable.pageSize}
-            offset  #{pageable.offset}
+            offset  #{pageable.offset}  -   #{pageable.pageSize}
         </if>
     </select>
 

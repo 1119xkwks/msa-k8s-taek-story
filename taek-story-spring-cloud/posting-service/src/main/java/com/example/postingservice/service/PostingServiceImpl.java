@@ -77,6 +77,7 @@ public class PostingServiceImpl implements PostingService {
 		List<Long> friendUserSeqs = userServiceClient.friendUserSeqsByUserSeq(loggedIn.getSeq());
 		log.debug("[selectPages] friendUserSeqs: {}", friendUserSeqs);
 
+		log.debug("[selectPages] pageable: {}", pageable);
 		List<Posts> list = postingMapper.selectPages(loggedIn.getSeq(), friendUserSeqs, pageable);
 		int total = postingMapper.countPages(loggedIn.getSeq(), friendUserSeqs, pageable);
 		return new PageImpl<Posts>(list, pageable, total);

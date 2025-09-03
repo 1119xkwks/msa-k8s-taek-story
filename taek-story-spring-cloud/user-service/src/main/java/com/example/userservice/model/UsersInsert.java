@@ -20,6 +20,8 @@ import java.util.Objects;
 @Alias("usersInsert")
 public class UsersInsert {
 
+	private Long seq;
+
 	/** 이메일 */
 	@NotBlank(message = "이메일을 입력하세요.")
 	@Email(message = "이메일 형식이 올바르지 않습니다.")

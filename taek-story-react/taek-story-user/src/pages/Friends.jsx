@@ -12,6 +12,8 @@ import { API_BASE, apiFetch } from "../util/api.js";
 import { $alert } from "../util/modals.js";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/sessionSlice.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserTie } from "@fortawesome/free-solid-svg-icons";
 
 const Friends = () => {
   const loggedUser = useSelector(selectUser);
@@ -146,12 +148,22 @@ const Friends = () => {
               results.map((user) => (
                 <div key={user.seq} className="friends-item">
                   <div className="friends-user">
-                    <Avatar
-                      className="poster-avatar"
-                      img={`${API_BASE}/file-service/file/image/content/${user.fileProfileSeq}`}
-                      alt={`${user.nickname} 프로필 이미지`}
-                      rounded
-                    />
+                    {user.fileProfileSeq ? (
+                      <Avatar
+                        className="poster-avatar"
+                        img={`${API_BASE}/file-service/file/image/content/${user.fileProfileSeq}`}
+                        alt={`${user.nickname} 프로필 이미지`}
+                        rounded
+                      />
+                    ) : (
+                      <div className="rounded-full bg-gray-300 w-10 h-10 flex items-center justify-center mr-2">
+                        <FontAwesomeIcon
+                          className="text-2xl"
+                          icon={faUserTie}
+                        />
+                      </div>
+                    )}
+
                     <div className="poster-name">
                       {user.nickname}{" "}
                       <span className="text-gray-800/50">({user.email})</span>
@@ -161,7 +173,7 @@ const Friends = () => {
                     <div className="friends-actions">(나)</div>
                   ) : (
                     <div className="friends-actions">
-                      {/* 두 가지 상태 예시 */}
+                      {/* 친구 상태별 버튼 */}
                       <div className="friends-action-group">
                         {user.friendStatus === "friend" && (
                           <span className="status-friend">친구</span>
