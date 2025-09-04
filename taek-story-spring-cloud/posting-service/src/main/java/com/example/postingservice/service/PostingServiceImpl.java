@@ -48,6 +48,7 @@ public class PostingServiceImpl implements PostingService {
 			int insertCnt = postingMapper.insertPosts(posting);
 
 			if (insertCnt > 0) {
+				// 글 올림 Event produce
 				PostingEventPayload payload = PostingEventPayload.builder()
 						.key( UUID.randomUUID().toString() )
 						.type( "posted" )
