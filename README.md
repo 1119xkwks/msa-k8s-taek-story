@@ -6,7 +6,7 @@ http://127.0.0.1:30080/
 
 | 서비스명 | namespace | 서비스 포트 | 노드 포트 | 메모 |
 |---|---:|---:|---:|---|
-| ingress-nginx-controller-nodeport | ingress-nginx | 32080 |  | :32080 → :90 |
+| ingress-nginx-controller-nodeport | ingress-nginx |  | 32080 | :32080 → :90 |
 | ingress (taek-story-ingress / minio-s3-ingress) |  | 90 |  | url 라우팅 |
 | dev-proxy |  | 80 | 32290 | 개발 pc 프록시 |
 
